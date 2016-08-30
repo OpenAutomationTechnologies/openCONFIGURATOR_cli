@@ -1,0 +1,4 @@
+[submodule "openCONFIGURATOR_2.0_core"]
+	path = openCONFIGURATOR_2.0_core
+	url = https://github.com/OpenAutomationTechnologies/openCONFIGURATOR_library.git
+	branch = master
