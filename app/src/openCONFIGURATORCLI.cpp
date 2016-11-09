@@ -62,6 +62,155 @@ void show_usage(string name)
 	exit(1);
 }
 
+int parseXDC_XML(char* xmlPath)
+{
+	try
+	{
+		// Initialize Xerces infrastructure
+		XMLPlatformUtils::Initialize();
+
+		// Creating a DOMParser Object
+		XercesDOMParser domParser;
+
+		// Parsing the project XML file using the DOMParse parse() function
+		domParser.parse(xmlPath);
+
+		//  Create a document tree for the XML document
+		DOMDocument* doc = domParser.getDocument();
+
+		// Get the top-level element: Name is "root"
+		DOMElement* root = doc->getDocumentElement();
+		DOMXPathResult* result = doc->evaluate(
+		                             XMLString::transcode("/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/CN"),
+		                             root,
+		                             NULL,
+		                             DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
+		                             NULL);
+		if (result->getNodeValue() == NULL)
+		{
+			cout << "There is no result for the provided XPath " << endl;
+		}
+		else
+		{
+			XMLSize_t count = result->getSnapshotLength();
+
+			cout << "CN Count Value-------------------------------------" << count << endl;
+			for (XMLSize_t i = 0; i < count; i++)
+			{
+				result->snapshotItem(i);
+				DOMNode* item = result->getNodeValue();
+				char* index = XMLString::transcode(item->getAttributes()->getNamedItem(XMLString::transcode("pathToXDC"))->getNodeValue());
+
+				string indexString = index;
+				string indexString1 = "/" + indexString;
+
+				XMLString::release(&index);
+
+				string initialPath = (string) xmlPath;
+
+				string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
+				string fullPath = nextInitialPath.append(indexString1);
+				const char* c_str = nextInitialPath.c_str();
+
+				cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("pathToXDC"))->getNodeValue(), "ascii").str() << " ";
+				cout << "Node_ID: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("nodeID"))->getNodeValue(), "ascii").str() << " ";
+				cout << "\t" << "Multiplexed: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("isMultiplexed"))->getNodeValue(), "ascii").str() << " ";
+				cout << "\t" << "Chained: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("isChained"))->getNodeValue(), "ascii").str() << std::endl;
+				stringstream stream;
+				stream << indexString;
+
+				domParser.parse(c_str);
+
+				DOMDocument* doc = domParser.getDocument();
+				DOMElement* root = doc->getDocumentElement();
+				DOMXPathResult* result1 = doc->evaluate(
+				                              XMLString::transcode("/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationLayers/ObjectList/Object"),
+				                              root,
+				                              NULL,
+				                              DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
+				                              NULL);
+
+				if (result1->getNodeValue() == NULL)
+				{
+					cout << "There is no result for the provided XPath " << endl;
+				}
+				else
+				{
+					XMLSize_t count2 = result1->getSnapshotLength();
+					cout << "Object Count Value--------------" << count2 << endl;
+					for (XMLSize_t i = 0; i < count2; i++)
+					{
+						result1->snapshotItem(i);
+						DOMNode* item = result1->getNodeValue();
+						char* index = XMLString::transcode(item->getAttributes()->getNamedItem(XMLString::transcode("index"))->getNodeValue());
+						string indexString(index);
+						XMLString::release(&index);
+
+						cout << "Object_index: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("index"))->getNodeValue(), "ascii").str() << " ";
+						cout << "\t" << "Object_Name: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("name"))->getNodeValue(), "ascii").str() << " ";
+						cout << "\t" << "Object_Type: " << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("objectType"))->getNodeValue(), "ascii").str() << std::endl;
+						//cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("defaultValue"))->getNodeValue(), "ascii").str() << std::endl;
+						//cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("dataType"))->getNodeValue(), "ascii").str() << std::endl;
+						//cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("accessType"))->getNodeValue(), "ascii").str() << std::endl;
+						//cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("PDOmapping"))->getNodeValue(), "ascii").str() << std::endl;
+						//cout << TranscodeToStr(item->getAttributes()->getNamedItem(XMLString::transcode("defaultValue"))->getNodeValue(), "ascii").str() << std::endl;
+
+						stringstream stream;
+						uint32_t indexVal = 0;
+						stream << std::hex << indexString;
+						stream >> indexVal;
+
+						DOMXPathResult* subObject_result = doc->evaluate(
+						                                       XMLString::transcode("./SubObject"),
+						                                       item,
+						                                       NULL,
+						                                       DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
+						                                       NULL);
+						if (subObject_result->getNodeValue() != NULL)
+						{
+							XMLSize_t countSub = subObject_result->getSnapshotLength();
+							cout << "SubObject Count Value--------------" << countSub << endl;
+							for (XMLSize_t j = 0; j < countSub; j++)
+							{
+								subObject_result->snapshotItem(j);
+								DOMNode* itemSub = subObject_result->getNodeValue();
+								cout << "\t";
+								cout << "SubObject_subIndex: " <<  TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("subIndex"))->getNodeValue(), "ascii").str() << " ";
+								cout << "\t" << "SubObject_Name: " <<  TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("name"))->getNodeValue(), "ascii").str() << " ";
+								cout << "\t" << "SubObject_Type: " <<  TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("objectType"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("dataType"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("defaultValue"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("PDOmapping"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("lowLimit"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("highLimit"))->getNodeValue(), "ascii").str() << std::endl;
+								//cout << TranscodeToStr(itemSub->getAttributes()->getNamedItem(XMLString::transcode("actualValue"))->getNodeValue(), "ascii").str() << std::endl;
+							}
+							subObject_result->release();
+						}
+					}
+					result1->release();
+				}
+
+			}
+
+			result->release();
+
+
+		}
+	}
+	catch (xercesc::XMLException& e)
+	{
+		char* message = xercesc::XMLString::transcode(e.getMessage());
+		ostringstream errBuf;
+		errBuf << "Error parsing file: " << message << flush;
+		XMLString::release(&message);
+	}
+
+	XMLPlatformUtils::Terminate();
+	return 0;
+}
+
+
 string getFileExtension(string& s)
 {
 	return (fs::extension(s));
@@ -172,7 +321,7 @@ int main(int parameterCount, char* parameter[])
 			}
 		}
 	}
-
+	parseXDC_XML(xml);
 	return 0;
 }
 
