@@ -1,7 +1,7 @@
 /************************************************************************
-\file main.cpp
-\author Sree Hari Vignesh, Kalycito Infotech Private Limited.
-\brief Implementation to handle parameters received in the command line.
+\file Parser.h
+\author Subash Janarthanan, Kalycito Infotech Private Limited.
+\brief Specifies the parser functionalities included in CLI.
 ************************************************************************/
 
 /*------------------------------------------------------------------------------
@@ -29,17 +29,46 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#include "OpenConfiguratorCore.h"
-#include "ValidateCLIParameter.h"
+#ifndef PARSER_H
+#define PARSER_H
 
-using namespace IndustrialNetwork::POWERLINK::Application::openCONFIGURATORCLI;
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMDocument.hpp>
+#include <xercesc/dom/DOMElement.hpp>
+#include <xercesc/util/TransService.hpp>
+#include <xercesc/parsers/XercesDOMParser.hpp>
 
-int main(int parameterCount, char* parameter[])
+namespace IndustrialNetwork
 {
-	std::string projectParam = parameter[1];
-	std::string projectPath = parameter[2];
-	std::string outputParam = parameter[3];
-	std::string outputPath = parameter[4];
-	ValidateCLIParameter::GetInstance().ValidateParameter(parameterCount, projectParam, projectPath, outputParam, outputPath);
-	return 0;
+	namespace POWERLINK
+	{
+		namespace Application
+		{
+			namespace openCONFIGURATORCLI
+			{
+				class Parser
+				{
+					private:
+						//Specifies the nodeID of Node
+						std::string nodeId;
+						//Specifies the XDC path of Node.
+						std::string pathToXDC;
+
+					public:
+						/*
+						\Returns the Instance of class.
+						*/
+						static Parser& GetInstance();
+
+						/*
+						\Parses the project XML file.
+						\param xmlPath The project xml file.
+						*/
+						int ParseXMLFile(std::string xmlPath);
+				};
+			}
+		}
+	}
 }
+
+#endif //PARSER_H

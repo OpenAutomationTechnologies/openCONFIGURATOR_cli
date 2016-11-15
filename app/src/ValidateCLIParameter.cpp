@@ -1,60 +1,58 @@
 /************************************************************************
 \file ValidateCLIParameter.cpp
-\brief Implementation of the Class to validate the input parameters in command line.
 \author Sree Hari Vignesh, Kalycito Infotech Private Limited.
-*
-* @copyright (c) 2016, Kalycito Infotech Private Limited
-*                    All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the
-*     documentation and/or other materials provided with the distribution.
-*   * Neither the name of the copyright holders nor the
-*     names of its contributors may be used to endorse or promote products
-*     derived from this software without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
-* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+\brief Implementation of the Class to validate the input parameters in command line.
+************************************************************************/
+
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+	* Redistributions of source code must retain the above copyright
+	  notice, this list of conditions and the following disclaimer.
+	* Redistributions in binary form must reproduce the above copyright
+	  notice, this list of conditions and the following disclaimer in the
+	  documentation and/or other materials provided with the distribution.
+	* Neither the name of the copyright holders nor the
+	  names of its contributors may be used to endorse or promote products
+	  derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
 #include "OpenConfiguratorCore.h"
 #include "ValidateCLIParameter.h"
 #include "CLIResult.h"
 #include "LoggingConfiguration.h"
+#include "Parser.h"
 
 using namespace IndustrialNetwork::POWERLINK::Core::API;
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application::openCONFIGURATORCLI;
 
-char* xmlFile = "";
-
-void ValidateCLIParameter::Show_usage() {
-	boost::format formatter(kMsgToolGenerator);
-	
-		//LOG_ERROR() << formatter.str();
-		std::cout<< "Kalycito Infotech Private Limited "<< std::endl;
-		std::cout<< "B&R Internal" << std::endl;
-		std::cout << "Usage: CdcBuilder.exe <ProjectFilePath> [options]"<< std::endl;
-		std::cout<< " Options: "<<std::endl;
-		std::cout<< " -p,--project <ProjectFile>   Project XML file. "<<std::endl;
-		std::cout<< " -o,--output <OutputPath>     Output path for generated files. "<<std::endl;
-		std::cout<< " -de,--german                 German log messages. Default is English."<<std::endl;
-		std::cout<< " -v,--verbose                 Log file. "<<std::endl;
-		std::cout<< " -h,--help <Help>             Help. "<<std::endl;
-		exit(1);
+void ValidateCLIParameter::ShowUsage()
+{
+	LOG_INFO() << kMsgToolGenerator;
+	LOG_INFO() << kMsgToolVendor;
+	LOG_INFO() << kMsgToolUsage;
+	LOG_INFO() << kMsgOptions;
+	LOG_INFO() << kMsgProjectParameter;
+	LOG_INFO() << kMsgOutputParameter;
+	LOG_INFO() << kMsgLanguageParameter;
+	LOG_INFO() << kMsgLogMessage;
+	LOG_INFO() << kMsgHelpParameter;
+	exit(1);
 }
-
 
 ValidateCLIParameter& ValidateCLIParameter::GetInstance()
 {
@@ -62,91 +60,123 @@ ValidateCLIParameter& ValidateCLIParameter::GetInstance()
 	return instance;
 }
 
-std::string ValidateCLIParameter::GetNetworkName() {
-	return boost::filesystem::basename(xmlFile);
+std::string ValidateCLIParameter::GetProjectpath()
+{
+	return std::string(ValidateCLIParameter::xmlFile);
 }
 
-int ValidateCLIParameter::ValidateParameter(int parameterCount, char* parameter[])
+std::string ValidateCLIParameter::GetNetworkName()
 {
-	OpenConfiguratorCore::GetInstance();
+	return boost::filesystem::basename(ValidateCLIParameter::xmlFile);
+}
+
+int ValidateCLIParameter::ValidateParameter(int parameterCount, std::string projectParam, std::string projectPath, std::string outputParam, std::string outputPath)
+{
 	std::string projectXMLFile = "";
-	
-	if(parameterCount < 4) {
-		boost::format formatter(kMsgInvalidArguments);
-		std::cout << "Invalid number of arguments. Expected: 3 Actual: "<< parameterCount << std::endl;
-		Show_usage();
+
+	if (parameterCount < 4)
+	{
+		LOG_ERROR() << "Invalid number of arguments. Expected: 3 Actual: " << parameterCount;
+		ShowUsage();
+		exit(1);
+	}
+	if (parameterCount == 1)
+	{
+		ShowUsage();
+		exit(1);
+	}
+	if (parameterCount == 2)
+	{
+		LOG_ERROR() << kMsgInsufficientParameters;
+		ShowUsage();
 		exit(1);
 	}
 
-	if(parameterCount == 1) {
-	Show_usage();
-	exit(1);
-	}
+	std::string projectFileparam = projectParam;
 
-	if(parameterCount == 2) {
-		std::cout << "Insufficient command line parameters." << std::endl;
-		Show_usage();
-		exit(1);
-	}
-
-	std::string projectFileparam = std::string(parameter[1]);
-
-	if((projectFileparam == "-p") || (projectFileparam == "--project"))  {
-
-		projectXMLFile = std::string(parameter[2]);
-		xmlFile = parameter[2];
-		if(!boost::filesystem::exists(projectXMLFile)) {
-			std::cout << "Project file does not exists." << std::endl;
+	if ((projectFileparam == "-p") || (projectFileparam == "--project"))
+	{
+		std::cout << "Section left";
+		projectXMLFile = projectPath;
+		std::cout << "Section left";
+		ValidateCLIParameter::xmlFile = projectPath;
+		if (!boost::filesystem::exists(projectXMLFile))
+		{
+			LOG_ERROR() << kMsgProjectFileExists;
 			exit(1);
 		}
-		
-		if(boost::filesystem::extension(projectXMLFile) != ".xml") {
-			std::cout << "Invalid file!" << std::endl;
+
+		if (boost::filesystem::extension(projectXMLFile) != ".xml")
+		{
+			LOG_ERROR() << kMsgInvalidParameter;
 			exit(1);
 		}
-		if(parameter[3] != NULL) {
-		std::string outputfileparam = std::string(parameter[3]);
-		if(outputfileparam != "") {
-			if((outputfileparam == "-o") || (outputfileparam == "--output")) {
-			std::string outputFile = std::string(parameter[4]);
-			if(!boost::filesystem::exists(outputFile)) {
-				std::cout << "Output directory does not exists." << std::endl;
+		const std::string& outputfileparam = outputParam;
+		if (!outputfileparam.empty())
+		{
+			if ((outputfileparam == "-o") || (outputfileparam == "--output"))
+			{
+				std::string outputFile = outputPath;
+				try
+				{
+					if (!boost::filesystem::exists(outputFile))
+					{
+						LOG_ERROR() << kMsgOutputDirectoryExists;
+						exit(1);
+					}
+				}
+				catch (std::exception exc)
+				{
+					exc.what();
+				}
+			}
+			else
+			{
+				LOG_ERROR() << kMsgInvalidParameter;
+				ShowUsage();
 				exit(1);
 			}
-		}else {
-			std::cout << "Invalid command line parameter. ";
-			Show_usage();
-			exit(1);
-		}
-		}
-		}
-	}else {
-		projectXMLFile = std::string(parameter[1]);
-		xmlFile = parameter[1];
-		if(!boost::filesystem::exists(projectXMLFile)) {
-			std::cout << "Project file does not exists." << std::endl;
-		}
-		if(boost::filesystem::extension(projectXMLFile) != ".xml") {
-			std::cout << "Invalid file!" << std::endl;
-		}
-		if(parameter[2] != NULL) {
-
-		std::string outputfileparam = std::string(parameter[2]);
-
-		if((outputfileparam == "-o") || (outputfileparam == "--output")) {
-			std::string outputFile = std::string(parameter[3]);
-			if(!boost::filesystem::exists(outputFile)) {
-				std::cout << "Output directory does not exists." << std::endl;
-				exit(1);
-			}
-		}else {
-			std::cout << "Invalid command line parameter. ";
-			Show_usage();
-			exit(1);
-		}
 		}
 	}
+	else
+	{
+		projectXMLFile = projectPath;
+		ValidateCLIParameter::xmlFile = projectPath;
+		try
+		{
+			if (!boost::filesystem::exists(projectXMLFile))
+			{
+				LOG_ERROR() << kMsgProjectFileExists;
+			}
+		}
+		catch (std::exception exc)
+		{
+			exc.what();
+		}
+		if (boost::filesystem::extension(projectXMLFile) != ".xml")
+		{
+			LOG_ERROR() << kMsgInvalidFile;
+		}
+		std::string outputfileparam = outputParam;
 
-	//ParseXMLXDC(XmlFile);
+		if ((outputfileparam == "-o") || (outputfileparam == "--output"))
+		{
+			std::string outputFile = outputPath;
+			if (!boost::filesystem::exists(outputFile))
+			{
+				LOG_ERROR() << kMsgOutputDirectoryExists;
+				exit(1);
+			}
+		}
+		else
+		{
+			LOG_ERROR() << kMsgInvalidParameter;
+			ShowUsage();
+			exit(1);
+		}
+	}
+	//Parse the project XML file
+	Parser::GetInstance().ParseXMLFile(ValidateCLIParameter::xmlFile);
 	return 0;
-}	
+}
+

@@ -1,7 +1,7 @@
 /************************************************************************
-\file main.cpp
+\file ProjectParser.h
 \author Sree Hari Vignesh, Kalycito Infotech Private Limited.
-\brief Implementation to handle parameters received in the command line.
+\brief Specifies the method used for executing library API
 ************************************************************************/
 
 /*------------------------------------------------------------------------------
@@ -28,18 +28,53 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
+#ifndef PROJECT_PARSER_H
+#define PROJECT_PARSER_H
+
+#include <fstream>
+#include <string>
+#include <list>
 
 #include "OpenConfiguratorCore.h"
-#include "ValidateCLIParameter.h"
+#include "Parser.h"
 
-using namespace IndustrialNetwork::POWERLINK::Application::openCONFIGURATORCLI;
-
-int main(int parameterCount, char* parameter[])
+namespace IndustrialNetwork
 {
-	std::string projectParam = parameter[1];
-	std::string projectPath = parameter[2];
-	std::string outputParam = parameter[3];
-	std::string outputPath = parameter[4];
-	ValidateCLIParameter::GetInstance().ValidateParameter(parameterCount, projectParam, projectPath, outputParam, outputPath);
-	return 0;
+	namespace POWERLINK
+	{
+		namespace Application
+		{
+			namespace openCONFIGURATORCLI
+			{
+				class ProjectParser
+				{
+					public:
+						/*
+						\Returns the instance of LibraryUtils.
+						*/
+						static ProjectParser& GetInstance();
+
+						/*
+						\Updates the information of Node XDC into library API.
+						\param nodeidList Specifies the node id value of node.
+						\param cnXDC Specifies the XDC path of node.
+						*/
+						void UpdateNodeIdCollection(std::uint8_t nodeIdList, const std::string& cnXDC);
+
+						/*
+						\Updates the Device POWERLINK profile body of XDD/XDC into core library.
+						\param doc Specifies the instance of XDC document.
+						\param nodeID Specifies the Id value of node.
+						*/
+						void ImportProfileBodyDevicePOWERLINK(xercesc::DOMDocument* doc, std::uint8_t nodeId);
+						void UpdateManagingNode();
+						void UpdateControlledNode();
+						void UpdateModules();
+						void UpdateParameters();
+						void UpdateObjects();
+				};
+			}
+		}
+	}
 }
+#endif // PROJECT_PARSER_H
