@@ -1,42 +1,19 @@
-/************************************************************************
-\file ProjectParser.h
-\author Sree Hari Vignesh, Kalycito Infotech Private Limited.
-\brief Specifies the method used for executing library API
-************************************************************************/
+/**
+ * \class ProjectParser
+ *
+ * \brief Parses XML file using ParserElement and ParserResult
+ *
+ * \author Kalycito Infotech Private Limited
+ *
+ * \version 0.1
+ *
+ */
 
-/*------------------------------------------------------------------------------
-Copyright (c) 2016, Kalycito Infotech Private Limited
-All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-	* Redistributions of source code must retain the above copyright
-	  notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
-	  notice, this list of conditions and the following disclaimer in the
-	  documentation and/or other materials provided with the distribution.
-	* Neither the name of the copyright holders nor the
-	  names of its contributors may be used to endorse or promote products
-	  derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-------------------------------------------------------------------------------*/
 #ifndef PROJECT_PARSER_H
 #define PROJECT_PARSER_H
 
-#include <fstream>
-#include <string>
-#include <list>
-
-#include "OpenConfiguratorCore.h"
-#include "Parser.h"
+#include "OpenConfiguratorCLI.h"
+#include "ParserElement.h"
 
 namespace IndustrialNetwork
 {
@@ -44,37 +21,116 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			namespace openCONFIGURATORCLI
+			class ProjectParser
 			{
-				class ProjectParser
-				{
-					public:
-						/*
-						\Returns the instance of LibraryUtils.
-						*/
-						static ProjectParser& GetInstance();
+				public:
+					/// Default constructor of the class
+					ProjectParser();
 
-						/*
-						\Updates the information of Node XDC into library API.
-						\param nodeidList Specifies the node id value of node.
-						\param cnXDC Specifies the XDC path of node.
-						*/
-						void UpdateNodeIdCollection(std::uint8_t nodeIdList, const std::string& cnXDC);
+					/// Descriptor of the class
+					~ProjectParser();
 
-						/*
-						\Updates the Device POWERLINK profile body of XDD/XDC into core library.
-						\param doc Specifies the instance of XDC document.
-						\param nodeID Specifies the Id value of node.
-						*/
-						void ImportProfileBodyDevicePOWERLINK(xercesc::DOMDocument* doc, std::uint8_t nodeId);
-						void UpdateManagingNode();
-						void UpdateControlledNode();
-						void UpdateModules();
-						void UpdateParameters();
-						void UpdateObjects();
-				};
-			}
-		}
-	}
-}
+					/** \brief Creates single instance
+					  * \return Static instance of the class
+					  */
+					static ProjectParser& GetInstance();
+
+					/** \brief Parses the XML file
+					  * \param xmlPath Name of the XML file with path
+					  * \return true if parsing is success; false otherwise
+					  */
+					bool ParserXMLFile(std::string xmlPath);
+
+				private:
+					/**
+					  * \brief Updates the information of Node XDC into library API
+					  * \param nodeId Specifies the node id value of node
+					  * \param pathXDC Specifies the XDC path of node
+					  * \return Nothing
+					  */
+					bool UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& pathXDC);
+
+					/**
+					  * \brief Updates the Device POWERLINK profile body of XDD/XDC into core library
+					  * \param element element that contains handle of XDC document
+					  * \param nodeId Specifies the Id value of node
+					  * \return Nothing
+					  */
+					bool ImportProfileBodyDevicePOWERLINK(ParserElement& element, std::uint8_t nodeId);
+
+					/**
+					  * \brief Updates the Communication POWERLINK profile body of XDD/XDC into core library
+					  * \param element element that contains handle of XDC document
+					  * \param nodeId Specifies the Id value of node
+					  * \return Nothing
+					  */
+					bool ImportProfileBodyCommunicationPOWERLINK(ParserElement& element, std::uint8_t nodeId);
+
+					/**
+					  * \brief Gets the IEC_Datatype based on the string retrieved from XDC
+					  * \param dataType Specifies the dataType value of object or parameter
+					  * \returns IEC_Datatype
+					  */
+					IEC_Datatype GetDataType(std::string dataType);
+
+					/**
+					  * \brief Gets the ParameterAccess based on the value retrieved from XDC
+					  * \param access Specifies the access value of parameter
+					  * \return ParameterAccess
+					  */
+					ParameterAccess GetParameterAccess(std::string access);
+
+					/**
+					  * \brief Gets the ObjectType of object from XDC
+					  * \param objType Specifies the type of an object
+					  * \return ObjectType
+					 */
+					ObjectType GetObjectType(std::uint8_t objType);
+
+					/**
+					  * \brief Gets the PlkDataType of object from XDC
+					  * \param plkDataType Specifies the data type of an object
+					  * \return PlkDataType
+					  */
+					PlkDataType GetPLKDataType(std::string plkDataType);
+
+					/**
+					 * \brief Gets the AccessType of object from XDC
+					 * \param accessType Specifies the access type of object
+					 * \return AccessType
+					 */
+					AccessType GetObjAccessType(std::string accessType);
+
+					/**
+					  * \brief Gets the PDOMapping of object or sub-object from XDC
+					  * \param pdoMapp Specifies the mapping value of object or sub-object
+					  * \return PDOMapping
+					  */
+					PDOMapping GetPDOMapping(std::string pdoMapp);
+
+					/**
+					  * \brief Gets the IEC_Datatype of object or sub-object based on element in XDC
+					  * \param node Instance of DOMNode
+					  * \return IEC_Datatype
+					  */
+					IEC_Datatype GetIECDataType(xercesc::DOMNode* node);
+
+
+					bool AddDataType(ParserElement& element, std::uint8_t nodeId);
+					bool CreateStructDataType(ParserElement& element, std::uint8_t nodeId);
+					bool CreateArrayDataType(ParserElement& element, std::uint8_t nodeId);
+					bool CreateParameterTemplate(ParserElement& element, std::uint8_t nodeId);
+					bool CreateParameterGroup(ParserElement& element, std::uint8_t nodeId);
+					bool CreateParameterList(ParserElement& element, std::uint8_t nodeId);
+					bool CreateChildParameterGroup(ParserElement& element, std::uint8_t nodeId, xercesc::DOMNode* parameterGroupResult, std::string uniqueId);
+					bool SetParamAllowedValue(ParserElement& element,DOMNode* node,std::uint8_t nodeId,std::string uniqueId);
+					bool SetParamAllowedRange(ParserElement& element,DOMNode* node,std::uint8_t nodeId,std::string uniqueId);
+					bool SetParamActualValue(ParserElement& element,DOMNode* node,std::uint8_t nodeId,std::string uniqueId);
+					bool SetParamDefaultValue(ParserElement& element,DOMNode* node,std::uint8_t nodeId,std::string uniqueId);
+					bool CreateObject(ParserElement& element, std::uint8_t nodeId);
+			};
+		} // end of namespace Application
+	} // end of namespace POWERLINK
+} // end of namespace IndustrialNetwork
 #endif // PROJECT_PARSER_H
+
