@@ -36,9 +36,10 @@ namespace IndustrialNetwork
 					  */
 					bool CreateElement(std::string file);
 
-					xercesc::DOMDocument * docHandle;						///< Document handle
+					xercesc::DOMDocument *docHandle;						///< Document handle
 
-					xercesc::DOMElement * docElement;						///< Document element handle
+					xercesc::DOMElement *docElement;						///< Document element handle
+					xercesc::XercesDOMParser *domParser;                   ///< Create DOM parser
 
 				private:
 					std::string filePath;							///< file that has to be parsed

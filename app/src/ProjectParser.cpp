@@ -28,7 +28,7 @@ ProjectParser& ProjectParser::GetInstance()
 	return instance;
 }
 
-bool ProjectParser::ParserXMLFile(const std::string xmlPath)
+bool ProjectParser::ParserXMLFile(std::string xmlPath)
 {
 	try
 	{
@@ -41,7 +41,7 @@ bool ProjectParser::ParserXMLFile(const std::string xmlPath)
 
 		if (xmlParserElement.CreateElement(xmlPath) == true)
 		{
-			if (mnResult.CreateResult(xmlParserElement, mnXpathExpression.c_str(),
+			if (mnResult.CreateResult(xmlParserElement, mnXpathExpression,
 										"nodeID,pathToXDC,name") == true)
 			{
 				for (int row = 0; row < mnResult.parameters.size(); row++)
