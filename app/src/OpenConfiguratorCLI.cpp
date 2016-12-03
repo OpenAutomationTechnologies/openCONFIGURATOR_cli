@@ -14,6 +14,7 @@
 #include "OpenConfiguratorCLI.h"
 #include "ParameterValidator.h"
 #include "ProjectParser.h"
+#include "ConfigurationGenerator.h"
 
 /**************************** Public members *********************************/
 
@@ -78,9 +79,8 @@ bool OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<std::s
 			//Parse the XML file
 			ProjectParser::GetInstance().ParserXMLFile(xmlFilePath);
 
-
 			//Generate output files
-
+			ConfigurationGenerator::GetInstance().BuildConciseDeviceConfiguration(outputPath);
 
 			return true;
 		}

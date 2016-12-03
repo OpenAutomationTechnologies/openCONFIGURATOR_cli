@@ -32,7 +32,7 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 	return instance;
 }
 
-bool ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string networkId,std::string outputPath){
+bool ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string outputPath){
 	LOG_INFO()<< "Entered Build configuration....";
 	std::vector<std::uint8_t> binOutput;
 	std::string configurationOutput="";
@@ -48,9 +48,9 @@ bool ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string network
 
 	try
 	{
-		if (!boost::filesystem::exists("C:/OCP_Projects_Xerces/Xerces_4CN/output"))
+		if (!boost::filesystem::exists(outputPath))
 			{
-				boost::filesystem::path dir("C:/OCP_Projects_Xerces/Xerces_4CN/output");
+				boost::filesystem::path dir(outputPath);
 				boost::filesystem::create_directory(dir);
 			}
 	}
@@ -63,12 +63,19 @@ bool ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string network
             return retVal;
         }
 
-	retVal = createMnobdCdc(outputPath,configurationOutput);
+		std::ostringstream buffer;
+		
+		 for (int i = 0; i < binOutput.size(); i++) {
+			 std::uint8_t value = binOutput.at(i);
+			buffer << (value);
+		 }
+
+	retVal = createMnobdCdc(outputPath,buffer);
         if (!retVal) {
             return retVal;
         }
 
-      retVal = createMnobdHexTxt(outputPath,configurationOutput);
+      retVal = createMnobdHexTxt(outputPath,buffer);
         if (!retVal) {
             return retVal;
         }
@@ -80,7 +87,7 @@ bool ConfigurationGenerator::createMnobdTxt(std::string outputPath,std::string c
 	try
 	{
 		LOG_INFO()<< "Entered createMnobdtxt methos...........";
-		std::string targetPath= "C:/OCP_Projects_Xerces/Xerces_4CN/output/mnobd.txt";
+		std::string targetPath= outputPath+"/mnobd.txt";
 		std::ofstream file(targetPath);
 		file << configuration << std::endl;
 	}
@@ -91,14 +98,14 @@ bool ConfigurationGenerator::createMnobdTxt(std::string outputPath,std::string c
 	return true;
 }
 
-bool ConfigurationGenerator::createMnobdCdc(std::string outputPath,std::string configuration)
+bool ConfigurationGenerator::createMnobdCdc(std::string outputPath,std::ostringstream& buffer)
 {
 	try
 	{
 		LOG_INFO()<< "Entered createMnobdCdc methos...........";
-		std::string targetPath= "C:/OCP_Projects_Xerces/Xerces_4CN/output/mnobd.cdc";
+		std::string targetPath= outputPath+"/mnobd.cdc";
 		std::ofstream file(targetPath);
-		file << configuration << std::endl;
+		file << buffer.str() << std::endl;
 	}
 	catch(std::exception exce)
 	{ 
@@ -107,14 +114,39 @@ bool ConfigurationGenerator::createMnobdCdc(std::string outputPath,std::string c
 	return true;
 }
 
-bool ConfigurationGenerator::createMnobdHexTxt(std::string outputPath,std::string configuration)
+bool ConfigurationGenerator::createMnobdHexTxt(std::string outputPath,std::ostringstream& buffer)
 {
 	try
 	{
 		LOG_INFO()<< "Entered createMnobHexTxt methos...........";
-		std::string targetPath= "C:/OCP_Projects_Xerces/Xerces_4CN/output/mnobd_char.txt";
+
+		std::ostringstream sb;
+
+		
+
+		LOG_INFO() << "Created string stream";
+		
+		short lineBreakCount = 0;
+		for (int cnt = 0; cnt < buffer.str().size(); ++cnt) {
+            sb << "0x"; 
+			
+			sb <<(std::uint8_t) ("%02X" , (buffer.str().at(cnt))); 
+            if (cnt != (buffer.str().size() - 1)) {
+                sb << ",";
+            }
+            lineBreakCount++;
+
+            if (lineBreakCount == 16) {
+                sb << "\n";
+                lineBreakCount = 0;
+            } else {
+                sb << " " ;
+            }
+        }
+
+		std::string targetPath= outputPath+"/mnobd_char.txt";
 		std::ofstream file(targetPath);
-		file << configuration << std::endl;
+		file << sb.str() << std::endl;
 	}
 	catch(std::exception exce)
 	{ 

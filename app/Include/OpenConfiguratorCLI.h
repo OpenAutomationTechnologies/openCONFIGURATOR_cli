@@ -35,11 +35,12 @@
 
 using namespace IndustrialNetwork::POWERLINK::Core::API;
 using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
-using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
-using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
-using namespace IndustrialNetwork::POWERLINK::Application;
-using namespace IndustrialNetwork::POWERLINK::Application::CLIConstants;
 using namespace IndustrialNetwork::POWERLINK::Core::ObjectDictionary;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application::CLIConstants;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::Node;
+using namespace IndustrialNetwork::POWERLINK::Application;
 using namespace xercesc;
 
 namespace IndustrialNetwork

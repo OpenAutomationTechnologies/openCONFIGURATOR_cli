@@ -42,6 +42,10 @@ namespace IndustrialNetwork
 				const std::string subObjectXpathExpression = "./SubObject";
 				const std::string structVarXpathExpression = "./varDeclaration";
 				const std::string arraySubRangeXpathExpression = "./subrange";
+				const std::string forcedObjectXpathExpression = "./ForcedObjects/Object";
+				const std::string generalFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/GeneralFeatures";
+				const std::string mnFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/MNFeatures";
+				const std::string cnFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/CNFeatures";
 			} // end of namespace CLIConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK

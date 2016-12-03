@@ -15,10 +15,8 @@
 #include <string>
 
 #include "OpenConfiguratorCLI.h"
-
 #include "IResult.h"
 #include "CLIErrorCode.h"
-
 
 namespace IndustrialNetwork
 {

@@ -37,10 +37,10 @@ namespace IndustrialNetwork
 						static ConfigurationGenerator& GetInstance();
 
 
-						bool BuildConciseDeviceConfiguration(std::string networkId,std::string outputPath);
+						bool BuildConciseDeviceConfiguration(std::string outputPath);
 						bool createMnobdTxt(std::string outputPath,std::string configuration);
-						bool createMnobdCdc(std::string outputPath,std::string configuration);
-						bool createMnobdHexTxt(std::string outputPath,std::string configuration);
+						bool createMnobdCdc(std::string outputPath,std::ostringstream& buffer);
+						bool createMnobdHexTxt(std::string outputPath,std::ostringstream& buffer);
 					
 				};
 			}

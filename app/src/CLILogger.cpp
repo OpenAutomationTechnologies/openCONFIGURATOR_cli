@@ -10,13 +10,17 @@
  */
 
 #include "OpenConfiguratorCLI.h"
-#include "CLILogger.h"
 
 CLILogger::CLILogger()
 {
 	fileLog = false;
 
 	languageGerman = false;
+
+	CLIMessageTypeString.push_back("INFO");
+	CLIMessageTypeString.push_back("WARN");
+	CLIMessageTypeString.push_back("ERROR");
+	CLIMessageTypeString.push_back("DEBUG");
 }
 
 CLILogger::~CLILogger()
@@ -35,12 +39,19 @@ CLILogger& CLILogger::GetInstance()
 
 void CLILogger::SetFileLog(bool set)
 {
-	fileLog = set;
-
-	if (fileLog == true)
+	if (set == true)
 	{
 		ofs.open ("OpenCONFIGURATOR_CLI.log", std::ofstream::out | std::ofstream::app);
 	}
+	else
+	{
+		if (fileLog == true)
+		{
+			ofs.close();
+		}
+	}
+
+	fileLog = set;
 }
 
 void CLILogger::SetLanguageToGerman(bool set)
@@ -48,14 +59,22 @@ void CLILogger::SetLanguageToGerman(bool set)
 	languageGerman = set;
 }
 
-void CLILogger::LogMessage(uint32_t messageId)
+/*
+void CLILogger::LogMessage(CLIMessageType msgType, CLIResult& result)
 {
+	std::ostringstream message;
+
+	message << "[" << CLIMessageTypeString.at((uint8_t)msgType).c_str()	<< "] ";
+	message << "[" << boost::posix_time::second_clock::local_time()		<< "] ";
+	message << result.GetErrorMessage() << std::endl;
+			
 	if (fileLog == true)
 	{
-		//ofs << logMessage->at(messageId);
+		ofs << message.str();
 	}
 	else
 	{
-		//LOG_ERROR(logMessage->at(messageId));
+		std::cout << message.str();
 	}
 }
+*/

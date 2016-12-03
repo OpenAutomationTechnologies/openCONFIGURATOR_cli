@@ -67,6 +67,30 @@ namespace IndustrialNetwork
 					bool ImportProfileBodyCommunicationPOWERLINK(ParserElement& element, std::uint8_t nodeId);
 
 					/**
+					  * \brief Adds network management general features
+					  * \param element element that contains handle of XDC document
+					  * \param nodeId Specifies the Id value of node
+					  * \return Nothing
+					  */
+					bool AddNetworkManagementGeneralFeatures(ParserElement& element, std::uint8_t nodeId);
+
+					/**
+					  * \brief Adds network management MN features
+					  * \param element element that contains handle of XDC document
+					  * \param nodeId Specifies the Id value of node
+					  * \return Nothing
+					  */
+					bool AddNetworkManagementMnFeatures(ParserElement& element, std::uint8_t nodeId);
+
+					/**
+					  * \brief Adds network management CN features
+					  * \param element element that contains handle of XDC document
+					  * \param nodeId Specifies the Id value of node
+					  * \return Nothing
+					  */
+					bool AddNetworkManagementCnFeatures(ParserElement& element, std::uint8_t nodeId);
+
+					/**
 					  * \brief Gets the IEC_Datatype based on the string retrieved from XDC
 					  * \param dataType Specifies the dataType value of object or parameter
 					  * \returns IEC_Datatype

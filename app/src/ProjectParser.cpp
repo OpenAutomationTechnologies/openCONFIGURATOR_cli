@@ -46,7 +46,7 @@ bool ProjectParser::ParserXMLFile(std::string xmlPath)
 			{
 				for (int row = 0; row < mnResult.parameters.size(); row++)
 				{
-					uint8_t nodeId = (uint8_t) atoi(mnResult.parameters[row].at(0).c_str());
+					uint8_t nodeId = (uint8_t)atoi(mnResult.parameters[row].at(0).c_str());
 
 					/**< Core Library API call to create Node */
 					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
@@ -76,7 +76,7 @@ bool ProjectParser::ParserXMLFile(std::string xmlPath)
 			{
 				for (int row = 0; row < cnResult.parameters.size(); row++)
 				{
-					uint8_t nodeId = (uint8_t) atoi(cnResult.parameters[row].at(0).c_str());
+					uint8_t nodeId = (uint8_t)atoi(cnResult.parameters[row].at(0).c_str());
 
 					/**< Core Library API call to create Node */
 					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
@@ -237,7 +237,7 @@ bool ProjectParser::CreateArrayDataType(ParserElement & element, std::uint8_t no
 					}
 					else
 					{
-						lowerLimit = (uint32_t)subpResult.parameters[subrow].at(0).c_str();
+						lowerLimit = (uint32_t)atoi(subpResult.parameters[subrow].at(0).c_str());
 					}
 
 					if (subpResult.parameters[subrow].at(1).empty())
@@ -247,7 +247,7 @@ bool ProjectParser::CreateArrayDataType(ParserElement & element, std::uint8_t no
 					}
 					else
 					{
-						upperLimit = (uint32_t)subpResult.parameters[subrow].at(1).c_str();
+						upperLimit = (uint32_t)atoi(subpResult.parameters[subrow].at(1).c_str());
 					}
 
 					/**< Core Library API call to create ArrayDatatype */
@@ -523,9 +523,9 @@ bool ProjectParser::CreateChildParameterGroup(ParserElement & element,
 				Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
 						OpenConfiguratorCLI::GetInstance().GetNetworkName(),
 						nodeId,
-						pResult.parameters[row].at(0), 				/* uniqueID */
+						pResult.parameters[row].at(0), 								/* uniqueID */
 						paramGroupUId,
-						(uint8_t)pResult.parameters[row].at(3).c_str(),		/* bitOffset */
+						(uint8_t)atoi(pResult.parameters[row].at(3).c_str()),		/* bitOffset */
 						"", "", 0U);
 				if (!res.IsSuccessful())
 				{
@@ -537,11 +537,11 @@ bool ProjectParser::CreateChildParameterGroup(ParserElement & element,
 				Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
 						OpenConfiguratorCLI::GetInstance().GetNetworkName(),
 						nodeId,
-						pResult.parameters[row].at(0), 						/* uniqueID */
+						pResult.parameters[row].at(0), 								/* uniqueID */
 						paramGroupUId,
-						pResult.parameters[row].at(1), 						/* conditionalUniqueIDRef */
-						pResult.parameters[row].at(2), 						/* conditionalValue */
-						(uint8_t)pResult.parameters[row].at(3).c_str(),		/* bitOffset */
+						pResult.parameters[row].at(1), 								/* conditionalUniqueIDRef */
+						pResult.parameters[row].at(2), 								/* conditionalValue */
+						(uint8_t)atoi(pResult.parameters[row].at(3).c_str()),		/* bitOffset */
 						"", "", 0U);
 				if (!res.IsSuccessful())
 				{
@@ -564,9 +564,9 @@ bool ProjectParser::CreateChildParameterGroup(ParserElement & element,
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
 										OpenConfiguratorCLI::GetInstance().GetNetworkName(),
 										nodeId, paramGroupUId,
-										subpResult.parameters[subrow].at(0),					/* uniqueIDRef */
+										subpResult.parameters[subrow].at(0),							/* uniqueIDRef */
 										"",
-										(uint8_t)subpResult.parameters[subrow].at(3).c_str(), 	/* bitOffset */
+										(uint8_t)atoi(subpResult.parameters[subrow].at(3).c_str()), 	/* bitOffset */
 										"", "", 0U);
 						if (!res.IsSuccessful())
 						{
@@ -576,13 +576,13 @@ bool ProjectParser::CreateChildParameterGroup(ParserElement & element,
 					else
 					{
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
-								OpenConfiguratorCLI::GetInstance().GetNetworkName(),
-								nodeId,
-								pResult.parameters[row].at(0),							/* uniqueID */
-								subpResult.parameters[subrow].at(0),					/* uniqueIDRef */
-								subpResult.parameters[subrow].at(2),  					/* actualValue */
-								(uint8_t)subpResult.parameters[subrow].at(3).c_str(), 	/* bitOffset */
-								"", "", 0U);
+										OpenConfiguratorCLI::GetInstance().GetNetworkName(),
+										nodeId,
+										pResult.parameters[row].at(0),									/* uniqueID */
+										subpResult.parameters[subrow].at(0),							/* uniqueIDRef */
+										subpResult.parameters[subrow].at(2),  							/* actualValue */
+										(uint8_t)atoi(subpResult.parameters[subrow].at(3).c_str()), 	/* bitOffset */
+										"", "", 0U);
 						if (!res.IsSuccessful())
 						{
 							LOG_ERROR() << res.GetErrorMessage();
@@ -638,10 +638,10 @@ bool ProjectParser::CreateParameterGroup(ParserElement & element, std::uint8_t n
 					Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
 							OpenConfiguratorCLI::GetInstance().GetNetworkName(),
 							nodeId,
-							pResult.parameters[row].at(0),							/* uniqueID */
-							subpResult.parameters[subrow].at(0),					/* uniqueIDRef */
-							subpResult.parameters[subrow].at(2),  					/* actualValue */
-							(uint8_t)subpResult.parameters[subrow].at(3).c_str(), 	/* bitOffset */
+							pResult.parameters[row].at(0),									/* uniqueID */
+							subpResult.parameters[subrow].at(0),							/* uniqueIDRef */
+							subpResult.parameters[subrow].at(2),  							/* actualValue */
+							(uint8_t)atoi(subpResult.parameters[subrow].at(3).c_str()), 	/* bitOffset */
 							"", "", 0U);
 					if (!res.IsSuccessful())
 					{
@@ -1020,11 +1020,100 @@ bool ProjectParser::ImportProfileBodyCommunicationPOWERLINK(ParserElement & elem
 	return true;
 }
 
-/**
-/Updates the Library with the information extracted from the node XDC.
-/param nodeid Specifies the ID of the Node.
-/param cnXDC Specifies the XDC path of Node.
-*/
+bool ProjectParser::AddNetworkManagementGeneralFeatures(ParserElement& element, std::uint8_t nodeId)
+{
+	ParserResult pResult;
+
+	if (pResult.CreateResult(element,
+				generalFeatureXpathExpression.c_str(),
+				"CFMConfigManager,DLLErrBadPhysMode,DLLErrMacBuffer,DLLFeatureCN,DLLFeatureMN,NMTBootTimeNotActive,NMTCycleTimeGranularity,NMTCycleTimeMax,NMTCycleTimeMin,NMTMinRedCycleTime,NMTEmergencyQueueSize,NMTErrorEntries,NMTExtNmtCmds,NMTFlushArpEntry,NMTIsochronous,NMTNetHostNameSet,NMTMaxCNNodeID,NMTMaxCNNumber,NMTMaxHeartbeats,NMTNodeIDByHW,NMTNodeIDBySW,NMTProductCode,NMTPublishActiveNodes,NMTPublishConfigNodes,NMTPublishEmergencyNew,NMTPublishNodeState,NMTPublishOperational,NMTPublishPreOp1,NMTPublishPreOp2,NMTPublishReadyToOp,NMTPublishStopped,NMTPublishTime,NMTRevisionNo,NWLForward,NWLICMPSupport,NWLIPSupport,PDODynamicMapping,PDOGranularity,PDOMaxDescrMem,PDORPDOChannelObjects,PDORPDOChannels,PDORPDOCycleDataLim,PDORPDOOverallObjects,PDOSelfReceipt,PDOTPDOChannelObjects,PDOTPDOCycleDataLim,PDOTPDOOverallObjects,PHYExtEPLPorts,PHYHubDelay,PHYHubIntegrated,PHYHubJitter,RT1RT1SecuritySupport,RT1RT1Support,RT2RT2Support,SDOClient,SDOCmdFileRead,SDOCmdFileWrite,SDOCmdLinkName,SDOCmdReadAllByIndex,SDOCmdReadByName,SDOCmdReadMultParam,SDOCmdWriteAllByIndex,SDOCmdWriteByName,SDOCmdWriteMultParam,SDOMaxConnections,SDOMaxParallelConnections,SDOSeqLayerTxHistorySize,SDOServer,SDOSupportASnd,SDOSupportPDO,SDOSupportUdpIp,DLLMultiplePReqPRes") == true)
+	{
+		for (int row = 0; row < pResult.parameters.size(); row++)
+		{
+			for (int param = 0; param < pResult.parameters[row].size(); param++)
+			{
+				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
+					OpenConfiguratorCLI::GetInstance().GetNetworkName(), 
+					nodeId, 
+					((GeneralFeatureEnum) param), 
+					pResult.parameters[row].at(param).c_str());
+
+				if (!res.IsSuccessful())
+				{
+					LOG_ERROR() << res.GetErrorMessage();
+				}
+			}
+		}
+	}
+	else
+	{
+		// CLI error
+		return false;
+	}
+}
+
+bool ProjectParser::AddNetworkManagementMnFeatures(ParserElement& element, std::uint8_t nodeId)
+{
+	ParserResult pResult;
+
+	if (pResult.CreateResult(element,
+				mnFeatureXpathExpression.c_str(),
+				"DLLErrMNMultipleMN,DLLMNFeatureMultiplex,DLLMNPResChaining,DLLMNFeaturePResTx,NMTMNASnd2SoC,NMTMNBasicEthernet,NMTMNMultiplCycMax,NMTMNPRes2PReq,NMTMNPRes2PRes,NMTMNPResRx2SoA,NMTMNPResTx2SoA,NMTMNSoA2ASndTx,NMTMNSoC2PReq,NMTNetTime,NMTNetTimeIsRealTime,NMTRelativeTime,NMTServiceUdpIp,NMTSimpleBoot,PDOTPDOChannels,NMTMNDNA,NMTMNRedundancy,DLLMNRingRedundancy,NMTMNMaxAsynchronousSlots") == true)
+	{
+		for (int row = 0; row < pResult.parameters.size(); row++)
+		{
+			for (int param = 0; param < pResult.parameters[row].size(); param++)
+			{
+				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
+					OpenConfiguratorCLI::GetInstance().GetNetworkName(), 
+					nodeId, 
+					(MNFeatureEnum) (param + (int) MNFeatureEnum::DLLErrMNMultipleMN), 
+					pResult.parameters[row].at(param).c_str());
+				if (!res.IsSuccessful())
+				{
+					LOG_ERROR() << res.GetErrorMessage();
+				}
+			}
+		}
+	}
+	else
+	{
+		// CLI error
+		return false;
+	}
+}
+
+bool ProjectParser::AddNetworkManagementCnFeatures(ParserElement& element, std::uint8_t nodeId)
+{
+	ParserResult pResult;
+
+	if (pResult.CreateResult(element,
+				cnFeatureXpathExpression.c_str(),
+				"DLLCNFeatureMultiplex,DLLCNPResChaining,NMTCNPreOp2ToReady2Op,NMTCNSoC2PReq,NMTCNSetNodeNumberTime,NMTCNDNA,NMTCNMaxAInv") == true)
+	{
+		for (int row = 0; row < pResult.parameters.size(); row++)
+		{
+			for (int param = 0; param < pResult.parameters[row].size(); param++)
+			{
+				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
+					OpenConfiguratorCLI::GetInstance().GetNetworkName(), 
+					nodeId, 
+					(CNFeatureEnum) (param + (int) CNFeatureEnum::DLLCNFeatureMultiplex), 
+					pResult.parameters[row].at(param).c_str());
+				if (!res.IsSuccessful())
+				{
+					LOG_ERROR() << res.GetErrorMessage();
+				}
+			}
+		}
+	}
+	else
+	{
+		// CLI error
+		return false;
+	}
+}
+
 bool ProjectParser::UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& cnXDC)
 {
 	std::string indexString1 = "/" + cnXDC;
@@ -1038,6 +1127,9 @@ bool ProjectParser::UpdateNodeIdCollection(std::uint8_t nodeId, const std::strin
 
 	ImportProfileBodyDevicePOWERLINK(element, nodeId);
 	ImportProfileBodyCommunicationPOWERLINK(element, nodeId);
+	AddNetworkManagementGeneralFeatures(element, nodeId);
+	AddNetworkManagementMnFeatures(element, nodeId);
+	AddNetworkManagementCnFeatures(element, nodeId);
 
 	return true;
 }
@@ -1361,11 +1453,11 @@ PDOMapping ProjectParser::GetPDOMapping(std::string pdoMapp)
 	{
 		return PDOMapping::OPTIONAL;
 	}
-	else if (pdoMapp == "tpdo")
+	else if (pdoMapp == "TPDO")
 	{
 		return PDOMapping::TPDO;
 	}
-	else if (pdoMapp == "rpdo")
+	else if (pdoMapp == "RPDO")
 	{
 		return PDOMapping::RPDO;
 	}

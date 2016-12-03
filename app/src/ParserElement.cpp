@@ -16,25 +16,29 @@
 ParserElement::ParserElement()
 {
 	XMLPlatformUtils::Initialize();  /**< Initialize the Xerces usage */
-	this->domParser = new xercesc::XercesDOMParser();
+
+	domParser = new xercesc::XercesDOMParser;
 }
 
 ParserElement::~ParserElement()
 {
-	delete[] this->domParser;
+	delete [] domParser;
+
 	XMLPlatformUtils::Terminate();   /**< Release the Xerces usage */
 }
 
 bool ParserElement::CreateElement(std::string file)
 {
 	filePath = file;
+
 	/**< Input project XML file to DOM parse() function */
-	this->domParser->parse(filePath.c_str()); 
+	domParser->parse(filePath.c_str()); 
 
 	/**< Store the entire project XML file in DOMDocument */
-	this->docHandle = this->domParser->getDocument(); 
+	docHandle = domParser->getDocument(); 
+
 	/**< Store the Top node element of the document in root */
-	this->docElement = docHandle->getDocumentElement(); 
+	docElement = docHandle->getDocumentElement(); 
 
 	return true;
 }

@@ -25,16 +25,21 @@ int main(int parameterCount, char* parameter[])
 		paramList.push_back(parameter[index]);
 	}
 
+	CLIResult ress = CLIResult(CLIErrorCode::LESS_NO_OF_PARAMS, kMsgLessNoOfParams);
+
+	printf("%s",ress.GetErrorMessage().c_str());
+	LOG_INFO() << ress.GetErrorMessage();
+
 	// Generate output files
 	bool result = OpenConfiguratorCLI::GetInstance().GeneratePOWERLINKConfigurationFiles(paramList);
 
 	if (result == true)
 	{
-		LOG_INFO("POWERLINK Configuration Files generated successfully");
+		LOG_INFO() <<"POWERLINK Configuration Files generated successfully";
 	}
 	else
 	{
-		LOG_INFO("Failed to Generate POWERLINK Configuration Files");
+		LOG_INFO() <<"Failed to Generate POWERLINK Configuration Files";
 	}
 
 	return 0;

@@ -39,10 +39,11 @@ namespace IndustrialNetwork
 					xercesc::DOMDocument *docHandle;						///< Document handle
 
 					xercesc::DOMElement *docElement;						///< Document element handle
-					xercesc::XercesDOMParser *domParser;                   ///< Create DOM parser
 
 				private:
-					std::string filePath;							///< file that has to be parsed
+					std::string filePath;									///< file that has to be parsed
+
+					xercesc::XercesDOMParser * domParser;					///< Create DOM parser
 
 			}; // end of class ParserElement
 		} // end of namespace Application

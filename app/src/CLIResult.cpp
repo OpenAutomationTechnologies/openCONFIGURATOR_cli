@@ -10,6 +10,7 @@
  */
 
 #include "CLIResult.h"
+#include "CLIErrorCode.h"
 
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 

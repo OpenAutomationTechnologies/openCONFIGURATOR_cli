@@ -20,6 +20,14 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			enum class CLIMessageType : std::uint8_t
+			{
+				MT_INFO = 0,
+				MT_WARN,
+				MT_ERROR,
+				MT_DEBUG
+			};
+
 			class CLILogger
 			{
 				public:
@@ -46,19 +54,21 @@ namespace IndustrialNetwork
 					  */
 					void SetLanguageToGerman(bool set);
 
-					/** \brief Log messages with the specified message type
-					  * \param type Log message type
-					  * \param messageId ID number of the message
+					/** \brief Log messages in to file or console
+					  * \param msgType Log message type
+					  * \param result result of type CLIResult
 					  * \return Nothing
 					  */
-					void LogMessage(uint32_t messageId);
+					//void LogMessage(CLIMessageType msgType, CLIResult& result);
 
 				private:
-					bool fileLog;								///< file Log enabled status
+					bool fileLog;									///< file Log enabled status
 
-					bool languageGerman;						///< German language enabled status
+					bool languageGerman;							///< German language enabled status
 
-					std::ofstream ofs;							///< Log file stream handle
+					std::ofstream ofs;								///< Log file stream handle
+
+					std::vector<std::string> CLIMessageTypeString;	///< Message type strings
 
 			}; // end of class CLILogger
 		} // end of namespace Application
