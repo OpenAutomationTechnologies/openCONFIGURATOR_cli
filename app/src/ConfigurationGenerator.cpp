@@ -113,7 +113,6 @@ CLIResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string ou
 
 CLIResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outputPath)
 {
-	const std::uint32_t kMnNodeId = 240;
 	CLIResult cliRes;
 
 	std::vector<std::uint8_t> nodeIdCollection;
@@ -131,7 +130,7 @@ CLIResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outp
 	{
 		std::uint8_t value = nodeIdCollection.at(index);
 
-		if (value != kMnNodeId)
+		if (value != MN_DEFAULT_NODE_ID)
 		{
 			// resolve to be done
 			continue;

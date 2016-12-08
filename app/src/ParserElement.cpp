@@ -16,7 +16,7 @@ ParserElement::ParserElement()
 	/**< Initialize the Xerces usage */
 	xercesc::XMLPlatformUtils::Initialize();
 
-	domParser = new xercesc::XercesDOMParser;
+	domParser = new xercesc::XercesDOMParser();
 }
 
 ParserElement::~ParserElement()

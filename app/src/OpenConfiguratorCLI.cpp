@@ -98,12 +98,12 @@ CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<s
 				}
 			}
 
-//			res = ParameterValidator::GetInstance().IsXMLSchemaValid(xmlFilePath);
-			//if (!res.IsSuccessful())
-//			{
+			res = ParameterValidator::GetInstance().IsXMLSchemaValid(xmlFilePath);
+			if (!res.IsSuccessful())
+			{
 				/**< XML file schema is not valid */
-//				return res;
-//			}
+				return res;
+			}
 
 			/**< Parse and Generate configuration output */
 			res = ConfigurationGenerator::GetInstance().GenerateConfigurationFiles(xmlFilePath, outputPath);

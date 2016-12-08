@@ -46,6 +46,17 @@ namespace IndustrialNetwork
 				const std::string kGeneralFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/GeneralFeatures";
 				const std::string kMnFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/MNFeatures";
 				const std::string kCnFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/CNFeatures";
+				const std::string kIntrfcListXpathExpression = kCnXpathExpression +"/InterfaceList";
+				const std::string kIntrfcXpathExpression = kCnXpathExpression +"/InterfaceList/Interface";
+				const std::string kInterfaceXDCxpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/interfaceList/interface";
+				const std::string kAppLayerInterfaceXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationLayers/moduleManagement/interfaceList/interface";
+				const std::string kInterfaceRangeXpathExpression = kAppLayerInterfaceXpathExpression + "/rangeList/range";
+				const std::string kModuleNodeXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/moduleInterface";
+				const std::string kModuleXpathExpression = kIntrfcXpathExpression + "/Module";
+				const std::string kForcedObjectNodeXpathExpression = kCnXpathExpression + "/ForcedObjects/Object";
+				const std::string kForcedObjectModuleXpathExpression = kModuleXpathExpression + "/ForcedObjects/Object";
+
+				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0; // 240
 
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name";
@@ -66,10 +77,17 @@ namespace IndustrialNetwork
 				const std::string kFormatStrParameterXpathExpression = "uniqueID,access,templateIDRef";
 				const std::string kFormatStrParameterDataTypeIdRefXpathExpression = "uniqueID,access";
 				const std::string kFormatStrObjectXpathExpression = "index,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
-				const std::string kFormatStrSubObjectXpathExpression = "subIndex,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
 				const std::string kFormatStrGeneralFeatureXpathExpression = "CFMConfigManager,DLLErrBadPhysMode,DLLErrMacBuffer,DLLFeatureCN,DLLFeatureMN,NMTBootTimeNotActive,NMTCycleTimeGranularity,NMTCycleTimeMax,NMTCycleTimeMin,NMTMinRedCycleTime,NMTEmergencyQueueSize,NMTErrorEntries,NMTExtNmtCmds,NMTFlushArpEntry,NMTIsochronous,NMTNetHostNameSet,NMTMaxCNNodeID,NMTMaxCNNumber,NMTMaxHeartbeats,NMTNodeIDByHW,NMTNodeIDBySW,NMTProductCode,NMTPublishActiveNodes,NMTPublishConfigNodes,NMTPublishEmergencyNew,NMTPublishNodeState,NMTPublishOperational,NMTPublishPreOp1,NMTPublishPreOp2,NMTPublishReadyToOp,NMTPublishStopped,NMTPublishTime,NMTRevisionNo,NWLForward,NWLICMPSupport,NWLIPSupport,PDODynamicMapping,PDOGranularity,PDOMaxDescrMem,PDORPDOChannelObjects,PDORPDOChannels,PDORPDOCycleDataLim,PDORPDOOverallObjects,PDOSelfReceipt,PDOTPDOChannelObjects,PDOTPDOCycleDataLim,PDOTPDOOverallObjects,PHYExtEPLPorts,PHYHubDelay,PHYHubIntegrated,PHYHubJitter,RT1RT1SecuritySupport,RT1RT1Support,RT2RT2Support,SDOClient,SDOCmdFileRead,SDOCmdFileWrite,SDOCmdLinkName,SDOCmdReadAllByIndex,SDOCmdReadByName,SDOCmdReadMultParam,SDOCmdWriteAllByIndex,SDOCmdWriteByName,SDOCmdWriteMultParam,SDOMaxConnections,SDOMaxParallelConnections,SDOSeqLayerTxHistorySize,SDOServer,SDOSupportASnd,SDOSupportPDO,SDOSupportUdpIp,DLLMultiplePReqPRes";
 				const std::string kFormatStrMnFeatureXpathExpression = "DLLErrMNMultipleMN,DLLMNFeatureMultiplex,DLLMNPResChaining,DLLMNFeaturePResTx,NMTMNASnd2SoC,NMTMNBasicEthernet,NMTMNMultiplCycMax,NMTMNPRes2PReq,NMTMNPRes2PRes,NMTMNPResRx2SoA,NMTMNPResTx2SoA,NMTMNSoA2ASndTx,NMTMNSoC2PReq,NMTNetTime,NMTNetTimeIsRealTime,NMTRelativeTime,NMTServiceUdpIp,NMTSimpleBoot,PDOTPDOChannels,NMTMNDNA,NMTMNRedundancy,DLLMNRingRedundancy,NMTMNMaxAsynchronousSlots";
 				const std::string kFormatStrCnFeatureXpathExpression = "DLLCNFeatureMultiplex,DLLCNPResChaining,NMTCNPreOp2ToReady2Op,NMTCNSoC2PReq,NMTCNSetNodeNumberTime,NMTCNDNA,NMTCNMaxAInv";
+				const std::string kFormatStrxPathExpression = "transmitsPRes,isMandatory,autostartNode,resetInOperational,verifyAppSwVersion,autoAppSwUpdateAllowed,isChained,isAsyncOnly,isType1Router,isType2Router";
+				const std::string kFormatStrModuleNodeXpathExpression = "childID,type,moduleAddressing,minPosition,maxPosition,minAddress,maxAddress,maxCount";
+				const std::string kFormatStrModuleXpathExpression = "name,position,address,pathToXDC,enabled";
+				const std::string kFormatStrxPathExpressionObject = "index, subindex";
+				const std::string kFormatStrObjectXpathExpressionModule = "index,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit,rangeSelector";
+				const std::string kFormatStrSubObjectXpathExpression = "subIndex,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
+				const std::string kFormatStrInterfaceXDCxpathExpression = "uniqueID,type,moduleAddressing,maxModules,unusedSlots,multipleModules";
+				const std::string kFormatStrInterfaceRangeXpathExpression = "name,baseIndex,maxIndex,maxSubIndex,sortMode,sortNumber,PDOmapping,sortStep";
 			} // end of namespace CLIConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK

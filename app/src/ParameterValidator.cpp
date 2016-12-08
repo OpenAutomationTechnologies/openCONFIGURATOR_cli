@@ -29,19 +29,26 @@ ParameterValidator& ParameterValidator::GetInstance()
 
 CLIResult ParameterValidator::IsXMLFileValid(std::string xmlFileName)
 {
-	if (!boost::filesystem::exists(xmlFileName))
+	try
 	{
-		boost::format formatter(kMsgXMLFileNotExists[CLILogger::GetInstance().languageIndex]);
-		formatter
-		% xmlFileName.c_str();
+		if (!boost::filesystem::exists(xmlFileName))
+		{
+			boost::format formatter(kMsgXMLFileNotExists[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% xmlFileName.c_str();
 
-		return CLIResult(CLIErrorCode::XML_FILE_NOT_EXISTS, formatter.str());
+			return CLIResult(CLIErrorCode::XML_FILE_NOT_EXISTS, formatter.str());
+		}
+
+		if (boost::filesystem::extension(xmlFileName) != ".xml")
+		{
+			return CLIResult(CLIErrorCode::XML_FILE_EXTN_INCORRECT, 
+								kMsgXMLFileExtnIncorrect[CLILogger::GetInstance().languageIndex]);
+		}
 	}
-
-	if (boost::filesystem::extension(xmlFileName) != ".xml")
+	catch(std::exception ex)
 	{
-		return CLIResult(CLIErrorCode::XML_FILE_EXTN_INCORRECT, 
-							kMsgXMLFileExtnIncorrect[CLILogger::GetInstance().languageIndex]);
+		return CLILogger::GetInstance().HandleExceptionCaught("Is XML File Valid", ex);
 	}
 
 	return CLIResult();
@@ -49,13 +56,20 @@ CLIResult ParameterValidator::IsXMLFileValid(std::string xmlFileName)
 
 CLIResult ParameterValidator::IsPathValid(std::string path)
 {
-	if (!boost::filesystem::exists(path))
+	try
 	{
-		boost::format formatter(kMsgOutputPathNotExiists[CLILogger::GetInstance().languageIndex]);
-		formatter
-		% path.c_str();
+		if (!boost::filesystem::exists(path))
+		{
+			boost::format formatter(kMsgOutputPathNotExiists[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% path.c_str();
 
-		return CLIResult(CLIErrorCode::OUTPUT_PATH_NOT_EXISTS, formatter.str());
+			return CLIResult(CLIErrorCode::OUTPUT_PATH_NOT_EXISTS, formatter.str());
+		}
+	}
+	catch(std::exception ex)
+	{
+		return CLILogger::GetInstance().HandleExceptionCaught("Is Path Valid", ex);
 	}
 
 	return CLIResult();
@@ -73,43 +87,60 @@ CLIResult ParameterValidator::IsXDCSchemaValid(std::string xdcFileName)
 
 CLIResult ParameterValidator::IsSchemaValid(std::string fileName, const std::string schemaDefFile)
 {
-	xercesc::XercesDOMParser domParser;
-
-	if (!boost::filesystem::exists(schemaDefFile))
+	try
 	{
-		boost::format formatter(kMsgSchemaFileNotExists[CLILogger::GetInstance().languageIndex]);
-		formatter
-		% schemaDefFile.c_str();
+		/**< Initialize the Xerces usage */
+		xercesc::XMLPlatformUtils::Initialize();
 
-		return CLIResult(CLIErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
+		xercesc::XercesDOMParser* domParserXdc = new xercesc::XercesDOMParser();
+
+		/**< Validate for the schema file existance */
+		if (!boost::filesystem::exists(schemaDefFile))
+		{
+			boost::format formatter(kMsgSchemaFileNotExists[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% schemaDefFile.c_str();
+
+			return CLIResult(CLIErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
+		}
+
+		/**< Input project file to DOM parse() function */
+		domParserXdc->parse(fileName.c_str()); 
+
+		if (domParserXdc->loadGrammar(schemaDefFile.c_str(), 
+									xercesc::Grammar::SchemaGrammarType) == NULL)
+		{
+			return CLIResult(CLIErrorCode::ERROR_LOADING_GRAMMER, 
+								kMsgErrorLoadingGrammer[CLILogger::GetInstance().languageIndex]);
+		}
+
+		/**< Set validation checks required for the file */
+		domParserXdc->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+		domParserXdc->setDoNamespaces(true);
+		domParserXdc->setDoXInclude(true);
+		domParserXdc->setDoSchema(true);
+		domParserXdc->setValidationConstraintFatal(true);
+
+		if (domParserXdc->getErrorCount() != 0)
+		{
+			CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_INFO, 
+												"DOM Parser error count" + domParserXdc->getErrorCount());
+
+			boost::format formatter(kMsgFileSchemeNotValid[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% fileName.c_str();
+
+			return CLIResult(CLIErrorCode::FILE_SCHEMA_NOT_VALID, formatter.str());
+		}
+
+		delete [] domParserXdc;
+
+		/**< Release the Xerces usage */
+		xercesc::XMLPlatformUtils::Terminate();
 	}
-
-	/**< Input project file to DOM parse() function */
-	domParser.parse(fileName.c_str()); 
-
-	if (domParser.loadGrammar(schemaDefFile.c_str(), 
-								xercesc::Grammar::SchemaGrammarType) == NULL)
+	catch(std::exception ex)
 	{
-		return CLIResult(CLIErrorCode::ERROR_LOADING_GRAMMER, 
-							kMsgErrorLoadingGrammer[CLILogger::GetInstance().languageIndex]);
-	}
-
-	/**< Set validation checks required for the file */
-	domParser.setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-	domParser.setDoNamespaces(true);
-	domParser.setDoXInclude(true);
-	domParser.setDoSchema(true);
-	domParser.setValidationConstraintFatal(true);
-
-	if (domParser.getErrorCount() != 0)
-	{
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_INFO, "DOM Parser error count" + domParser.getErrorCount());
-
-		boost::format formatter(kMsgFileSchemeNotValid[CLILogger::GetInstance().languageIndex]);
-		formatter
-		% fileName.c_str();
-
-		return CLIResult(CLIErrorCode::FILE_SCHEMA_NOT_VALID, formatter.str());
+		return CLILogger::GetInstance().HandleExceptionCaught("Is Schema Valid", ex);
 	}
 
 	return CLIResult();
