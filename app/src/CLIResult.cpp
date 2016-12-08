@@ -10,9 +10,6 @@
  */
 
 #include "CLIResult.h"
-#include "CLIErrorCode.h"
-
-using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 
 CLIResult::CLIResult(const CLIErrorCode& errorCode, const std::string& errorMessage = "") :
 	IResult<CLIErrorCode>(errorCode, errorMessage)

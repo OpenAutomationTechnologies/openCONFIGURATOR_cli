@@ -12,7 +12,12 @@
 #ifndef CLI_LOGGER_H
 #define CLI_LOGGER_H
 
-#include "OpenConfiguratorCLI.h"
+#include "Result.h"
+#include "CLIErrorCode.h"
+#include "CLIResult.h"
+
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
 
 namespace IndustrialNetwork
 {
@@ -20,12 +25,27 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			/// Log file name if file logging enabled
+			const std::string kOpenConfiguratorCLILogFileName = "OpenCONFIGURATOR_CLI.log";
+
+			/**
+			  *\brief Types of messages LogMessage can accept
+			  */
 			enum class CLIMessageType : std::uint8_t
 			{
-				MT_INFO = 0,
-				MT_WARN,
-				MT_ERROR,
-				MT_DEBUG
+				CLI_INFO = 0,
+				CLI_WARN,
+				CLI_ERROR,
+				CLI_DEBUG
+			};
+
+			/**
+			  *\brief Types of languages LogMessage can accept
+			  */
+			enum class CLILanguageType : std::uint8_t
+			{
+				EN = 0,				/**< English */
+				DE = 1				/**< German */
 			};
 
 			class CLILogger
@@ -44,9 +64,10 @@ namespace IndustrialNetwork
 
 					/** \brief Toggles the logging between console and file
 					  * \param set true or false; true for file log; false for console log
+					  * \path path logging file path
 					  * \return Nothing
 					  */
-					void SetFileLog(bool set);
+					void SetFileLog(bool set, std::string path);
 
 					/** \brief Sets the language to be used for logging
 					  * \param set true or false; true for German; false for English
@@ -54,13 +75,42 @@ namespace IndustrialNetwork
 					  */
 					void SetLanguageToGerman(bool set);
 
-					/** \brief Log messages in to file or console
+					/** \brief Log message with given message type description
 					  * \param msgType Log message type
-					  * \param result result of type CLIResult
+					  * \param logDescription Message string to be logged
 					  * \return Nothing
 					  */
-					//void LogMessage(CLIMessageType msgType, CLIResult& result);
+					void LogMessage(CLIMessageType msgType, std::string logDescription);
 
+					/** \brief Log message with given message type description
+					  * \param msgType Log message type
+					  * \param result CLIResult returned by member functions
+					  * \return Nothing
+					  */
+					void LogMessage(CLIMessageType msgType, CLIResult& result);
+
+					/** \brief Logs message for CLI API failure
+					  * \param apiDescription Description of the CLI API failure
+					  * \param result CLIResult returned by the failed CLI API
+					  * \return CLIResult Failure result with caller API name
+					  */
+					CLIResult HandleCliApiFailed(std::string apiDescription, CLIResult& result);
+
+					/** \brief Logs message for Core API failure
+					  * \param apiDescription Description of the CLI API failure
+					  * \param result Result returned by the failed Core API
+					  * \return CLIResult Failure result with caller API name
+					  */
+					CLIResult HandleCoreApiFailed(std::string apiDescription, Result& result);
+
+					/** \brief Logs message when exception caught
+					  * \param apiDescription Description of the CLI API failure
+					  * \param e Exception ojbect
+					  * \return CLIResult Failure result with caller API name
+					  */
+					CLIResult HandleExceptionCaught(std::string apiDescription, std::exception& e);
+
+					std::uint8_t languageIndex;						///< Index of current language
 				private:
 					bool fileLog;									///< file Log enabled status
 

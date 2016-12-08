@@ -24,24 +24,24 @@
 #include <xercesc/util/TransService.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #include "OpenConfiguratorCore.h"
 #include "LoggingConfiguration.h"
-#include "Result.h"
-#include "CLILogger.h"
-#include "CLIResult.h"
 #include "CLIErrorCode.h"
+#include "Result.h"
+#include "CLIResult.h"
+#include "CLILogger.h"
 #include "CLIConstants.h"
 
 using namespace IndustrialNetwork::POWERLINK::Core::API;
+using namespace IndustrialNetwork::POWERLINK::Core::Node;
 using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
 using namespace IndustrialNetwork::POWERLINK::Core::ObjectDictionary;
 using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
-using namespace IndustrialNetwork::POWERLINK::Application::CLIConstants;
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
-using namespace IndustrialNetwork::POWERLINK::Core::Node;
 using namespace IndustrialNetwork::POWERLINK::Application;
-using namespace xercesc;
+using namespace IndustrialNetwork::POWERLINK::Application::CLIConstants;
 
 namespace IndustrialNetwork
 {
@@ -70,13 +70,15 @@ namespace IndustrialNetwork
 
 					/** \brief Generates the configuration output files
 					  * \param paramsList List of command line parameters
-					  * \return true in case of output generated; false otherwise
+					  * \return CLIResult
 					  */
-					bool GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList);
+					CLIResult GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList);
 
 					std::string xmlFilePath;	///< The input XML file with path
 
 					std::string outputPath;		///< The output directory path
+
+					std::string networkName;	///< Network name of the project file
 
 				private:
 					/** \brief Prints the command line usage syntax of the application
@@ -110,7 +112,7 @@ namespace IndustrialNetwork
 					  * \param paramsList List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool IsLogVerbose(std::vector<std::string> paramsList);
+					bool IsLogDebug(std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-h' or '--help'
 					  *        from command line parameters list

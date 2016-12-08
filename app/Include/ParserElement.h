@@ -1,7 +1,7 @@
 /**
  * \class ParserElement
  *
- * \brief Owns all the handles of a file to be parsed
+ * \brief Set of handles of a file to be parsed
  *
  * \author Kalycito Infotech Private Limited
  *
@@ -30,20 +30,19 @@ namespace IndustrialNetwork
 					~ParserElement();
 
 					/** \brief Creates and parser element
-					  * \param element Instance of an parser element
 					  * \param file XML or XCD file to be parsed
-					  * \return true on successful initiation; false otherwise
+					  * \return CLIResult
 					  */
-					bool CreateElement(std::string file);
+					CLIResult CreateElement(std::string file);
 
-					xercesc::DOMDocument *docHandle;						///< Document handle
+					xercesc::DOMDocument* docHandle;			///< Document handle
 
-					xercesc::DOMElement *docElement;						///< Document element handle
+					xercesc::DOMElement* docElement;			///< Document element handle
 
 				private:
-					std::string filePath;									///< file that has to be parsed
+					std::string filePath;						///< file that has to be parsed
 
-					xercesc::XercesDOMParser * domParser;					///< Create DOM parser
+					xercesc::XercesDOMParser* domParser;		///< Create DOM parser
 
 			}; // end of class ParserElement
 		} // end of namespace Application

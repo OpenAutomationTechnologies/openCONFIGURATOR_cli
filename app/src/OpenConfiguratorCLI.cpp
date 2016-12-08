@@ -13,15 +13,13 @@
 
 #include "OpenConfiguratorCLI.h"
 #include "ParameterValidator.h"
-#include "ProjectParser.h"
 #include "ConfigurationGenerator.h"
-
-/**************************** Public members *********************************/
 
 OpenConfiguratorCLI::OpenConfiguratorCLI()
 {
 	xmlFilePath = "";
 	outputPath = "";
+	networkName = "";
 }
 
 OpenConfiguratorCLI::~OpenConfiguratorCLI()
@@ -37,26 +35,28 @@ OpenConfiguratorCLI& OpenConfiguratorCLI::GetInstance()
 
 std::string OpenConfiguratorCLI::GetNetworkName()
 {
-	return boost::filesystem::basename(xmlFilePath);
+	networkName = boost::filesystem::basename(xmlFilePath);
+	return networkName;
 }
 
-bool OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList)
+CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList)
 {
-	const uint8_t kMinimumNumberOfParameters = 3;
+	const std::uint8_t kMinimumNumberOfParameters = 3;
+	CLIResult res;
 
 	if(GetHelpOption(paramsList))
 	{
 		ShowUsage();
 
-		return true;
+		return CLIResult();
 	}
 
 	if (paramsList.size() < kMinimumNumberOfParameters)
 	{
-		// Show error
 		ShowUsage();
 
-		return false;
+		return CLIResult(CLIErrorCode::LESS_NO_OF_PARAMS, 
+							kMsgLessNoOfParams[CLILogger::GetInstance().languageIndex]);
 	}
 
 	if (GetXMLFileName(paramsList))
@@ -65,41 +65,68 @@ bool OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<std::s
 		{
 			if (IsLanguageGerman(paramsList))
 			{
-				//Initiate CLILogger for German language
+				/**< Initiate CLILogger for German language */
+				CLILogger::GetInstance().SetLanguageToGerman(true);
 			}
 
-			if (IsLogVerbose(paramsList))
+			if (IsLogDebug(paramsList))
 			{
-				//Initiate CLILogger for logging on console
+				/**< Initiate CLILogger for logging on console */
+				CLILogger::GetInstance().SetFileLog(true, outputPath);
 			}
 
-			//Validate the parameters
+			GetNetworkName();
 
+			/**< Validate the parameters */
+			res = ParameterValidator::GetInstance().IsXMLFileValid(xmlFilePath);
+			if (!res.IsSuccessful())
+			{
+				return res;
+			}
 
-			//Parse the XML file
-			ProjectParser::GetInstance().ParserXMLFile(xmlFilePath);
+			res = ParameterValidator::GetInstance().IsPathValid(outputPath);
+			if (!res.IsSuccessful())
+			{
+				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
 
-			//Generate output files
-			ConfigurationGenerator::GetInstance().BuildConciseDeviceConfiguration(outputPath);
+				/**< Create the output path as it doesnt exists */
+				boost::filesystem::path dir(outputPath);
+				if(!boost::filesystem::create_directory(dir))
+				{
+					/**< Failed to create the output path */
+					return res;
+				}
+			}
 
-			return true;
+//			res = ParameterValidator::GetInstance().IsXMLSchemaValid(xmlFilePath);
+			//if (!res.IsSuccessful())
+//			{
+				/**< XML file schema is not valid */
+//				return res;
+//			}
+
+			/**< Parse and Generate configuration output */
+			res = ConfigurationGenerator::GetInstance().GenerateConfigurationFiles(xmlFilePath, outputPath);
+			if (!res.IsSuccessful())
+			{
+				/**< Unable to parse XML or generate configuration files */
+				return res;
+			}
+
+			return CLIResult();
 		}
 		else
 		{
-			// Show error
-
-			return false;
+			return CLIResult(CLIErrorCode::OUTPUT_PATH_NOT_FOUND, 
+							kMsgOutputPathNotFound[CLILogger::GetInstance().languageIndex]);
 		}
 	}
 	else
 	{
-		// Show error
-
-		return false;
+		return CLIResult(CLIErrorCode::XML_FILE_NOT_FOUND, 
+							kMsgXMLFileNotFound[CLILogger::GetInstance().languageIndex]);
 	}
 }
-
-/**************************** Private members ********************************/
 
 void OpenConfiguratorCLI::ShowUsage()
 {
@@ -127,9 +154,9 @@ void OpenConfiguratorCLI::ShowUsage()
 
 bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
 {
-	for (uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		// Search for project file option
+		/**< Search for project file option */
 		if ((paramsList.at(index) == "-p")  || (paramsList.at(index) == "--project"))
 		{
 			xmlFilePath = paramsList.at(index + 1);
@@ -137,9 +164,9 @@ bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
 		}
 	}
 
-	// if options '-p' or '--project' not found, consider the first parameter
-	// as the project XML file name
-	if (xmlFilePath == "")
+	/**< if options '-p' or '--project' not found, consider the first parameter
+	     as the project XML file name */
+	if (xmlFilePath.empty())
 	{
 		xmlFilePath = paramsList.at(0);
 	}
@@ -149,9 +176,9 @@ bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
 
 bool OpenConfiguratorCLI::GetOutputPath(std::vector<std::string> paramsList)
 {
-	for (uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		// Search for output path option
+		/**< Search for output path option */
 		if ((paramsList.at(index) == "-o")  || (paramsList.at(index) == "--output"))
 		{
 			outputPath = paramsList.at(index + 1);
@@ -164,9 +191,9 @@ bool OpenConfiguratorCLI::GetOutputPath(std::vector<std::string> paramsList)
 
 bool OpenConfiguratorCLI::IsLanguageGerman(std::vector<std::string> paramsList)
 {
-	for (uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		// Search for German language option
+		/**< Search for German language option */
 		if ((paramsList.at(index) == "-de")  || (paramsList.at(index) == "--german"))
 		{
 			return true;
@@ -176,11 +203,11 @@ bool OpenConfiguratorCLI::IsLanguageGerman(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCLI::IsLogVerbose(std::vector<std::string> paramsList)
+bool OpenConfiguratorCLI::IsLogDebug(std::vector<std::string> paramsList)
 {
-	for (uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		// Search for verbose option
+		/**< Search for verbose option */
 		if ((paramsList.at(index) == "-d")  || (paramsList.at(index) == "--debug"))
 		{
 			return true;
@@ -192,9 +219,9 @@ bool OpenConfiguratorCLI::IsLogVerbose(std::vector<std::string> paramsList)
 
 bool OpenConfiguratorCLI::GetHelpOption(std::vector<std::string> paramsList)
 {
-	for (uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		// Search for verbose option
+		/**< Search for verbose option */
 		if ((paramsList.at(index) == "-h")  || (paramsList.at(index) == "--help"))
 		{
 			return true;

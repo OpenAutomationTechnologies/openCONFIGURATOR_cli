@@ -13,33 +13,27 @@
 
 #include "OpenConfiguratorCLI.h"
 
-using namespace IndustrialNetwork::POWERLINK::Application;
-
 int main(int parameterCount, char* parameter[])
 {
 	std::vector<std::string> paramList;
 
-	// Prepare the parameter list
-	for (int index = 1; index < parameterCount; index++)
+	/**< Prepare the parameter list */
+	for (std::int32_t index = 1; index < parameterCount; index++)
 	{
 		paramList.push_back(parameter[index]);
 	}
 
-	CLIResult ress = CLIResult(CLIErrorCode::LESS_NO_OF_PARAMS, kMsgLessNoOfParams);
+	/**< Generate output configuration files */
+	CLIResult result = OpenConfiguratorCLI::GetInstance().GeneratePOWERLINKConfigurationFiles(paramList);
 
-	printf("%s",ress.GetErrorMessage().c_str());
-	LOG_INFO() << ress.GetErrorMessage();
-
-	// Generate output files
-	bool result = OpenConfiguratorCLI::GetInstance().GeneratePOWERLINKConfigurationFiles(paramList);
-
-	if (result == true)
+	if (!result.IsSuccessful())
 	{
-		LOG_INFO() <<"POWERLINK Configuration Files generated successfully";
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_ERROR, result);
 	}
 	else
 	{
-		LOG_INFO() <<"Failed to Generate POWERLINK Configuration Files";
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_INFO, 
+					"POWERLINK configuration files generated successfully");
 	}
 
 	return 0;

@@ -23,108 +23,149 @@ ParserResult::~ParserResult()
 
 }
 
-bool ParserResult::CreateResult(ParserElement& pElement,
+CLIResult ParserResult::CreateResult(ParserElement& pElement,
 					std::string transcodeString,
 					std::string formatString)
 {
-	return(CreateResult(pElement,
+	return CreateResult(pElement,
 				 transcodeString,
 				 formatString,
-				 pElement.docElement));
+				 pElement.docElement);
 }
 
-bool ParserResult::CreateResult(ParserElement& pElement,
+CLIResult ParserResult::CreateResult(ParserElement& pElement,
 					std::string transcodeString,
 					std::string formatString,
-					DOMNode * parentNode)
+					xercesc::DOMNode* parentNode)
 {
-	/**< Get result of Managing Node */
-	DOMXPathResult* nResult = pElement.docHandle->evaluate(
-	                               XMLString::transcode(transcodeString.c_str()),
-	                               parentNode,
-	                               NULL,
-	                               DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
-	                               NULL);
-
-	resultNodeValue = nResult->getNodeValue();
-
-	if (resultNodeValue == NULL)
+	if (parentNode == NULL)
 	{
-		LOG_INFO() << "There is no result for the Managing Node XPath ";
-		return true;
+		boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
+		formatter
+		% "Create Result";
+
+		return CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
 	}
-	else
+
+	try
 	{
-		std::vector<std::string> attributeNames;
-		std::string subString;
+		/**< Get result of Managing Node */
+		xercesc::DOMXPathResult* nResult = pElement.docHandle->evaluate(
+									   xercesc::XMLString::transcode(transcodeString.c_str()),
+									   parentNode,
+									   NULL,
+									   xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
+									   NULL);
 
-		 // Convert the string into string stream
-		std::stringstream splitString(formatString);
-  
-		// Interpret the formatString and split in to attribute names
-		while(std::getline(splitString, subString, ','))
+		resultNodeValue = nResult->getNodeValue();
+
+		if (resultNodeValue == NULL)
 		{
-			attributeNames.push_back(subString);
+			boost::format formatter(kMsgNoResultForXPath[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% transcodeString.c_str();
+
+			return CLIResult(CLIErrorCode::NO_RESULT_FOR_XPATH, formatter.str());
 		}
-		
-		XMLSize_t count = nResult->getSnapshotLength();
-
-		// Parse the parameters
-		for (XMLSize_t nIndex = 0; nIndex < count; nIndex++)
+		else
 		{
-			nResult->snapshotItem(nIndex);
-			node.push_back(nResult->getNodeValue());
-			
-			std::vector<std::string> row;
-			for (uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
+			std::vector<std::string> attributeNames;
+			std::string subString;
+
+			/**<  Convert the string into string stream */
+			std::stringstream splitString(formatString);
+
+			/**<  Interpret the formatString and split in to attribute names */
+			while(std::getline(splitString, subString, ','))
 			{
-				row.push_back(GetAttributeValue(node.at(nIndex), attributeNames.at(attrIndex)));
+				attributeNames.push_back(subString);
 			}
 
-			parameters.push_back(row);
+			XMLSize_t count = nResult->getSnapshotLength();
+
+			/**<  Parse the parameters */
+			for (XMLSize_t nIndex = 0; nIndex < count; nIndex++)
+			{
+				nResult->snapshotItem(nIndex);
+				node.push_back(nResult->getNodeValue());
+
+				std::vector<std::string> row;
+				for (std::uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
+				{
+					row.push_back(GetAttributeValue(node.at(nIndex), attributeNames.at(attrIndex)));
+				}
+
+				parameters.push_back(row);
+			}
+
 		}
 
+		nResult->release();
+	}
+	catch (std::exception& ex)
+	{
+		return CLILogger::GetInstance().HandleExceptionCaught("Create Result", ex);
 	}
 
-	nResult->release();
-
-	return true;
+	return CLIResult();
 }
 
-std::string ParserResult::GetAttributeValue(DOMNode* domNode, std::string attributeName)
+std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::string attributeName)
 {
-	if (domNode->hasAttributes())
+	if (domNode == NULL)
 	{
-		DOMNamedNodeMap* attributes = domNode->getAttributes();
-		const XMLSize_t attribCount = attributes->getLength();
+		boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
+		formatter
+		% "Get Attribute Value";
 
-		for (XMLSize_t attribSize = 0; attribSize < attribCount; attribSize++)
+		CLIResult res = CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
+
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
+		return "";
+	}
+
+	try
+	{
+		if (domNode->hasAttributes())
 		{
-			DOMNode* currentNode = attributes->item(attribSize);
-			if (currentNode->getNodeType() == DOMNode::ATTRIBUTE_NODE)
+			xercesc::DOMNamedNodeMap* attributes = domNode->getAttributes();
+			const XMLSize_t attribCount = attributes->getLength();
+
+			for (XMLSize_t attribSize = 0; attribSize < attribCount; attribSize++)
 			{
-				char* attribute = XMLString::transcode(currentNode->getNodeName());
-
-				if (strcmp(attribute, attributeName.c_str()) == 0)
+				xercesc::DOMNode* currentNode = attributes->item(attribSize);
+				if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
 				{
-					char* val = XMLString::transcode(
-									domNode->getAttributes()->getNamedItem(
-											XMLString::transcode(attributeName.c_str())
-									)->getNodeValue()
-								);
+					char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
 
-					std::string value(val);
+					if (attributeName.compare(attribute) == 0)
+					{
+						char* val = xercesc::XMLString::transcode(
+										domNode->getAttributes()->getNamedItem(
+												xercesc::XMLString::transcode(attributeName.c_str())
+										)->getNodeValue()
+									);
 
-					XMLString::release(&val);
-					XMLString::release(&attribute);
-					return value;
-				}
-				else
-				{
-					XMLString::release(&attribute);
+						std::string value(val);
+
+						xercesc::XMLString::release(&val);
+						xercesc::XMLString::release(&attribute);
+
+						return value;
+					}
+					else
+					{
+						xercesc::XMLString::release(&attribute);
+					}
 				}
 			}
 		}
+	}
+	catch (std::exception& ex)
+	{
+		CLIResult res = CLILogger::GetInstance().HandleExceptionCaught("Get Attribute Value", ex);
+
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
 	}
 
 	return "";

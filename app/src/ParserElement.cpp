@@ -9,13 +9,12 @@
  *
  */
 
-#include "OpenConfiguratorCore.h"
-#include "OpenConfiguratorCLI.h"
 #include "ParserElement.h"
 
 ParserElement::ParserElement()
 {
-	XMLPlatformUtils::Initialize();  /**< Initialize the Xerces usage */
+	/**< Initialize the Xerces usage */
+	xercesc::XMLPlatformUtils::Initialize();
 
 	domParser = new xercesc::XercesDOMParser;
 }
@@ -24,21 +23,45 @@ ParserElement::~ParserElement()
 {
 	delete [] domParser;
 
-	XMLPlatformUtils::Terminate();   /**< Release the Xerces usage */
+	/**< Release the Xerces usage */
+	xercesc::XMLPlatformUtils::Terminate();
 }
 
-bool ParserElement::CreateElement(std::string file)
+CLIResult ParserElement::CreateElement(std::string file)
 {
-	filePath = file;
+	try
+	{
+		filePath = file;
 
-	/**< Input project XML file to DOM parse() function */
-	domParser->parse(filePath.c_str()); 
+		/**< Input project XML file to DOM parse() function */
+		domParser->parse(filePath.c_str());
 
-	/**< Store the entire project XML file in DOMDocument */
-	docHandle = domParser->getDocument(); 
+		/**< Store the entire project XML file in DOMDocument */
+		docHandle = domParser->getDocument();
+		if (docHandle == NULL)
+		{
+			boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% "create DOM parser document";
 
-	/**< Store the Top node element of the document in root */
-	docElement = docHandle->getDocumentElement(); 
+			return CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
+		}
 
-	return true;
+		/**< Store the Top node element of the document in root */
+		docElement = docHandle->getDocumentElement();
+		if (docElement == NULL)
+		{
+			boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
+			formatter
+			% "create DOM parser element";
+
+			return CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
+		}
+	}
+	catch (std::exception& ex)
+	{
+		return CLILogger::GetInstance().HandleExceptionCaught("Create Element", ex);
+	}
+
+	return CLIResult();
 }

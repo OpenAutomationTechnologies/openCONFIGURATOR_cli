@@ -31,42 +31,43 @@ namespace IndustrialNetwork
 					~ParserResult();
 
 					/** \brief Parses and produces attributes from root
-					  * \param element file element to be parsed
+					  * \param pElement file element to be parsed
 					  * \param transcodeString Transcode input string for parsing
 					  * \param formatString Attribute names as string separated by comma
-					  * \return true on successful creation; false otherwise
+					  * \return CLIResult
 					  */
-					bool CreateResult(ParserElement& pElement,
+					CLIResult CreateResult(ParserElement& pElement,
 										std::string transcodeString,
 										std::string formatString);
 
 					/** \brief Parses and produces attributes by considering
 					  *        an sub node element as parent
-					  * \param element file element to be parsed
+					  * \param pElement file element to be parsed
 					  * \param transcodeString Transcode input string for parsing
 					  * \param formatString Attribute names as string separated by comma
 					  * \param parentNode Sub node to be considered as parent
-					  * \return true on successful creation; false otherwise
+					  * \return CLIResult
 					  */
-					bool CreateResult(ParserElement& pElement,
+					CLIResult CreateResult(ParserElement& pElement,
 										std::string transcodeString,
 										std::string formatString,
-										DOMNode * parentNode);
+										xercesc::DOMNode* parentNode);
 
 					std::vector<std::vector<std::string> > parameters;		///< Parsed parameters
 
-					DOMNode * resultNodeValue;								///< Parent node
+					xercesc::DOMNode* resultNodeValue;						///< Parent node
 
-					std::vector<DOMNode *> node;							///< Parsed node
+					std::vector<xercesc::DOMNode*> node;					///< Parsed node
 
 				private:
 					/**
-					  * \brief Gets the value of attribute available in the XDC
-					  * \param node Instance of DOMNode
+					  * \brief Gets the value of attribute available
+					  * \param domNode Instance of DOMNode
 					  * \param attributeName The name of the attribute
 					  * \return attribute value
 					  */
-					std::string GetAttributeValue(DOMNode* domNode, std::string attributeName);
+					std::string GetAttributeValue(xercesc::DOMNode* domNode,
+										std::string attributeName);
 
 			}; // end of class ParserResult
 		} // end of namespace Application
