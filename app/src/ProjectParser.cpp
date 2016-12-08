@@ -277,6 +277,15 @@ IEC_Datatype ProjectParser::GetIECDataType(xercesc::DOMNode* node)
 			{
 				char* subNodeName = xercesc::XMLString::transcode(currentNode->getNodeName());
 				std::string childNodeName = subNodeName;
+				if ((childNodeName == "defaultValue") ||
+					(childNodeName == "allowedValues") || 
+					(childNodeName == "actualValue") || 
+					(childNodeName == "substituteValue") || 
+					(childNodeName == "unit") || 
+					(childNodeName == "property"))
+				{
+					return data;
+				}
 				data = GetDataType(childNodeName);
 			}
 		}
@@ -658,12 +667,13 @@ CLIResult ProjectParser::CreateParameterTemplate(ParserElement& element, std::ui
 												 std::uint32_t modposition)
 {
 	ParserResult pResult;
-
+	LOG_DEBUG() << "Template Entered!";
 	CLIResult crres = pResult.CreateResult(element, kParameterTemplateXpathExpression,
 								kFormatStrParameterTemplateXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		return crres;
+		LOG_DEBUG() << "Template not available!";
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
 	}
 	else
 	{
@@ -673,20 +683,12 @@ CLIResult ProjectParser::CreateParameterTemplate(ParserElement& element, std::ui
 			IEC_Datatype data = GetIECDataType(pResult.node.at(row));
 
 			ParserResult subpResult;
-
+			LOG_DEBUG() << "Template  available!";
 			CLIResult subcrres = subpResult.CreateResult(element, kParameterDataTypeIdRefXpathExpression,
 										kFormatStrParameterDataTypeIdRefXpathExpression,
 										pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
-			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-			}
-			else
-			{
-				if (subpResult.resultNodeValue == NULL)
-				{
-					LOG_INFO() << "DataTypeIdRef not available.";
-
+			{ LOG_DEBUG() << "Data type not  available!";
 					/**< Core Library API call to create Parameter */
 					Result res = OpenConfiguratorCore::GetInstance().CreateParameter(
 							OpenConfiguratorCLI::GetInstance().networkName,
@@ -697,9 +699,10 @@ CLIResult ProjectParser::CreateParameterTemplate(ParserElement& element, std::ui
 					{
 						return CLILogger::GetInstance().HandleCoreApiFailed("Create Parameter", res);
 					}
-				}
-				else
-				{
+			}
+			else
+			{
+				LOG_INFO() << "DataTypeIdRef not available.";
 					for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 					{
 						ParameterAccess paramAccessSubNode = GetParameterAccess(subpResult.parameters[subrow].at(1));
@@ -717,35 +720,34 @@ CLIResult ProjectParser::CreateParameterTemplate(ParserElement& element, std::ui
 						}
 					}
 				}
-			}
-
+			//TODO: 8122016 Implement check for templateid ref
 			/**< Updates the allowed values of parameter template.*/
-			subcrres = SetParamAllowedValue(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
-			if (!subcrres.IsSuccessful())
-			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-			}
+			//subcrres = SetParamAllowedValue(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
+			//if (!subcrres.IsSuccessful())
+			//{
+			//	CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
+			//}
 
-			/**< Updates the allowed range of parameter template.*/
-			subcrres = SetParamAllowedRange(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
-			if (!subcrres.IsSuccessful())
-			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-			}
+			///**< Updates the allowed range of parameter template.*/
+			//subcrres = SetParamAllowedRange(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
+			//if (!subcrres.IsSuccessful())
+			//{
+			//	CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
+			//}
 
-			/**< Updates the default value of parameter template.*/
-			subcrres = SetParamDefaultValue(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
-			if (!subcrres.IsSuccessful())
-			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-			}
+			///**< Updates the default value of parameter template.*/
+			//subcrres = SetParamDefaultValue(element, nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
+			//if (!subcrres.IsSuccessful())
+			//{
+			//	CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
+			//}
 
-			/**< Updates the actual value of parameter template.*/
-			subcrres = SetParamActualValue(element,  nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
-			if (!subcrres.IsSuccessful())
-			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-			}
+			///**< Updates the actual value of parameter template.*/
+			//subcrres = SetParamActualValue(element,  nodeId, pResult.node.at(row), pResult.parameters[row].at(0), interfaceId, modId, modposition);
+			//if (!subcrres.IsSuccessful())
+			//{
+			//	CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
+			//}
 		}
 	}
 
@@ -767,7 +769,7 @@ CLIResult ProjectParser::CreateChildParameterGroup(ParserElement& element,
 								parameterGroupNode);
 	if (!crres.IsSuccessful())
 	{
-		return crres;
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
 	}
 	else
 	{
@@ -860,17 +862,18 @@ CLIResult ProjectParser::CreateParameterGroup(ParserElement& element, std::uint8
 												std::uint32_t modposition)
 {
 	ParserResult pResult;
-
+	LOG_DEBUG() << "Parameter group available";
 	CLIResult crres = pResult.CreateResult(element, kParameterGroupXpathExpression,
 											kFormatStrParameterGroupXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		return crres;
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
 	}
 	else
 	{
 		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
 		{
+			LOG_DEBUG() << "Parameter group Entered";
 			Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
 					OpenConfiguratorCLI::GetInstance().networkName,
 					nodeId,
@@ -901,6 +904,7 @@ CLIResult ProjectParser::CreateParameterGroup(ParserElement& element, std::uint8
 			{
 				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
+					LOG_DEBUG() << "Parameter Reference Entered";
 					Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
 							OpenConfiguratorCLI::GetInstance().networkName,
 							nodeId,
@@ -909,6 +913,7 @@ CLIResult ProjectParser::CreateParameterGroup(ParserElement& element, std::uint8
 							subpResult.parameters[subrow].at(2),  									/**< actualValue */
 							(std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3).c_str()), 	/**< bitOffset */
 							interfaceId, modId, modposition);
+					LOG_DEBUG() << "Parameter Reference left";
 					if (!res.IsSuccessful())
 					{
 						return CLILogger::GetInstance().HandleCoreApiFailed("Create Parameter Reference", res);
@@ -932,7 +937,7 @@ CLIResult ProjectParser::CreateParameterList(ParserElement& element, std::uint8_
 											kFormatStrParameterXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		return crres;
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
 	}
 	else
 	{
@@ -966,13 +971,7 @@ CLIResult ProjectParser::CreateParameterList(ParserElement& element, std::uint8_
 											pResult.node.at(row));
 				if (!subcrres.IsSuccessful())
 				{
-					CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, subcrres);
-				}
-				else
-				{
-					if (subpResult.resultNodeValue == NULL)
-					{
-						LOG_ERROR() << "DataTypeIdRef not available." << std::endl;
+					LOG_ERROR() << "DataTypeIdRef not available." << std::endl;
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameter(
 								OpenConfiguratorCLI::GetInstance().networkName,
 								nodeId,
@@ -984,10 +983,10 @@ CLIResult ProjectParser::CreateParameterList(ParserElement& element, std::uint8_
 						{
 							return CLILogger::GetInstance().HandleCoreApiFailed("Create Parameter", res);
 						}
-					}
-					else
-					{
-						for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				}
+				else
+				{
+					for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 						{
 							ParameterAccess paramAccess = GetParameterAccess(subpResult.parameters[subrow].at(1));
 
@@ -1006,7 +1005,7 @@ CLIResult ProjectParser::CreateParameterList(ParserElement& element, std::uint8_
 								return CLILogger::GetInstance().HandleCoreApiFailed("Create Parameter", res);
 							}
 						}
-					}
+					
 				}
 			}
 
@@ -1092,7 +1091,7 @@ CLIResult ProjectParser::CreateObject(ParserElement& element, std::uint8_t nodeI
 											kFormatStrObjectXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		return crres;
+		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
 	}
 	else
 	{
