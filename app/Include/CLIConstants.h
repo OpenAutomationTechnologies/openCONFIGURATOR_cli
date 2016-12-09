@@ -24,6 +24,7 @@ namespace IndustrialNetwork
 			{
 				const std::string kMnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/MN";
 				const std::string kCnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/CN";
+				const std::string kRmnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/RMN";
 				const std::string kStructXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/dataTypeList/struct";
 				const std::string kArrayXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/dataTypeList/array";
 				const std::string kParameterTemplateXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/templateList/parameterTemplate";
@@ -60,6 +61,7 @@ namespace IndustrialNetwork
 
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name";
+				const std::string kFormatStrRmnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrStructXpathExpression = "uniqueID,name";
 				const std::string kFormatStrStructVarXpathExpression = "uniqueID,name,size";
 				const std::string kFormatStrArrayXpathExpression = "uniqueID,name";
@@ -70,7 +72,7 @@ namespace IndustrialNetwork
 				const std::string kFormatStrParameterMaxValueXpathExpression = "value";
 				const std::string kFormatStrParameterActualValueXpathExpression = "value";
 				const std::string kFormatStrParameterDefaultValueXpathExpression = "value";
-				const std::string kFormatStrParameterTemplateXpathExpression = "uniqueID,access";
+				const std::string kFormatStrParameterTemplateXpathExpression = "uniqueID,access,templateIDRef";
 				const std::string kFormatStrChildParameterGroupXpathExpression = "uniqueID,conditionalUniqueIDRef,conditionalValue,bitOffset,configParameter,groupLevelVisible";
 				const std::string kFormatStrParameterGroupXpathExpression = "uniqueID,conditionalUniqueIDRef,conditionalValue,bitOffset,configParameter,groupLevelVisible";
 				const std::string kFormatStrChildParameterRefXpathExpression = "uniqueIDRef,access,actualValue,bitOffset";
@@ -88,6 +90,7 @@ namespace IndustrialNetwork
 				const std::string kFormatStrSubObjectXpathExpression = "subIndex,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
 				const std::string kFormatStrInterfaceXDCxpathExpression = "uniqueID,type,moduleAddressing,maxModules,unusedSlots,multipleModules";
 				const std::string kFormatStrInterfaceRangeXpathExpression = "name,baseIndex,maxIndex,maxSubIndex,sortMode,sortNumber,PDOmapping,sortStep";
+				const std::string kFormatStrAppLayerInterfaceXpathExpression = "uniqueIDRef";
 			} // end of namespace CLIConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK
