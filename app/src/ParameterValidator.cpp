@@ -13,17 +13,17 @@
 
 ParameterValidator::ParameterValidator()
 {
-
+// REVIEW_COMMENT:
 }
 
 ParameterValidator::~ParameterValidator()
 {
-
+// REVIEW_COMMENT:
 }
 
 ParameterValidator& ParameterValidator::GetInstance()
 {
-	static ParameterValidator instance;
+	static ParameterValidator instance;// REVIEW_COMMENT:
 	return instance;
 }
 
@@ -91,7 +91,7 @@ CLIResult ParameterValidator::IsSchemaValid(std::string fileName, const std::str
 	{
 		/**< Initialize the Xerces usage */
 		xercesc::XMLPlatformUtils::Initialize();
-
+// REVIEW_COMMENT:
 		xercesc::XercesDOMParser* domParserXdc = new xercesc::XercesDOMParser();
 
 		/**< Validate for the schema file existance */

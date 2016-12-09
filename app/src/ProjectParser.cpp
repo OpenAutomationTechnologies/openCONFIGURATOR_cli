@@ -7,7 +7,7 @@
  *
  * \version 0.1
  *
- */
+ */// REVIEW_COMMENT: 
 
 #include "ProjectParser.h"
 #include "ParserResult.h"
@@ -15,12 +15,12 @@
 
 ProjectParser::ProjectParser()
 {
-
+// REVIEW_COMMENT: 
 }
 
 ProjectParser::~ProjectParser()
 {
-
+// REVIEW_COMMENT: 
 }
 
 ProjectParser& ProjectParser::GetInstance()
@@ -29,8 +29,8 @@ ProjectParser& ProjectParser::GetInstance()
 	return instance;
 }
 
-CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
-{
+CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)// REVIEW_COMMENT: const
+{// REVIEW_COMMENT: createMn, CreateCn, CreateRmn function
 	try
 	{
 		/**< Core Library API call to create Network */
@@ -38,7 +38,7 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 						OpenConfiguratorCLI::GetInstance().networkName);
 
 		ParserElement xmlParserElement;
-		ParserResult mnResult, cnResult, rmnResult;
+		ParserResult mnResult, cnResult, rmnResult;// REVIEW_COMMENT: add three defs
 
 		CLIResult ceres = xmlParserElement.CreateElement(xmlPath);
 		if (!ceres.IsSuccessful())
@@ -50,7 +50,7 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 			CLIResult crres;
 
 			crres = mnResult.CreateResult(xmlParserElement, kMnXpathExpression,
-													kFormatStrMnXpathExpression);
+													kFormatStrMnXpathExpression);// REVIEW_COMMENT: alignment
 			if (!crres.IsSuccessful())
 			{
 				return crres;
@@ -59,13 +59,13 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 			{
 				for (std::uint32_t row = 0; row < mnResult.parameters.size(); row++)
 				{
-					std::uint8_t nodeId = (std::uint8_t)std::stoi(mnResult.parameters[row].at(0).c_str());
+					std::uint8_t nodeId = (std::uint8_t)std::stoi(mnResult.parameters[row].at(0).c_str());// REVIEW_COMMENT: stoi empty() check
 
 					/**< Core Library API call to create Node */
 					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
 										OpenConfiguratorCLI::GetInstance().networkName,
 										nodeId,
-										mnResult.parameters[row].at(2));	/**< name */
+										mnResult.parameters[row].at(2));	/**< name */// REVIEW_COMMENT: give "name" instead 2 
 					if (!res.IsSuccessful())
 					{
 						return CLILogger::GetInstance().HandleCoreApiFailed("Create MN Node", res);
@@ -87,7 +87,7 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 					clires = UpdateNodeIdCollection(nodeId,
 										mnResult.parameters[row].at(1),	/**< pathToXDC */
 										forcedModularNodeObj, forcedModularNodeSubObj, 
-										"","",0U);
+										"","",0U);// REVIEW_COMMENT: spaces before values
 					if (!clires.IsSuccessful())
 					{
 						return CLILogger::GetInstance().HandleCliApiFailed("Update MN Node Id Collection", clires);
@@ -103,7 +103,7 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 			}
 
 			crres = rmnResult.CreateResult(xmlParserElement, kRmnXpathExpression,
-													kFormatStrRmnXpathExpression);
+													kFormatStrRmnXpathExpression);// REVIEW_COMMENT: align
 			if (!crres.IsSuccessful())
 			{
 				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, crres);
@@ -119,11 +119,11 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 										OpenConfiguratorCLI::GetInstance().networkName,
 										nodeId,
 										rmnResult.parameters[row].at(2),		/**< name */
-										true);	
+										true);	// REVIEW_COMMENT: remove tab
 					if (!res.IsSuccessful())
 					{
-						CLIResult cliresult;
-						cliresult = CLILogger::GetInstance().HandleCoreApiFailed("Create RN Node", res);
+						CLIResult cliresult;// REVIEW_COMMENT: blank line
+						cliresult = CLILogger::GetInstance().HandleCoreApiFailed("Create RMN Node", res);
 
 						CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, cliresult);
 					}
@@ -132,11 +132,11 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 					std::vector<std::string> forcedModularNodeObj;		/**< Specifies the group of forced objects in Node */
 					std::vector<std::string> forcedModularNodeSubObj;	/**< Specifies the group of forced sub objects in Node */
 
-					/**< Core Library API calls to import the XDD of node */
+					/**< Core Library API calls to import the XDD of node */// REVIEW_COMMENT: XDC
 					clires = UpdateNodeIdCollection(nodeId,
 										rmnResult.parameters[row].at(1),		/**< pathToXDC */
 										forcedModularNodeObj, forcedModularNodeSubObj, 
-										"","",0U);
+										"","",0U);// REVIEW_COMMENT: space
 					if (!clires.IsSuccessful())
 					{
 						CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, clires);
@@ -168,7 +168,7 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 					CLIResult cliresult;
 
 					clires = subCnResult.CreateResult(xmlParserElement, 
-														kIntrfcXpathExpression, "id");
+														kIntrfcXpathExpression, "id");// REVIEW_COMMENT: defne constant
 					if (!clires.IsSuccessful())
 					{
 						CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, clires);
@@ -309,13 +309,13 @@ CLIResult ProjectParser::ParserXMLFile(std::string xmlPath)
 	return CLIResult();
 }
 
-IEC_Datatype ProjectParser::GetIECDataType(xercesc::DOMNode* node)
+IEC_Datatype ProjectParser::GetIECDataType(xercesc::DOMNode* node)// REVIEW_COMMENT: const
 {
 	IEC_Datatype data = IEC_Datatype::UNDEFINED;
 
 	if (node->hasChildNodes())
 	{
-		xercesc::DOMNodeList* childNode = node-> getChildNodes();
+		xercesc::DOMNodeList* childNode = node-> getChildNodes();// REVIEW_COMMENT: space
 		const XMLSize_t nodeCount = childNode->getLength();
 
 		for (XMLSize_t index = 0; index < nodeCount; index++)
@@ -324,17 +324,17 @@ IEC_Datatype ProjectParser::GetIECDataType(xercesc::DOMNode* node)
 
 			if ((currentNode->getNodeType()) && (currentNode->getNodeType() == xercesc::DOMNode::ELEMENT_NODE))
 			{
-				char* subNodeName = xercesc::XMLString::transcode(currentNode->getNodeName());
-				std::string childNodeName = subNodeName;
-				if ((childNodeName == "defaultValue") ||
-					(childNodeName == "allowedValues") || 
+				char* subNodeName = xercesc::XMLString::transcode(currentNode->getNodeName()); // REVIEW_COMMENT: release
+				std::string childNodeName = subNodeName;// REVIEW_COMMENT: blank
+				if ((childNodeName == "defaultValue") ||// REVIEW_COMMENT: use compare()
+					(childNodeName == "allowedValues") || // REVIEW_COMMENT: use vector and used find()
 					(childNodeName == "actualValue") || 
 					(childNodeName == "substituteValue") || 
 					(childNodeName == "unit") || 
 					(childNodeName == "property"))
 				{
 					return data;
-				}
+				}// REVIEW_COMMENT: line
 				data = GetDataType(childNodeName);
 			}
 		}
@@ -345,7 +345,7 @@ IEC_Datatype ProjectParser::GetIECDataType(xercesc::DOMNode* node)
 
 CLIResult ProjectParser::CreateStructDataType(ParserElement& element, std::uint8_t nodeId, 
 											  std::string interfaceId, std::string modId, 
-											  std::uint32_t modposition)
+											  std::uint32_t modposition)// REVIEW_COMMENT: const, lower camel case
 {
 	ParserResult pResult;
 
@@ -387,7 +387,7 @@ CLIResult ProjectParser::CreateStructDataType(ParserElement& element, std::uint8
 				{
 					IEC_Datatype data = GetIECDataType(varDecResult.node.at(subrow));
 
-					std::uint32_t varDeclSize;
+					std::uint32_t varDeclSize;// REVIEW_COMMENT: line
 					if (varDecResult.parameters[subrow].at(2).empty())
 					{
 						/**< Set default value to size if value is empty */
@@ -395,7 +395,7 @@ CLIResult ProjectParser::CreateStructDataType(ParserElement& element, std::uint8
 					}
 					else
 					{
-						varDeclSize = (std::uint32_t) std::stoi(varDecResult.parameters[subrow].at(2).c_str());
+						varDeclSize = (std::uint32_t) std::stoi(varDecResult.parameters[subrow].at(2).c_str());// REVIEW_COMMENT: space after cast
 					}
 
 					/**< Core Library API call to create VarDeclaration */
@@ -1552,13 +1552,13 @@ CLIResult ProjectParser::CreateNetworkManagementCnFeatures(ParserElement& elemen
 	return CLIResult();
 }
 
-CLIResult ProjectParser::CreateInterface(std::uint8_t nodeId, const std::string& cnXDC)
+CLIResult ProjectParser::CreateInterface(std::uint8_t nodeId, const std::string& cnXDC) // REVIEW_COMMENT: cnXdc 
 {
 	std::string indexString1 = "/" + cnXDC;
 	std::string initialPath = OpenConfiguratorCLI::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
 	std::string fullPath = nextInitialPath.append(indexString1);
-
+ // REVIEW_COMMENT: 
 	CLIResult res;
 
 	res = ParameterValidator::GetInstance().IsXDCSchemaValid(nextInitialPath);
@@ -1627,12 +1627,12 @@ CLIResult ProjectParser::CreateInterface(std::uint8_t nodeId, const std::string&
 				{
 					return CLILogger::GetInstance().HandleCoreApiFailed("Create Interface", res);
 				}
-										
+										// REVIEW_COMMENT: remove tabs
 				ParserResult subPresult;
 
 				CLIResult cliRes = subPresult.CreateResult(element, kAppLayerInterfaceXpathExpression,
 											kFormatStrAppLayerInterfaceXpathExpression);
-
+// REVIEW_COMMENT:
 				if (!cliRes.IsSuccessful())
 				{
 					CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, cliRes);
@@ -1672,7 +1672,7 @@ CLIResult ProjectParser::CreateInterface(std::uint8_t nodeId, const std::string&
 														rangeSortStep, 
 														sortmodRange, 
 														sortRangeNumber,
-														maping);
+														maping);// REVIEW_COMMENT:mapping
 								if (!res.IsSuccessful())
 								{
 									return CLILogger::GetInstance().HandleCoreApiFailed("Create Range", res);
@@ -1688,17 +1688,17 @@ CLIResult ProjectParser::CreateInterface(std::uint8_t nodeId, const std::string&
 	return CLIResult();
 }
 
-CLIResult ProjectParser::UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& cnXDC, 
-												std::vector<std::string> forcedObject, 
+CLIResult ProjectParser::UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& cnXDC, // REVIEW_COMMENT:Xdc
+												std::vector<std::string> forcedObject, // REVIEW_COMMENT:const
 												std::vector<std::string> forcedSubObject, 
 												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition)
+												std::uint32_t modposition)// REVIEW_COMMENT:P
 {
-	std::string indexString1 = "/" + cnXDC;
+	std::string indexString1 = "/" + cnXDC;// REVIEW_COMMENT:remove 1
 	std::string initialPath = OpenConfiguratorCLI::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
 	std::string fullPath = nextInitialPath.append(indexString1);
-
+// REVIEW_COMMENT:
 	CLIResult res;
 
 	res = ParameterValidator::GetInstance().IsXDCSchemaValid(nextInitialPath);
@@ -1755,13 +1755,13 @@ CLIResult ProjectParser::UpdateNodeIdCollection(std::uint8_t nodeId, const std::
 	return CLIResult();
 }
 
-CLIResult ProjectParser::CreateNodeAssignment(ParserElement& pElement, std::string xPathExpression, std::uint8_t nodeId)
+CLIResult ProjectParser::CreateNodeAssignment(ParserElement& pElement, std::string xPathExpression, std::uint8_t nodeId)// REVIEW_COMMENT:80, const
 {
 	ParserResult pResult;
 
 	CLIResult crres = pResult.CreateResult(pElement, xPathExpression.c_str(),
 											kFormatStrxPathExpression);
-
+// REVIEW_COMMENT:
 	if (!crres.IsSuccessful())
 	{
 		return crres;
@@ -1791,7 +1791,7 @@ CLIResult ProjectParser::CreateNodeAssignment(ParserElement& pElement, std::stri
 			else
 			{
 				CLIResult res;
-
+// REVIEW_COMMENT: Use vector (hash table ref) to reduce number of lines
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_IS_CN, nodeId, "true");
 				if (!res.IsSuccessful())
 				{
@@ -1892,9 +1892,9 @@ CLIResult ProjectParser::SetNodeAssignment(NodeAssignment nodeassign, std::uint8
 	return CLIResult();
 }
 
-ModuleAddressing ProjectParser::GetModuleAddressing(std::string moduleAddressing)
+ModuleAddressing ProjectParser::GetModuleAddressing(std::string moduleAddressing)// REVIEW_COMMENT:const
 {
-	if (moduleAddressing == "manual")
+	if (moduleAddressing == "manual")// REVIEW_COMMENT: vector
 	{
 		return ModuleAddressing::MANUAL;
 	}
@@ -1905,33 +1905,33 @@ ModuleAddressing ProjectParser::GetModuleAddressing(std::string moduleAddressing
 	else if (moduleAddressing == "next")
 	{
 		return ModuleAddressing::NEXT;
-	}
+	}// REVIEW_COMMENT: line
 	return ModuleAddressing::NEXT;
 }
 
 SortNumber ProjectParser::GetSortNumber(std::string sortNumber)
 {
-	if (sortNumber == "continuous")
+	if (sortNumber == "continuous")// REVIEW_COMMENT:vector
 	{
 		return SortNumber::CONTINUOUS;
 	}
 	else if (sortNumber == "address")
 	{
 		return SortNumber::ADDRESS;
-	}
+	}// REVIEW_COMMENT:line
 	return SortNumber::CONTINUOUS;
 }
 
 SortMode ProjectParser::GetSortMode(std::string sortMode)
 {
-	if (sortMode == "index")
+	if (sortMode == "index")// REVIEW_COMMENT:vector
 	{
 		return SortMode::INDEX;
 	}
 	else if (sortMode == "subindex")
 	{
 		return SortMode::SUBINDEX;
-	}
+	}// REVIEW_COMMENT:l
 	return SortMode::INDEX;
 }
 
@@ -1944,7 +1944,7 @@ CLIResult ProjectParser::CreateModule(std::uint8_t nodeId, std::string interface
 	std::string initialPath = OpenConfiguratorCLI::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
 	std::string fullPath = nextInitialPath.append(indexString1);
-
+// REVIEW_COMMENT:
 	CLIResult res;
 
 	res = ParameterValidator::GetInstance().IsXDCSchemaValid(nextInitialPath);
@@ -2027,7 +2027,7 @@ CLIResult ProjectParser::CreateModuleObject(ParserElement & element, std::uint8_
 											std::uint32_t modposition)
 {
 	ParserResult pResult;
-	
+	// REVIEW_COMMENT:
 	CLIResult clires = pResult.CreateResult(element, kObjectXpathExpression.c_str(),
 								kFormatStrObjectXpathExpressionModule);
 
@@ -2065,7 +2065,7 @@ CLIResult ProjectParser::CreateModuleObject(ParserElement & element, std::uint8_
 			if ((!dataType.empty()) && (uniqueIdRef.empty()))
 			{
 				Result res = OpenConfiguratorCore::GetInstance().CreateModuleObject(
-						OpenConfiguratorCLI::GetInstance().networkName,
+						OpenConfiguratorCLI::GetInstance().networkName,// REVIEW_COMMENT:align
 						nodeId, interfaceId,
 						modId, modposition,
 						objId, GetObjectType(objIdType),
@@ -2232,7 +2232,7 @@ CLIResult ProjectParser::CreateModuleObject(ParserElement & element, std::uint8_
 							{
 								Result res = OpenConfiguratorCore::GetInstance().SetSubObjectLimits(
 										OpenConfiguratorCLI::GetInstance().networkName,
-										nodeId, GetNewObjectIndex(nodeId, interfaceId, modId, modposition, objId),
+										nodeId, GetNewObjectIndex(nodeId, interfaceId, modId, modposition, objId),// REVIEW_COMMENT:
 										(std::uint8_t)GetNewSubObjectIndex(nodeId, interfaceId, modId, modposition, GetNewObjectIndex(nodeId, interfaceId, modId, modposition, objId), subObjId),
 										subpResult.parameters[subrow].at(9),			/**< sub object lowLimit */
 										subpResult.parameters[subrow].at(10));			/**< sub object highLimit */

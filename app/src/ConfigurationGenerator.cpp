@@ -14,17 +14,17 @@
 
 ConfigurationGenerator::ConfigurationGenerator()
 {
-
+// REVIEW_COMMENT:
 }
 
 ConfigurationGenerator::~ConfigurationGenerator()
 {
-
+// REVIEW_COMMENT:
 }
 
 ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 {
-	static ConfigurationGenerator instance;
+	static ConfigurationGenerator instance;// REVIEW_COMMENT:
 	return instance;
 }
 
@@ -63,7 +63,7 @@ CLIResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string ou
 {
 	std::vector<std::uint8_t> binOutput;		/**< binary output vector */
 	std::string configurationOutput = "";		/**< configuration output stream */
-
+// REVIEW_COMMENT:
 	Result res;
 	CLIResult cliRes;
 
@@ -174,7 +174,7 @@ CLIResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::st
 		if (ofile.is_open())
 		{
 			ofile << configuration << std::endl;
-
+// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
@@ -196,7 +196,7 @@ CLIResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::os
 		if (ofile.is_open())
 		{
 			ofile << buffer.str() << std::endl;
-
+// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
@@ -221,12 +221,12 @@ CLIResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std:
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
             toStream << "0x";
-
+// REVIEW_COMMENT:
 			toStream << (std::uint8_t) ("%02X" , (buffer.str().at(cnt)));
             if (cnt != (buffer.str().size() - 1))
 			{
                 toStream << ",";
-            }
+            }// REVIEW_COMMENT:
             lineBreakCount++;
 
             if (lineBreakCount == kWordWrapLength)
@@ -280,7 +280,7 @@ CLIResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput << std::endl;
-
+// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
@@ -312,7 +312,7 @@ CLIResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput.c_str() << std::endl;
-
+// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
@@ -344,7 +344,7 @@ CLIResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, 
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput << std::endl;
-
+// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}

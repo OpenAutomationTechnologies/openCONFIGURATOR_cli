@@ -7,9 +7,9 @@
  *
  * \version 0.1
  *
- */
+ */// REVIEW_COMMENT: 
 
-#ifndef PROJECT_PARSER_H
+#ifndef PROJECT_PARSER_H// REVIEW_COMMENT: 
 #define PROJECT_PARSER_H
 
 #include "OpenConfiguratorCLI.h"
@@ -28,7 +28,7 @@ namespace IndustrialNetwork
 					/// Default constructor of the class
 					ProjectParser();
 
-					/// Descriptor of the class
+					/// Descriptor of the class// REVIEW_COMMENT: 
 					~ProjectParser();
 
 					/** \brief Creates single instance
@@ -36,11 +36,11 @@ namespace IndustrialNetwork
 					  */
 					static ProjectParser& GetInstance();
 
-					/** \brief Parses the XML file
+					/** \brief Parses the XML file // REVIEW_COMMENT: stick with standards
 					  * \param xmlPath Name of the XML file with path
 					  * \return CLIResult
 					  */
-					CLIResult ParserXMLFile(std::string xmlPath);
+					CLIResult ParserXMLFile(std::string xmlPath);// REVIEW_COMMENT: ParseXmlFile
 
 				private:
 					/**
@@ -54,7 +54,7 @@ namespace IndustrialNetwork
 					  * \param modposition Specifies the modulePosition of module
 					  * \return CLIResult
 					  */
-					CLIResult UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& pathXDC, 
+					CLIResult UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& pathXDC, // REVIEW_COMMENT: 
 													std::vector<std::string> forcedObject, 
 													std::vector<std::string> forcedSubObject, 
 													std::string interfceID, std::string modId, 
@@ -436,7 +436,7 @@ namespace IndustrialNetwork
 										std::string modId, std::uint32_t modposition);
 
 					/**< Group of forced objects in Node */
-					std::vector<std::string> forcedNodeObj;  
+					std::vector<std::string> forcedNodeObj;  // REVIEW_COMMENT: keep it at the bottom
 
 					/**< Group of forced sub objects in Node */
 					std::vector<std::string> forcedNodeSubObj;
@@ -450,7 +450,7 @@ namespace IndustrialNetwork
 					/**
 					  * \brief Gets the IEC_Datatype based on the string retrieved from XDC
 					  * \param dataType Specifies the dataType value of object or parameter
-					  * \returns IEC_Datatype
+					  * \returns IEC_Datatype// REVIEW_COMMENT: return
 					  */
 					IEC_Datatype GetDataType(std::string dataType);
 

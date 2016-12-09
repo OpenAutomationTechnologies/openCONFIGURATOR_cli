@@ -7,7 +7,7 @@
  *
  * \version 0.1
  *
- */
+ */// REVIEW_COMMENT: copyright and License
 
 #ifndef CLI_ERROR_CODE_H
 #define CLI_ERROR_CODE_H

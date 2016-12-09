@@ -7,7 +7,7 @@
  *
  * \version 0.1
  *
- */
+ */// REVIEW_COMMENT: license
 
 #include "OpenConfiguratorCore.h"
 #include "OpenConfiguratorCLI.h"
@@ -15,20 +15,20 @@
 
 ParserResult::ParserResult()
 {
-
+// REVIEW_COMMENT: line not required
 }
 
 ParserResult::~ParserResult()
 {
-
+// REVIEW_COMMENT: line not required
 }
 
 CLIResult ParserResult::CreateResult(ParserElement& pElement,
-					std::string transcodeString,
+					std::string transcodeString,// REVIEW_COMMENT: alignment
 					std::string formatString)
 {
 	return CreateResult(pElement,
-				 transcodeString,
+				 transcodeString,// REVIEW_COMMENT: alignment
 				 formatString,
 				 pElement.docElement);
 }
@@ -36,12 +36,12 @@ CLIResult ParserResult::CreateResult(ParserElement& pElement,
 CLIResult ParserResult::CreateResult(ParserElement& pElement,
 					std::string transcodeString,
 					std::string formatString,
-					xercesc::DOMNode* parentNode)
+					xercesc::DOMNode* parentNode)// REVIEW_COMMENT: const
 {
 	if (parentNode == NULL)
 	{
-		boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
-		formatter
+		boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);// REVIEW_COMMENT: 80 chars
+		formatter// REVIEW_COMMENT: in a single line
 		% "Create Result";
 
 		return CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
@@ -51,7 +51,7 @@ CLIResult ParserResult::CreateResult(ParserElement& pElement,
 	{
 		/**< Get result of Managing Node */
 		xercesc::DOMXPathResult* nResult = pElement.docHandle->evaluate(
-									   xercesc::XMLString::transcode(transcodeString.c_str()),
+									   xercesc::XMLString::transcode(transcodeString.c_str()),// REVIEW_COMMENT: remove space
 									   parentNode,
 									   NULL,
 									   xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
@@ -62,7 +62,7 @@ CLIResult ParserResult::CreateResult(ParserElement& pElement,
 		if (resultNodeValue == NULL)
 		{
 			boost::format formatter(kMsgNoResultForXPath[CLILogger::GetInstance().languageIndex]);
-			formatter
+			formatter// REVIEW_COMMENT: single line
 			% transcodeString.c_str();
 
 			return CLIResult(CLIErrorCode::NO_RESULT_FOR_XPATH, formatter.str());
@@ -97,29 +97,29 @@ CLIResult ParserResult::CreateResult(ParserElement& pElement,
 
 				parameters.push_back(row);
 			}
-
+// REVIEW_COMMENT: remove line
 		}
 
 		nResult->release();
 	}
-	catch (std::exception& ex)
+	catch (std::exception& ex)// REVIEW_COMMENT: e
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create Result", ex);
+		return CLILogger::GetInstance().HandleExceptionCaught("Create Result", ex);// REVIEW_COMMENT: 80
 	}
 
 	return CLIResult();
 }
 
-std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::string attributeName)
+std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::string attributeName)// REVIEW_COMMENT: const
 {
 	if (domNode == NULL)
 	{
 		boost::format formatter(kMsgNullPtrFound[CLILogger::GetInstance().languageIndex]);
-		formatter
+		formatter// REVIEW_COMMENT: single line
 		% "Get Attribute Value";
 
 		CLIResult res = CLIResult(CLIErrorCode::NULL_POINTER_FOUND, formatter.str());
-
+// REVIEW_COMMENT: remove line
 		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
 		return "";
 	}
@@ -135,10 +135,10 @@ std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::stri
 			{
 				xercesc::DOMNode* currentNode = attributes->item(attribSize);
 				if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
-				{
+				{// REVIEW_COMMENT: intentionally used - comment
 					char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
 
-					if (attributeName.compare(attribute) == 0)
+					if (attributeName.compare(attribute) == 0)// REVIEW_COMMENT: combine IFs
 					{
 						char* val = xercesc::XMLString::transcode(
 										domNode->getAttributes()->getNamedItem(
@@ -147,7 +147,7 @@ std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::stri
 									);
 
 						std::string value(val);
-
+// REVIEW_COMMENT: 
 						xercesc::XMLString::release(&val);
 						xercesc::XMLString::release(&attribute);
 
@@ -161,10 +161,10 @@ std::string ParserResult::GetAttributeValue(xercesc::DOMNode* domNode, std::stri
 			}
 		}
 	}
-	catch (std::exception& ex)
+	catch (std::exception& ex)// REVIEW_COMMENT: e
 	{
-		CLIResult res = CLILogger::GetInstance().HandleExceptionCaught("Get Attribute Value", ex);
-
+		CLIResult res = CLILogger::GetInstance().HandleExceptionCaught("Get Attribute Value", ex);// REVIEW_COMMENT: 80
+// REVIEW_COMMENT: 
 		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
 	}
 

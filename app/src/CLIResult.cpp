@@ -7,7 +7,7 @@
  *
  * \version 0.1
  *
- */
+ */ // REVIEW_COMMENT: copyright and License
 
 #include "CLIResult.h"
 
@@ -30,7 +30,7 @@ CLIResult::~CLIResult()
 {
 }
 
-bool CLIResult::IsSuccessful()
+bool CLIResult::IsSuccessful() // REVIEW_COMMENT: check for bool
 {
 	return (this->GetErrorType() == CLIErrorCode::SUCCESS);
 }

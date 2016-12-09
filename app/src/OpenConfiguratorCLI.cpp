@@ -24,12 +24,12 @@ OpenConfiguratorCLI::OpenConfiguratorCLI()
 
 OpenConfiguratorCLI::~OpenConfiguratorCLI()
 {
-
+// REVIEW_COMMENT:
 }
 
 OpenConfiguratorCLI& OpenConfiguratorCLI::GetInstance()
 {
-	static OpenConfiguratorCLI instance;
+	static OpenConfiguratorCLI instance;// REVIEW_COMMENT:
 	return instance;
 }
 
