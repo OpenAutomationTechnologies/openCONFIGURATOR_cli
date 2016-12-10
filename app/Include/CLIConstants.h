@@ -1,16 +1,40 @@
 /**
- * \file CLIConstants
+ * \file CliConstants
  *
  * \brief Includes all the transcode constant strings and format strings used
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 0.1
+ * \version 1.0
  *
  */
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
 
-#ifndef CLI_CONSTANTS_H
-#define CLI_CONSTANTS_H
+#ifndef _CLI_CONSTANTS_H_
+#define _CLI_CONSTANTS_H_
 
 #include <string>
 
@@ -20,7 +44,7 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			namespace CLIConstants
+			namespace CliConstants
 			{
 				const std::string kMnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/MN";
 				const std::string kCnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/CN";
@@ -49,7 +73,7 @@ namespace IndustrialNetwork
 				const std::string kCnFeatureXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/NetworkManagement/CNFeatures";
 				const std::string kIntrfcListXpathExpression = kCnXpathExpression +"/InterfaceList";
 				const std::string kIntrfcXpathExpression = kCnXpathExpression +"/InterfaceList/Interface";
-				const std::string kInterfaceXDCxpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/interfaceList/interface";
+				const std::string kInterfaceXdcXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/interfaceList/interface";
 				const std::string kAppLayerInterfaceXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationLayers/moduleManagement/interfaceList/interface";
 				const std::string kInterfaceRangeXpathExpression = kAppLayerInterfaceXpathExpression + "/rangeList/range";
 				const std::string kModuleNodeXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/moduleInterface";
@@ -57,7 +81,7 @@ namespace IndustrialNetwork
 				const std::string kForcedObjectNodeXpathExpression = kCnXpathExpression + "/ForcedObjects/Object";
 				const std::string kForcedObjectModuleXpathExpression = kModuleXpathExpression + "/ForcedObjects/Object";
 
-				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0; // 240
+				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0;		/** 240 */
 
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name";
@@ -88,12 +112,13 @@ namespace IndustrialNetwork
 				const std::string kFormatStrxPathExpressionObject = "index, subindex";
 				const std::string kFormatStrObjectXpathExpressionModule = "index,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit,rangeSelector";
 				const std::string kFormatStrSubObjectXpathExpression = "subIndex,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
-				const std::string kFormatStrInterfaceXDCxpathExpression = "uniqueID,type,moduleAddressing,maxModules,unusedSlots,multipleModules";
+				const std::string kFormatStrInterfaceXdcXpathExpression = "uniqueID,type,moduleAddressing,maxModules,unusedSlots,multipleModules";
 				const std::string kFormatStrInterfaceRangeXpathExpression = "name,baseIndex,maxIndex,maxSubIndex,sortMode,sortNumber,PDOmapping,sortStep";
 				const std::string kFormatStrAppLayerInterfaceXpathExpression = "uniqueIDRef";
-			} // end of namespace CLIConstants
+				const std::string kFormatStrIntrfcXpathExpression = "id";
+			} // end of namespace CliConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK
 } // end of namespace IndustrialNetwork
 
-#endif // CLI_CONSTANTS_H
+#endif // _CLI_CONSTANTS_H_

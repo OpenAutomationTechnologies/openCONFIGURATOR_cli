@@ -5,14 +5,38 @@
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 0.1
+ * \version 1.0
  *
- */// REVIEW_COMMENT: 
+ */ 
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
 
-#ifndef PROJECT_PARSER_H// REVIEW_COMMENT: 
-#define PROJECT_PARSER_H
+#ifndef _PROJECT_PARSER_H_
+#define _PROJECT_PARSER_H_
 
-#include "OpenConfiguratorCLI.h"
+#include "OpenConfiguratorCli.h"
 #include "ParserElement.h"
 #include "ParserResult.h"
 
@@ -25,10 +49,12 @@ namespace IndustrialNetwork
 			class ProjectParser
 			{
 				public:
-					/// Default constructor of the class
+					/** \brief Default constructor of the class 
+					  */
 					ProjectParser();
 
-					/// Descriptor of the class// REVIEW_COMMENT: 
+					/** \brief Destructor of the class 
+					  */
 					~ProjectParser();
 
 					/** \brief Creates single instance
@@ -36,470 +62,486 @@ namespace IndustrialNetwork
 					  */
 					static ProjectParser& GetInstance();
 
-					/** \brief Parses the XML file // REVIEW_COMMENT: stick with standards
-					  * \param xmlPath Name of the XML file with path
-					  * \return CLIResult
+					/** \brief Parses the XML file
+					  * \param xmlPath			Name of the XML file with path
+					  * \return CliResult
 					  */
-					CLIResult ParserXMLFile(std::string xmlPath);// REVIEW_COMMENT: ParseXmlFile
+					CliResult ParseXmlFile(const std::string xmlPath);
 
 				private:
-					/**
-					  * \brief Updates the information of Node XDC into library API
-					  * \param nodeId Specifies the node ID value of node
-					  * \param pathXDC Specifies the XDC path of node
-					  * \param forcedObject Specifies the vector of forced objects in node
-					  * \param forcedSubObject Specifies the vector of forced sub-objects in node
-					  * \param interfceID Specifies the inteface ID  of modular node
-					  * \param modId Specifies the moduleID of module
-					  * \param modposition Specifies the modulePosition of module
-					  * \return CLIResult
+					/** \brief Updates the XDC node information into core library
+					  * \param nodeId 			Node ID value of node
+					  * \param pathXdc 			XDC path of node
+					  * \param forcedObject 	Vector of forced objects in node
+					  * \param forcedSubObject 	Vector of forced sub-objects in node
+					  * \param interfceId 		Inteface ID of modular node
+					  * \param modId 			ID of module
+					  * \param modPosition 		Position of module
+					  * \return CliResult
 					  */
-					CLIResult UpdateNodeIdCollection(std::uint8_t nodeId, const std::string& pathXDC, // REVIEW_COMMENT: 
-													std::vector<std::string> forcedObject, 
-													std::vector<std::string> forcedSubObject, 
-													std::string interfceID, std::string modId, 
-													std::uint32_t modposition);
+					CliResult UpdateNodeIdCollection(const std::uint8_t nodeId, 
+									const std::string& pathXdc, 
+									const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject, 
+									const std::string interfceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Updates the interface information of modular Node XDC into library API
-					  * \param nodeId Specifies the node ID value of modular head node
-					  * \param pathXDC Specifies the XDC path of modular head node
-					  * \return CLIResult
+					/** \brief Updates the modular node interface information of 
+					  *        XDC into core library
+					  * \param nodeId 		Node ID value of modular head node
+					  * \param pathXdc 		The XDC path of modular head node
+					  * \return CliResult
 					  */
-					CLIResult CreateInterface(std::uint8_t nodeId, const std::string& pathXDC);
+					CliResult CreateInterface(const std::uint8_t nodeId, 
+									const std::string& pathXdc);
 
-					/**
-					  * \brief Updates the Device POWERLINK profile body of XDD/XDC into core library
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfceID Specifies the inteface ID  of modular node
-					  * \param modId Specifies the moduleID of module
-					  * \param modposition Specifies the modulePosition of module
-					  * \return CLIResult
+					/** \brief Updates the Device POWERLINK profile body of 
+					  *        XDD/XDC into core library
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfceId 	Inteface ID of modular node
+					  * \param modId 		ID of module
+					  * \param modPosition 	Position of module
+					  * \return CliResult
 					  */
-					CLIResult ImportProfileBodyDevicePOWERLINK(ParserElement& element, std::uint8_t nodeId, 
-													std::string interfaceId, std::string modId, 
-													std::uint32_t modposition);
+					CliResult ImportProfileBodyDevice(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Updates the Communication POWERLINK profile body of XDD/XDC into core library
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param forcedObject Specifies the vector of forced objects in node
-					  * \param forcedSubObject Specifies the vector of forced sub-objects in node
-					  * \param interfceID Specifies the inteface ID  of modular node
-					  * \param modId Specifies the moduleID of module
-					  * \param modposition Specifies the modulePosition of module
-					  * \return CLIResult
+					/** \brief Updates the Communication POWERLINK profile body 
+					  *        of XDD/XDC into core library
+					  * \param element 			Element that contains handle of XDC
+					  * \param nodeId 			ID value of node
+					  * \param forcedObject 	Vector of forced objects in node
+					  * \param forcedSubObject 	Vector of forced sub-objects in node
+					  * \param interfceID 		Inteface ID of modular node
+					  * \param modId 			ID of module
+					  * \param modPosition 		Position of module
+					  * \return CliResult
 					  */
-					CLIResult ImportProfileBodyCommunicationPOWERLINK(ParserElement& element, std::uint8_t nodeId, 
-													std::vector<std::string> forcedObject, 
-													std::vector<std::string> forcedSubObject,
-													std::string interfaceId, std::string modId, 
-													std::uint32_t modposition);
+					CliResult ImportProfileBodyCommn(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject,
+									const std::string interfaceId, std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates network management general features
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \return CLIResult
+					/** \brief Creates network management general features
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \return CliResult
 					  */
-					CLIResult CreateNetworkManagementGeneralFeatures(ParserElement& element, std::uint8_t nodeId);
+					CliResult CreateNwMgtGeneralFeatures(const ParserElement& element, 
+									const std::uint8_t nodeId);
 
-					/**
-					  * \brief Creates network management MN features
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \return CLIResult
+					/** \brief Creates network management MN features
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \return CliResult
 					  */
-					CLIResult CreateNetworkManagementMnFeatures(ParserElement& element, std::uint8_t nodeId);
+					CliResult CreateNwMgtMnFeatures(const ParserElement& element, 
+									const std::uint8_t nodeId);
 
-					/**
-					  * \brief Creates network management CN features
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \return CLIResult
+					/** \brief Creates network management CN features
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \return CliResult
 					  */
-					CLIResult CreateNetworkManagementCnFeatures(ParserElement& element, std::uint8_t nodeId);
+					CliResult CreateNwMgtCnFeatures(const ParserElement& element, 
+									const std::uint8_t nodeId);
 
-					/**
-					  * \brief Creates node assignment values of node
-					  * \param element element that contains handle of XDC document
-					  * \param xPathExpression xpath expression of XML
-					  * \param nodeId ID value of node
-					  * \return CLIResult
+					/** \brief Creates node assignment values of node
+					  * \param element 			Element that contains handle of XDC
+					  * \param xPathExpression 	xpath expression of XML
+					  * \param nodeId 			ID value of node
+					  * \return CliResult
 					  */
-					CLIResult CreateNodeAssignment(ParserElement& element, std::string xPathExpression, std::uint8_t nodeId);
+					CliResult CreateNodeAssignment(const ParserElement& element, 
+									const std::string xPathExpression, 
+									const std::uint8_t nodeId);
 
-					/**
-					  * \brief Sets node assignment values of node into library
-					  * \param nodeassign Node assignment attribute
-					  * \param nodeId ID value of node
-					  * \param value Node assignment attribute value
-					  * \return CLIResult
+					/** \brief Sets node assignment values of node into library
+					  * \param nodeassign 		Node assignment attribute
+					  * \param nodeId 			ID value of node
+					  * \param value 			Node assignment attribute value
+					  * \return CliResult
 					  */
-					CLIResult SetNodeAssignment(NodeAssignment nodeassign, std::uint8_t nodeId, std::string value);
+					CliResult SetNodeAssignment(const NodeAssignment nodeassign, 
+									const std::uint8_t nodeId, 
+									const std::string value);
 
-					/**
-					  * \brief Creates Struct and Array data type parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates Struct and Array data type parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateDataType(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateDataType(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates Struct data type parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates Struct data type parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateStructDataType(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateStructDataType(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates Array data type parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates Array data type parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateArrayDataType(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateArrayDataType(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates parameter template related parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates parameter template related parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		Specifies the Id value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateParameterTemplate(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateParameterTemplate(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates parameter group related parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates parameter group related parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateParameterGroup(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateParameterGroup(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::string interfaceId,
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates parameter list related parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates parameter list related parse results
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateParameterList(ParserElement& element, std::uint8_t nodeId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateParameterList(const ParserElement& element,
+									const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates child parameter group related parse results
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param parameterGroupNode Parent parameter group node 
-					  * \param paramGroupUId Parent parameter group node ID
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates child parameter group related parse results
+					  * \param element 				Element that contains handle of XDC
+					  * \param nodeId 				ID value of node
+					  * \param parameterGroupNode	Parent parameter group node 
+					  * \param paramGroupUId 		Parent parameter group node ID
+					  * \param interfaceId 			Inteface ID of module node
+					  * \param modId 				ID value of module
+					  * \param modPosition 			Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateChildParameterGroup(ParserElement& element, std::uint8_t nodeId, 
-												xercesc::DOMNode* parameterGroupNode, 
-												std::string paramGroupUId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult CreateChildParameterGroup(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const xercesc::DOMNode* parameterGroupNode, 
+									const std::string paramGroupUId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Creates object related parse results and set parameters
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param forcedObject Specifies the vector of forced objects in node
-					  * \param forcedSubObject Specifies the vector of forced sub-objects in node
-					  * \return CLIResult
+					/** \brief Creates object related parse results and set parameters
+					  * \param element 			Element that contains handle of XDC
+					  * \param nodeId 			ID value of node
+					  * \param forcedObject 	Vector of forced objects in node
+					  * \param forcedSubObject 	Vector of forced sub-objects in node
+					  * \return CliResult
 					  */
-					CLIResult CreateObject(ParserElement& element, std::uint8_t nodeId, 
-												std::vector<std::string> forcedObject, 
-												std::vector<std::string> forcedSubObject);
+					CliResult CreateObject(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject);
 
-					/**
-					  * \brief Sets allowed values
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Sets allowed values
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult SetParamAllowedValue(ParserElement& element, std::uint8_t nodeId, 
-												xercesc::DOMNode* node, std::string uniqueId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult SetParamAllowedValue(const ParserElement& element,
+									const std::uint8_t nodeId, 
+									const xercesc::DOMNode* node, 
+									const std::string uniqueId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Sets allowed range values
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Sets allowed range values
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult SetParamAllowedRange(ParserElement& element, std::uint8_t nodeId, 
-												xercesc::DOMNode* node, std::string uniqueId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult SetParamAllowedRange(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const xercesc::DOMNode* node, 
+									const std::string uniqueId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Sets actual values
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the Id value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Sets actual values
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult SetParamActualValue(ParserElement& element, std::uint8_t nodeId, 
-												xercesc::DOMNode* node, std::string uniqueId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult SetParamActualValue(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const xercesc::DOMNode* node, 
+									const std::string uniqueId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Sets dafault values
-					  * \param element element that contains handle of XDC document
-					  * \param nodeId Specifies the ID value of node
-					  * \param interfaceId Inteface ID  of module node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Sets dafault values
+					  * \param element 		Element that contains handle of XDC
+					  * \param nodeId 		ID value of node
+					  * \param interfaceId 	Inteface ID of module node
+					  * \param modId 		ID value of module
+					  * \param modPosition 	Position value of module
+					  * \return CliResult
 					  */
-					CLIResult SetParamDefaultValue(ParserElement& element, std::uint8_t nodeId, 
-												xercesc::DOMNode* node, std::string uniqueId, 
-												std::string interfaceId, std::string modId, 
-												std::uint32_t modposition);
+					CliResult SetParamDefaultValue(const ParserElement& element, 
+									const std::uint8_t nodeId, 
+									const xercesc::DOMNode* node, 
+									const std::string uniqueId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Gets the addressing value of modular device from the XDC
-					  * \param modAddressing Module addressing value in XDC
+					/** \brief Gets the addressing value of modular device from the XDC
+					  * \param modAddressing 	Module addressing value in XDC
 					  * \return ModuleAddressing
 					  */
-					ModuleAddressing GetModuleAddressing(std::string modAddressing);
+					ModuleAddressing GetModuleAddressing(const std::string modAddressing);
 
-					/**
-					  * \brief Gets the Sort number of modular device from the XDC
-					  * \param sortNumber Sort number value in XDC
+					/** \brief Gets the sort number of modular device from the XDC
+					  * \param sortNumber 		Sort number value in XDC
 					  * \return SortNumber
 					  */
-					SortNumber GetSortNumber(std::string sortNumber);
+					SortNumber GetSortNumber(const std::string sortNumber);
 
-					/**
-					  * \brief Gets the Sort mode of modular device from the XDC
-					  * \param sortMode Sort mode value in XDC
+					/** \brief Gets the sort mode of modular device from the XDC
+					  * \param sortMode 		Sort mode value in XDC
 					  * \return SortMode
 					  */
-					SortMode GetSortMode(std::string sortMode);
+					SortMode GetSortMode(const std::string sortMode);
 
-					/**
-					  * \brief Creates module of node into library
-					  * \param nodeId ID value of node
-					  * \param interfaceId Interface ID value of modular node
-					  * \param moduleName Name of module
-					  * \param modulePosition Position value of module
-					  * \param moduleAddress Address value of module
-					  * \param modulePathToXDC PathToXDC value of module
-					  * \param moduleEnabled Enabled value of module
-					  * \return CLIResult
+					/** \brief Creates module of node into library
+					  * \param nodeId 			ID value of node
+					  * \param forcedObject 	Forced objects vector of node
+					  * \param forcedSubObject 	Forced sub-objects vector of node
+					  * \param interfaceId 		Interface ID value of modular node
+					  * \param moduleName 		Name of module
+					  * \param modulePosition 	Position value of module
+					  * \param moduleAddress 	Address value of module
+					  * \param modulePathToXDC 	PathToXDC value of module
+					  * \param moduleEnabled 	Enabled value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateModule(std::uint8_t nodeId, std::string interfaceId, 
-										std::string moduleName, std::string modulePosition, 
-										std::string moduleAddress, std::string modulePathToXDC, 
-										std::string moduleEnabled);
+					CliResult CreateModule(const std::uint8_t nodeId, 
+									const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject, 
+									const std::string interfaceId, 
+									const std::string moduleName, 
+									const std::string modulePosition, 
+									const std::string moduleAddress, 
+									const std::string modulePathToXDC, 
+									const std::string moduleEnabled);
 
-					/**
-					  * \brief Creates the object list of modules from XDC into core library
-					  * \param element Element that contains handle of XDC document
-					  * \param nodeId ID value of node
-					  * \param forcedObject Forced objects vector of node
-					  * \param forcedSubObject Forced sub-objects vector of node
-					  * \param interfaceId Inteface ID of modular node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					/** \brief Creates the object list of modules from XDC into core library
+					  * \param element 			Element that contains handle of XDC
+					  * \param nodeId 			ID value of node
+					  * \param forcedObject 	Forced objects vector of node
+					  * \param forcedSubObject 	Forced sub-objects vector of node
+					  * \param interfaceId 		Inteface ID of modular node
+					  * \param modId 			ID value of module
+					  * \param modPosition 		Position value of module
+					  * \return CliResult
 					  */
-					CLIResult CreateModuleObject(ParserElement & element, std::uint8_t nodeId, 
-										std::vector<std::string> forcedObject, 
-										std::vector<std::string> forcedSubObject, 
-										std::string interfaceId, std::string modId, 
-										std::uint32_t modposition);
+					CliResult CreateModuleObject(const ParserElement & element,
+									const std::uint8_t nodeId, 
+									const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject, 
+									const std::string interfaceId, std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**
-					  * \brief Gets the index of module object from library
-					  * \param nodeId Id value of node
-					  * \param interfaceId Inteface ID  of modular node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \param objId ID value of module object
+					/** \brief Gets the index of module object from library
+					  * \param nodeId 			ID value of node
+					  * \param interfaceId 		Inteface ID  of modular node
+					  * \param modId 			ID value of module
+					  * \param modPosition 		Position value of module
+					  * \param objId 			ID value of module object
 					  * \return Index of new object
 					  */
-					std::uint32_t GetNewObjectIndex(std::uint8_t nodeId, std::string interfaceId, 
-										std::string modId, std::uint32_t modposition, 
-										std::uint32_t objId);
+					std::uint32_t GetNewObjectIndex(const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition, 
+									const std::uint32_t objId);
 
-					/**
-					  * \brief Gets sub-index of module sub-object from the library
-					  * \param nodeId ID value of node
-					  * \param interfaceId Inteface ID  of modular node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \param objId ID value of module object
-					  * \param subObjId ID value of module sub object
+					/** \brief Gets sub-index of module sub-object from the library
+					  * \param nodeId 			ID value of node
+					  * \param interfaceId 		Inteface ID  of modular node
+					  * \param modId 			ID value of module
+					  * \param modPosition 		Position value of module
+					  * \param objId 			ID value of module object
+					  * \param subObjId 		ID value of module sub object
 					  * \return Index of new sub object
 					  */
-					std::int32_t GetNewSubObjectIndex(std::uint8_t nodeId, std::string interfaceId, 
-										std::string modId, std::uint32_t modposition, 
-										std::uint32_t objId, std::uint8_t subObjId);
+					std::int32_t GetNewSubObjectIndex(const std::uint8_t nodeId,
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition, 
+									const std::uint32_t objId, 
+									const std::uint8_t subObjId);
 					
-					/**
-					  * \brief Gets unique ID of parameter from the library
-					  * \param nodeId ID value of node
-					  * \param interfaceId Inteface ID  of modular node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \param uniqueID ID value of module parameters
+					/** \brief Gets unique ID of parameter from the library
+					  * \param nodeId 			ID value of node
+					  * \param interfaceId 		Inteface ID  of modular node
+					  * \param modId 			ID value of module
+					  * \param modPosition 		Position value of module
+					  * \param uniqueID 		ID value of module parameters
 					  * \return Parameter unique ID
 					  */
-					std::string GetNewParameterId(std::uint8_t nodeId, std::string interfaceId, 
-										std::string modId, std::uint32_t modposition, 
-										std::string uniqueID);
+					std::string GetNewParameterId(const std::uint8_t nodeId, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition, 
+									const std::string uniqueID);
 					
-					/**
-					  * \brief Updates the forced object list of node
-					  * \param element Element that contains handle of XDC document
-					  * \param xPathExpression Xpath expression of forced objects in XML
-					  * \param nodeId ID value of node
-					  * \param forcedObject Forced objects vector of node
-					  * \param forcedSubObject Forced sub-objects vector of node
-					  * \return CLIResult
+					/** \brief Updates the forced object list of node
+					  * \param element 			Element that contains handle of XDC
+					  * \param xPathExpression 	Xpath expression of forced objects in XML
+					  * \param nodeId 			ID value of node
+					  * \param forcedObject 	Forced objects vector output of node
+					  * \param forcedSubObject 	Forced sub-objects vector output of node
+					  * \return CliResult
 					  */
-					CLIResult CreateForcedObjects(ParserElement& pElement, std::string xPathExpression, 
-										std::uint8_t nodeId, std::vector<std::string> forcedObject, 
-										std::vector<std::string> forcedSubObject);
+					CliResult CreateForcedObjects(const ParserElement& pElement,
+									const std::string xPathExpression, 
+									const std::uint8_t nodeId, 
+									std::vector<std::string>& forcedObject, 
+									std::vector<std::string>& forcedSubObject);
 					
-					/**
-					  * \brief Updates the forced object list of node into core library
-					  * \param forcedObject Forced objects vector of node
-					  * \param forcedSubObject Forced sub-objects vector of node
-					  * \param nodeId ID value of node
-					  * \param objectIndex Index value of object
-					  * \param SubobjectIndex Sub-index value of sub-object
-					  * \param objectId ID value of object
-					  * \param subObjectId ID value of sub-object
-					  * \param objectActualValue Actual value of object
+					/** \brief Updates the forced object list of node into core library
+					  * \param forcedObject 		Forced objects vector of node
+					  * \param forcedSubObject 		Forced sub-objects vector of node
+					  * \param nodeId 				ID value of node
+					  * \param objectIndex 			Index value of object
+					  * \param SubobjectIndex 		Sub-index value of sub-object
+					  * \param objectId 			ID value of object
+					  * \param subObjectId 			ID value of sub-object
+					  * \param objectActualValue 	Actual value of object
 					  * \param subobjectActualValue Actual value of sub-object
-					  * \param moduleCheck Checks module or node
-					  * \param interfaceId Inteface ID  of modular node
-					  * \param modId ID value of module
-					  * \param modposition Position value of module
-					  * \return CLIResult
+					  * \param moduleCheck 			Checks module or node
+					  * \param interfaceId 			Inteface ID  of modular node
+					  * \param modId 				ID value of module
+					  * \param modPosition 			Position value of module
+					  * \return CliResult
 					  */
-					CLIResult UpdateForcedObjects(std::vector<std::string> forcedObject, 
-										std::vector<std::string> forcedSubObject, std::uint8_t nodeId,
-										std::string objectIndex, std::string SubobjectIndex, 
-										std::uint32_t objectId, std::uint8_t subObjectId, 
-										std::string objectActualValue, std::string subobjectActualValue,
-										bool moduleCheck, std::string interfaceId, 
-										std::string modId, std::uint32_t modposition);
+					CliResult UpdateForcedObjects(const std::vector<std::string> forcedObject, 
+									const std::vector<std::string> forcedSubObject, 
+									const std::uint8_t nodeId,
+									const std::string objectIndex, 
+									const std::string SubobjectIndex, 
+									const std::uint32_t objectId, 
+									const std::uint8_t subObjectId, 
+									const std::string objectActualValue, 
+									const std::string subobjectActualValue,
+									const bool moduleCheck, 
+									const std::string interfaceId, 
+									const std::string modId, 
+									const std::uint32_t modPosition);
 
-					/**< Group of forced objects in Node */
-					std::vector<std::string> forcedNodeObj;  // REVIEW_COMMENT: keep it at the bottom
-
-					/**< Group of forced sub objects in Node */
-					std::vector<std::string> forcedNodeSubObj;
-
-					/**< Group of forced objects in Module */
-					std::vector<std::string> forcedModularObj;
-
-					/**< Group of forced objects in Module */
-					std::vector<std::string> forcedModularSubObj;
-
-					/**
-					  * \brief Gets the IEC_Datatype based on the string retrieved from XDC
+					/** \brief Gets the IEC_Datatype based on the string retrieved from XDC
 					  * \param dataType Specifies the dataType value of object or parameter
-					  * \returns IEC_Datatype// REVIEW_COMMENT: return
+					  * \return IEC_Datatype
 					  */
-					IEC_Datatype GetDataType(std::string dataType);
+					IEC_Datatype GetDataType(const std::string dataType);
 
-					/**
-					  * \brief Gets the ParameterAccess based on the value retrieved from XDC
-					  * \param access Specifies the access value of parameter
+					/** \brief Gets the ParameterAccess based on the value retrieved from XDC
+					  * \param access 		The access value of parameter
 					  * \return ParameterAccess
 					  */
-					ParameterAccess GetParameterAccess(std::string access);
+					ParameterAccess GetParameterAccess(const std::string access);
 
-					/**
-					  * \brief Gets the ObjectType of object from XDC
-					  * \param objType Specifies the type of an object
+					/** \brief Gets the ObjectType of object from XDC
+					  * \param objType 		Specifies the type of an object
 					  * \return ObjectType
 					 */
-					ObjectType GetObjectType(std::uint8_t objType);
+					ObjectType GetObjectType(const std::uint8_t objType);
 
-					/**
-					  * \brief Gets the PlkDataType of object from XDC
-					  * \param plkDataType Specifies the data type of an object
+					/** \brief Gets the PlkDataType of object from XDC
+					  * \param plkDataType 	Specifies the data type of an object
 					  * \return PlkDataType
 					  */
-					PlkDataType GetPLKDataType(std::string plkDataType);
+					PlkDataType GetPlkDataType(const std::string plkDataType);
 
-					/**
-					 * \brief Gets the AccessType of object from XDC
-					 * \param accessType Specifies the access type of object
-					 * \return AccessType
-					 */
-					AccessType GetObjAccessType(std::string accessType);
+					/** \brief Gets the AccessType of object from XDC
+					  * \param accessType 	Specifies the access type of object
+					  * \return AccessType
+					  */
+					AccessType GetObjAccessType(const std::string accessType);
 
-					/**
-					  * \brief Gets the PDOMapping of object or sub-object from XDC
+					/** \brief Gets the PDOMapping of object or sub-object from XDC
 					  * \param pdoMapp Specifies the mapping value of object or sub-object
 					  * \return PDOMapping
 					  */
-					PDOMapping GetPDOMapping(std::string pdoMapp);
+					PDOMapping GetPdoMapping(const std::string pdoMapp);
 
-					/**
-					  * \brief Gets the IEC_Datatype of object or sub-object based on element in XDC
-					  * \param node Instance of DOMNode
+					/** \brief Gets the IEC_Datatype of object or sub-object 
+					  *        based on element in XDC
+					  * \param node 		Instance of DOMNode
 					  * \return IEC_Datatype
 					  */
-					IEC_Datatype GetIECDataType(xercesc::DOMNode* node);
+					IEC_Datatype GetIecDataType(const xercesc::DOMNode* node);
 
 			}; // end of class ProjectParser
 		} // end of namespace Application
 	} // end of namespace POWERLINK
 } // end of namespace IndustrialNetwork
 
-#endif // PROJECT_PARSER_H
-
+#endif // _PROJECT_PARSER_H_

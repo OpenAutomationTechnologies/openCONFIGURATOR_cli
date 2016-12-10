@@ -1,5 +1,5 @@
 /**
- * \file OpenConfiguratorCLI.cpp
+ * \file OpenConfiguratorCli.cpp
  *
  * \brief Implementation to receive the command line parameters for
  *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
@@ -11,52 +11,52 @@
  *
  */
 
-#include "OpenConfiguratorCLI.h"
+#include "OpenConfiguratorCli.h"
 #include "ParameterValidator.h"
 #include "ConfigurationGenerator.h"
 
-OpenConfiguratorCLI::OpenConfiguratorCLI()
+OpenConfiguratorCli::OpenConfiguratorCli()
 {
 	xmlFilePath = "";
 	outputPath = "";
 	networkName = "";
 }
 
-OpenConfiguratorCLI::~OpenConfiguratorCLI()
+OpenConfiguratorCli::~OpenConfiguratorCli()
 {
 // REVIEW_COMMENT:
 }
 
-OpenConfiguratorCLI& OpenConfiguratorCLI::GetInstance()
+OpenConfiguratorCli& OpenConfiguratorCli::GetInstance()
 {
-	static OpenConfiguratorCLI instance;// REVIEW_COMMENT:
+	static OpenConfiguratorCli instance;// REVIEW_COMMENT:
 	return instance;
 }
 
-std::string OpenConfiguratorCLI::GetNetworkName()
+std::string OpenConfiguratorCli::GetNetworkName()
 {
 	networkName = boost::filesystem::basename(xmlFilePath);
 	return networkName;
 }
 
-CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList)
+CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList)
 {
 	const std::uint8_t kMinimumNumberOfParameters = 3;
-	CLIResult res;
+	CliResult res;
 
 	if(GetHelpOption(paramsList))
 	{
 		ShowUsage();
 
-		return CLIResult();
+		return CliResult();
 	}
 
 	if (paramsList.size() < kMinimumNumberOfParameters)
 	{
 		ShowUsage();
 
-		return CLIResult(CLIErrorCode::LESS_NO_OF_PARAMS, 
-							kMsgLessNoOfParams[CLILogger::GetInstance().languageIndex]);
+		return CliResult(CliErrorCode::LESS_NO_OF_PARAMS, 
+							kMsgLessNoOfParams[CliLogger::GetInstance().languageIndex]);
 	}
 
 	if (GetXMLFileName(paramsList))
@@ -65,19 +65,19 @@ CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<s
 		{
 			if (IsLanguageGerman(paramsList))
 			{
-				/**< Initiate CLILogger for German language */
-				CLILogger::GetInstance().SetLanguageToGerman(true);
+				/** Initiate CliLogger for German language */
+				CliLogger::GetInstance().SetLanguageToGerman(true);
 			}
 
 			if (IsLogDebug(paramsList))
 			{
-				/**< Initiate CLILogger for logging on console */
-				CLILogger::GetInstance().SetFileLog(true, outputPath);
+				/** Initiate CliLogger for logging on console */
+				CliLogger::GetInstance().SetFileLog(true, outputPath);
 			}
 
 			GetNetworkName();
 
-			/**< Validate the parameters */
+			/** Validate the parameters */
 			res = ParameterValidator::GetInstance().IsXMLFileValid(xmlFilePath);
 			if (!res.IsSuccessful())
 			{
@@ -87,13 +87,13 @@ CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<s
 			res = ParameterValidator::GetInstance().IsPathValid(outputPath);
 			if (!res.IsSuccessful())
 			{
-				CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
+				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
 
-				/**< Create the output path as it doesnt exists */
+				/** Create the output path as it doesnt exists */
 				boost::filesystem::path dir(outputPath);
 				if(!boost::filesystem::create_directory(dir))
 				{
-					/**< Failed to create the output path */
+					/** Failed to create the output path */
 					return res;
 				}
 			}
@@ -101,34 +101,34 @@ CLIResult OpenConfiguratorCLI::GeneratePOWERLINKConfigurationFiles(std::vector<s
 			res = ParameterValidator::GetInstance().IsXMLSchemaValid(xmlFilePath);
 			if (!res.IsSuccessful())
 			{
-				/**< XML file schema is not valid */
+				/** XML file schema is not valid */
 				return res;
 			}
 
-			/**< Parse and Generate configuration output */
+			/** Parse and Generate configuration output */
 			res = ConfigurationGenerator::GetInstance().GenerateConfigurationFiles(xmlFilePath, outputPath);
 			if (!res.IsSuccessful())
 			{
-				/**< Unable to parse XML or generate configuration files */
+				/** Unable to parse XML or generate configuration files */
 				return res;
 			}
 
-			return CLIResult();
+			return CliResult();
 		}
 		else
 		{
-			return CLIResult(CLIErrorCode::OUTPUT_PATH_NOT_FOUND, 
-							kMsgOutputPathNotFound[CLILogger::GetInstance().languageIndex]);
+			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND, 
+							kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	else
 	{
-		return CLIResult(CLIErrorCode::XML_FILE_NOT_FOUND, 
-							kMsgXMLFileNotFound[CLILogger::GetInstance().languageIndex]);
+		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND, 
+							kMsgXMLFileNotFound[CliLogger::GetInstance().languageIndex]);
 	}
 }
 
-void OpenConfiguratorCLI::ShowUsage()
+void OpenConfiguratorCli::ShowUsage()
 {
 	const std::string kMsgToolGenerator     = "Kalycito Infotech Private Limited ";
 	const std::string kMsgToolVendor        = "B&R Internal" ;
@@ -152,11 +152,11 @@ void OpenConfiguratorCLI::ShowUsage()
 	std::cout << kMsgHelpParameter << std::endl;
 }
 
-bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetXMLFileName(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		/**< Search for project file option */
+		/** Search for project file option */
 		if ((paramsList.at(index) == "-p")  || (paramsList.at(index) == "--project"))
 		{
 			xmlFilePath = paramsList.at(index + 1);
@@ -164,7 +164,7 @@ bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
 		}
 	}
 
-	/**< if options '-p' or '--project' not found, consider the first parameter
+	/** if options '-p' or '--project' not found, consider the first parameter
 	     as the project XML file name */
 	if (xmlFilePath.empty())
 	{
@@ -174,11 +174,11 @@ bool OpenConfiguratorCLI::GetXMLFileName(std::vector<std::string> paramsList)
 	return true;
 }
 
-bool OpenConfiguratorCLI::GetOutputPath(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetOutputPath(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		/**< Search for output path option */
+		/** Search for output path option */
 		if ((paramsList.at(index) == "-o")  || (paramsList.at(index) == "--output"))
 		{
 			outputPath = paramsList.at(index + 1);
@@ -189,11 +189,11 @@ bool OpenConfiguratorCLI::GetOutputPath(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCLI::IsLanguageGerman(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::IsLanguageGerman(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		/**< Search for German language option */
+		/** Search for German language option */
 		if ((paramsList.at(index) == "-de")  || (paramsList.at(index) == "--german"))
 		{
 			return true;
@@ -203,11 +203,11 @@ bool OpenConfiguratorCLI::IsLanguageGerman(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCLI::IsLogDebug(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::IsLogDebug(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		/**< Search for verbose option */
+		/** Search for verbose option */
 		if ((paramsList.at(index) == "-d")  || (paramsList.at(index) == "--debug"))
 		{
 			return true;
@@ -217,11 +217,11 @@ bool OpenConfiguratorCLI::IsLogDebug(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCLI::GetHelpOption(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetHelpOption(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
-		/**< Search for verbose option */
+		/** Search for verbose option */
 		if ((paramsList.at(index) == "-h")  || (paramsList.at(index) == "--help"))
 		{
 			return true;

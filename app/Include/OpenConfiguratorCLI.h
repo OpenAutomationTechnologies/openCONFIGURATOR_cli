@@ -1,16 +1,40 @@
 /**
- * \class OpenConfiguratorCLI
+ * \class OpenConfiguratorCli
  *
  * \brief Main engine that calls functions for validation, parsing and configuration generation
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 0.1
+ * \version 1.0
  *
  */
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
 
-#ifndef OPEN_CONFIGURATOR_CLI_H
-#define OPEN_CONFIGURATOR_CLI_H
+#ifndef _OPEN_CONFIGURATOR_CLI_H_
+#define _OPEN_CONFIGURATOR_CLI_H_
 
 #include <fstream>
 #include <string>
@@ -28,11 +52,11 @@
 
 #include "OpenConfiguratorCore.h"
 #include "LoggingConfiguration.h"
-#include "CLIErrorCode.h"
+#include "CliErrorCode.h"
 #include "Result.h"
-#include "CLIResult.h"
-#include "CLILogger.h"
-#include "CLIConstants.h"
+#include "CliResult.h"
+#include "CliLogger.h"
+#include "CliConstants.h"
 
 using namespace IndustrialNetwork::POWERLINK::Core::API;
 using namespace IndustrialNetwork::POWERLINK::Core::Node;
@@ -42,7 +66,7 @@ using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
 using namespace IndustrialNetwork::POWERLINK::Core::ModularNode;
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 using namespace IndustrialNetwork::POWERLINK::Application;
-using namespace IndustrialNetwork::POWERLINK::Application::CLIConstants;
+using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;
 
 namespace IndustrialNetwork
 {
@@ -50,19 +74,21 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			class OpenConfiguratorCLI
+			class OpenConfiguratorCli
 			{
 				public:
-					/// Default constructor of the class
-					OpenConfiguratorCLI();
+					/** \brief Default constructor of the class
+					  */
+					OpenConfiguratorCli();
 
-					/// Descriptor of the class
-					~OpenConfiguratorCLI();
+					/** \brief Destructor of the class
+					  */
+					~OpenConfiguratorCli();
 
 					/** \brief Creates single instance
 					  * \return Static instance of the class
 					  */
-					static OpenConfiguratorCLI& GetInstance();
+					static OpenConfiguratorCli& GetInstance();
 
 					/** \brief Gets the network name of the XML file
 					  * \return Network name as string; "" in case of failure
@@ -70,16 +96,20 @@ namespace IndustrialNetwork
 					std::string GetNetworkName();
 
 					/** \brief Generates the configuration output files
-					  * \param paramsList List of command line parameters
-					  * \return CLIResult
+					  * \param paramsList		List of command line parameters
+					  * \return CliResult
 					  */
-					CLIResult GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList);
+					CliResult GeneratePOWERLINKConfigurationFiles(
+									const std::vector<std::string> paramsList);
 
-					std::string xmlFilePath;	///< The input XML file with path
+					/** The input XML file with path */
+					std::string xmlFilePath;
 
-					std::string outputPath;		///< The output directory path
+					/** The output directory path */
+					std::string outputPath;
 
-					std::string networkName;	///< Network name of the project file
+					/** Network name of the project file */
+					std::string networkName;
 
 				private:
 					/** \brief Prints the command line usage syntax of the application
@@ -89,42 +119,42 @@ namespace IndustrialNetwork
 
 					/** \brief Searches for options '-p' or '--project' followed by
 					  *        the XML file path from command line parameters list
-					  * \param paramsList List of command line parameters
+					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetXMLFileName(std::vector<std::string> paramsList);
+					bool GetXMLFileName(const std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-o' or '--output' followed by
 					  *        the output path from command line parameters list
-					  * \param paramsList List of command line parameters
+					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetOutputPath(std::vector<std::string> paramsList);
+					bool GetOutputPath(const std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-de' or '--german'
 					  *        from command line parameters list
-					  * \param paramsList List of command line parameters
+					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool IsLanguageGerman(std::vector<std::string> paramsList);
+					bool IsLanguageGerman(const std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-v' or '--verbose'
 					  *        from command line parameters list
-					  * \param paramsList List of command line parameters
+					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool IsLogDebug(std::vector<std::string> paramsList);
+					bool IsLogDebug(const std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-h' or '--help'
 					  *        from command line parameters list
-					  * \param paramsList List of command line parameters
+					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetHelpOption(std::vector<std::string> paramsList);
+					bool GetHelpOption(const std::vector<std::string> paramsList);
 
-			}; // end of class OpenConfiguratorCLI
+			}; // end of class OpenConfiguratorCli
 		} // end of namespace Application
 	} // end of namespace POWERLINK
 } // end of namespace IndustrialNetwork
 
-#endif // OPEN_CONFIGURATOR_CLI_H
+#endif // _OPEN_CONFIGURATOR_CLI_H_

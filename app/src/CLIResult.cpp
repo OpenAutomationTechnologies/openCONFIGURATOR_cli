@@ -1,5 +1,5 @@
 /**
- * \file CLIResult
+ * \file CliResult
  *
  * \brief Error code handler using IResult of core library
  *
@@ -9,28 +9,28 @@
  *
  */ // REVIEW_COMMENT: copyright and License
 
-#include "CLIResult.h"
+#include "CliResult.h"
 
-CLIResult::CLIResult(const CLIErrorCode& errorCode, const std::string& errorMessage = "") :
-	IResult<CLIErrorCode>(errorCode, errorMessage)
+CliResult::CliResult(const CliErrorCode& errorCode, const std::string& errorMessage = "") :
+	IResult<CliErrorCode>(errorCode, errorMessage)
 {
 }
 
-CLIResult::CLIResult(const CLIErrorCode& errorCode) :
-	IResult<CLIErrorCode>(errorCode)
+CliResult::CliResult(const CliErrorCode& errorCode) :
+	IResult<CliErrorCode>(errorCode)
 {
 }
 
-CLIResult::CLIResult() :
-	IResult<CLIErrorCode>(CLIErrorCode::SUCCESS)
+CliResult::CliResult() :
+	IResult<CliErrorCode>(CliErrorCode::SUCCESS)
 {
 }
 
-CLIResult::~CLIResult()
+CliResult::~CliResult()
 {
 }
 
-bool CLIResult::IsSuccessful() // REVIEW_COMMENT: check for bool
+bool CliResult::IsSuccessful() // REVIEW_COMMENT: check for bool
 {
-	return (this->GetErrorType() == CLIErrorCode::SUCCESS);
+	return (this->GetErrorType() == CliErrorCode::SUCCESS);
 }

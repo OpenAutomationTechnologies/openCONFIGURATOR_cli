@@ -28,64 +28,64 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 	return instance;
 }
 
-CLIResult ConfigurationGenerator::GenerateConfigurationFiles(std::string xmlPath, std::string outputPath)
+CliResult ConfigurationGenerator::GenerateConfigurationFiles(std::string xmlPath, std::string outputPath)
 {
-	CLIResult cliRes;
+	CliResult cliRes;
 
-	/**< Parse the XML file */
+	/** Parse the XML file */
 	cliRes = ProjectParser::GetInstance().ParserXMLFile(xmlPath);
 	if (!cliRes.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCliApiFailed("Parser XML File", cliRes);
+		return CliLogger::GetInstance().HandleCliApiFailed("Parser XML File", cliRes);
 	}
 
-	/**< Generate output files */
+	/** Generate output files */
 	cliRes = BuildConciseDeviceConfiguration(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		CLIResult res = CLILogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
+		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
 
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
+		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
 	}
 
 	cliRes = BuildProcessImageDescriptions(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		CLIResult res = CLILogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
+		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
 
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, res);
+		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string outputPath)
+CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string outputPath)
 {
-	std::vector<std::uint8_t> binOutput;		/**< binary output vector */
-	std::string configurationOutput = "";		/**< configuration output stream */
+	std::vector<std::uint8_t> binOutput;		/** binary output vector */
+	std::string configurationOutput = "";		/** configuration output stream */
 // REVIEW_COMMENT:
 	Result res;
-	CLIResult cliRes;
+	CliResult cliRes;
 
 	res = OpenConfiguratorCore::GetInstance().BuildConfiguration(
-					OpenConfiguratorCLI::GetInstance().networkName,
+					OpenConfiguratorCli::GetInstance().networkName,
 					configurationOutput,
 					binOutput);
 	if (!res.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCoreApiFailed("Build Configuration", res);
+		return CliLogger::GetInstance().HandleCoreApiFailed("Build Configuration", res);
 	}
 
 	cliRes = CreateMnobdTxt(outputPath, configurationOutput);
 	if (!cliRes.IsSuccessful())
 	{
-		CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create Mnobd Txt", cliRes);
+		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Txt", cliRes);
 
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 	}
 
 	std::ostringstream buffer;
-	/**< Convert binary values in to a buffer stream */
+	/** Convert binary values in to a buffer stream */
 	for (std::uint32_t index = 0; index < binOutput.size(); index++)
 	{
 		std::uint8_t value = binOutput.at(index);
@@ -95,37 +95,37 @@ CLIResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string ou
 	cliRes = CreateMnobdCdc(outputPath, buffer);
 	if (!cliRes.IsSuccessful())
 	{
-		CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create Mnobd Cdc", cliRes);
+		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Cdc", cliRes);
 
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 	}
 
 	cliRes = CreateMnobdHexTxt(outputPath, buffer);
 	if (!cliRes.IsSuccessful())
 	{
-		CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create Mnobd Hex Txt", cliRes);
+		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Hex Txt", cliRes);
 
-		CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outputPath)
+CliResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outputPath)
 {
-	CLIResult cliRes;
+	CliResult cliRes;
 
 	std::vector<std::uint8_t> nodeIdCollection;
 
 	Result res = OpenConfiguratorCore::GetInstance().GetAvailableNodeIds(
-					OpenConfiguratorCLI::GetInstance().networkName,
+					OpenConfiguratorCli::GetInstance().networkName,
 					nodeIdCollection);
 	if (!res.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCoreApiFailed("Build Process Image Descriptions", res);
+		return CliLogger::GetInstance().HandleCoreApiFailed("Build Process Image Descriptions", res);
 	}
 
-	/**< Create process image for CN nodes */
+	/** Create process image for CN nodes */
     for (std::uint32_t index = 0; index < nodeIdCollection.size(); index++)
 	{
 		std::uint8_t value = nodeIdCollection.at(index);
@@ -139,32 +139,32 @@ CLIResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outp
 		cliRes = CreateCProcessImage(value, outputPath);
 		if (!cliRes.IsSuccessful())
 		{
-			CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
+			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
 
-			CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 
 		cliRes = CreateXMLProcessImage(value, outputPath);
 		if (!cliRes.IsSuccessful())
 		{
-			CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
+			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
 
-			CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 
 		cliRes = CreateCSharpProcessImage(value, outputPath);
 		if (!cliRes.IsSuccessful())
 		{
-			CLIResult funRes = CLILogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
+			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
 
-			CLILogger::GetInstance().LogMessage(CLIMessageType::CLI_WARN, funRes.GetErrorMessage());
+			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 	}
 
-    return CLIResult();
+    return CliResult();
 }
 
-CLIResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::string configuration)
+CliResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::string configuration)
 {
 	try
 	{
@@ -180,13 +180,13 @@ CLIResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::st
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::ostringstream& buffer)
+CliResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::ostringstream& buffer)
 {
 	try
 	{
@@ -202,13 +202,13 @@ CLIResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::os
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create Mnobd Cdc", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Cdc", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std::ostringstream& buffer)
+CliResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std::ostringstream& buffer)
 {
 	try
 	{
@@ -217,7 +217,7 @@ CLIResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std:
 		std::ostringstream toStream;
 		std::uint8_t lineBreakCount = 0;
 
-		/**< Formatting the mnob hex text stream */
+		/** Formatting the mnob hex text stream */
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
             toStream << "0x";
@@ -253,23 +253,23 @@ CLIResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std:
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
 
-CLIResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::string outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildCProcessImage(
-					OpenConfiguratorCLI::GetInstance().networkName,
+					OpenConfiguratorCli::GetInstance().networkName,
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCoreApiFailed("BuildC Process Image", res);
+		return CliLogger::GetInstance().HandleCoreApiFailed("BuildC Process Image", res);
 	}
 
 	try
@@ -286,22 +286,22 @@ CLIResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create CProcess Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create CProcess Image", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std::string outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildXMLProcessImage(
-					OpenConfiguratorCLI::GetInstance().networkName,
+					OpenConfiguratorCli::GetInstance().networkName,
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCoreApiFailed("Create XML Process Image", res);
+		return CliLogger::GetInstance().HandleCoreApiFailed("Create XML Process Image", res);
 	}
 
 	try
@@ -318,22 +318,22 @@ CLIResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create XML Process Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create XML Process Image", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
 
-CLIResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, std::string outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildNETProcessImage(
-					OpenConfiguratorCLI::GetInstance().networkName,
+					OpenConfiguratorCli::GetInstance().networkName,
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CLILogger::GetInstance().HandleCoreApiFailed("Create CSharp Process Image", res);
+		return CliLogger::GetInstance().HandleCoreApiFailed("Create CSharp Process Image", res);
 	}
 
 	try
@@ -350,8 +350,8 @@ CLIResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, 
 	}
 	catch(std::exception ex)
 	{
-		return CLILogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", ex);
 	}
 
-	return CLIResult();
+	return CliResult();
 }
