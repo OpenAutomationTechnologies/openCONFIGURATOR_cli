@@ -69,7 +69,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(std::vector<std::strin
 	const std::uint8_t kMinimumNumberOfParameters = 3;
 	CliResult res;
 
-	if(GetHelpOption(paramsList))
+	if (GetHelpOption(paramsList))
 	{
 		ShowUsage();
 
@@ -117,7 +117,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(std::vector<std::strin
 
 				/** Create the output path as it doesnt exists */
 				boost::filesystem::path dir(outputPath);
-				if(!boost::filesystem::create_directory(dir))
+				if (!boost::filesystem::create_directory(dir))
 				{
 					/** Failed to create the output path */
 					return res;

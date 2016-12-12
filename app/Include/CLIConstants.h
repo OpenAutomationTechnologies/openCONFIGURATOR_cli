@@ -64,6 +64,7 @@ namespace IndustrialNetwork
 				const std::string kChildParameterGroupXpathExpression = "./parameterGroup";
 				const std::string kChildParameterRefXpathExpression = "./parameterRef";
 				const std::string kObjectXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationLayers/ObjectList/Object";
+				const std::string kDynamicChnlXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationLayers/dynamicChannels/dynamicChannel";
 				const std::string kSubObjectXpathExpression = "./SubObject";
 				const std::string kStructVarXpathExpression = "./varDeclaration";
 				const std::string kArraySubRangeXpathExpression = "./subrange";
@@ -82,9 +83,11 @@ namespace IndustrialNetwork
 				const std::string kForcedObjectModuleXpathExpression = kModuleXpathExpression + "/ForcedObjects/Object";
 
 				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0;		/** 240 */
+				const std::uint8_t MAX_CN_NODE_ID = 0xEF;			/** 239 */
+				const std::uint8_t MAX_MODULE_POSITION = 0xFE;		/** 254 */
 
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
-				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name";
+				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name,enabled";
 				const std::string kFormatStrRmnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrStructXpathExpression = "uniqueID,name";
 				const std::string kFormatStrStructVarXpathExpression = "uniqueID,name,size";
@@ -109,8 +112,9 @@ namespace IndustrialNetwork
 				const std::string kFormatStrxPathExpression = "transmitsPRes,isMandatory,autostartNode,resetInOperational,verifyAppSwVersion,autoAppSwUpdateAllowed,isChained,isAsyncOnly,isType1Router,isType2Router";
 				const std::string kFormatStrModuleNodeXpathExpression = "childID,type,moduleAddressing,minPosition,maxPosition,minAddress,maxAddress,maxCount";
 				const std::string kFormatStrModuleXpathExpression = "name,position,address,pathToXDC,enabled";
-				const std::string kFormatStrxPathExpressionObject = "index, subindex";
+				const std::string kFormatStrxPathExpressionObject = "index,subindex";
 				const std::string kFormatStrObjectXpathExpressionModule = "index,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit,rangeSelector";
+				const std::string kFormatStrDynamicChnlXpathExpressionModule = "dataType,accessType,startIndex,endIndex,maxNumber,addressOffset,bitAlignment";
 				const std::string kFormatStrSubObjectXpathExpression = "subIndex,name,objectType,defaultValue,dataType,accessType,PDOmapping,actualValue,uniqueIdRef,lowLimit,highLimit";
 				const std::string kFormatStrInterfaceXdcXpathExpression = "uniqueID,type,moduleAddressing,maxModules,unusedSlots,multipleModules";
 				const std::string kFormatStrInterfaceRangeXpathExpression = "name,baseIndex,maxIndex,maxSubIndex,sortMode,sortNumber,PDOmapping,sortStep";

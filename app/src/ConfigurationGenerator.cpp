@@ -151,14 +151,15 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
     for (std::uint32_t index = 0; index < nodeIdCollection.size(); index++)
 	{
 		std::uint8_t value = nodeIdCollection.at(index);
+		std::string outputPathExtended;
 
 		if (value != MN_DEFAULT_NODE_ID)
 		{
-			// resolve to be done
+			outputPathExtended = outputPath + "/" + std::to_string(value);
 			continue;
 		}
 
-		cliRes = CreateCProcessImage(value, outputPath);
+		cliRes = CreateCProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
@@ -166,7 +167,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 
-		cliRes = CreateXmlProcessImage(value, outputPath);
+		cliRes = CreateXmlProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
@@ -174,7 +175,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 
-		cliRes = CreateCSharpProcessImage(value, outputPath);
+		cliRes = CreateCSharpProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
@@ -268,7 +269,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath
 
 		if (ofile.is_open())
 		{
-			// Conversion to be done
+			/** Conversion to be added */
 			ofile << toStream.str() << std::endl;
 
 			ofile.close();

@@ -147,6 +147,22 @@ namespace IndustrialNetwork
 									const std::string interfaceId, std::string modId, 
 									const std::uint32_t modPosition);
 
+					/**
+					  * \brief Updates the Dynamic channels of XDD/XDC into core library
+					  * \param element 			Element that contains handle of XDC
+					  * \param nodeId 			ID value of node
+					  * \return CliResult
+					  */
+					CliResult CreateDynamicChannels(const ParserElement& element, 
+									const std::uint8_t nodeId);
+
+					/**
+					  * \brief Gets the access type of dynamic channel
+					  * \param accessType 			Access type of dynamic channels
+					  * \return DynamicChannelAccessType
+					  */
+					DynamicChannelAccessType GetDynamicChannelAccessType(const std::string accessType);
+
 					/** \brief Creates network management general features
 					  * \param element 		Element that contains handle of XDC
 					  * \param nodeId 		ID value of node
@@ -445,7 +461,6 @@ namespace IndustrialNetwork
 					  * \param interfaceId 		Inteface ID  of modular node
 					  * \param modId 			ID value of module
 					  * \param modPosition 		Position value of module
-					  * \param objId 			ID value of module object
 					  * \param subObjId 		ID value of module sub object
 					  * \return Index of new sub object
 					  */
@@ -453,7 +468,6 @@ namespace IndustrialNetwork
 									const std::string interfaceId, 
 									const std::string modId, 
 									const std::uint32_t modPosition, 
-									const std::uint32_t objId, 
 									const std::uint8_t subObjId);
 					
 					/** \brief Gets unique ID of parameter from the library
@@ -473,14 +487,12 @@ namespace IndustrialNetwork
 					/** \brief Updates the forced object list of node
 					  * \param element 			Element that contains handle of XDC
 					  * \param xPathExpression 	Xpath expression of forced objects in XML
-					  * \param nodeId 			ID value of node
 					  * \param forcedObject 	Forced objects vector output of node
 					  * \param forcedSubObject 	Forced sub-objects vector output of node
 					  * \return CliResult
 					  */
 					CliResult CreateForcedObjects(const ParserElement& pElement,
 									const std::string xPathExpression, 
-									const std::uint8_t nodeId, 
 									std::vector<std::string>& forcedObject, 
 									std::vector<std::string>& forcedSubObject);
 					
