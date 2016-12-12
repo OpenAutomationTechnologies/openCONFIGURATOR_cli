@@ -201,7 +201,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string outputPath,
 			ofile.close();
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", e);
 	}
@@ -223,9 +223,9 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string outputPath,
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Cdc", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Cdc", e);
 	}
 
 	return CliResult();
@@ -275,7 +275,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath
 			ofile.close();
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", e);
 	}
@@ -308,7 +308,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 			ofile.close();
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create CProcess Image", e);
 	}
@@ -340,7 +340,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 			ofile.close();
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create XML Process Image", e);
 	}
@@ -372,7 +372,7 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t no
 			ofile.close();
 		}
 	}
-	catch(std::exception e)
+	catch(std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", e);
 	}

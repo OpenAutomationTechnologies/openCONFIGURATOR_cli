@@ -72,7 +72,7 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult GenerateConfigurationFiles(const std::string xmlPath, 
+					CliResult GenerateConfigurationFiles(const std::string xmlPath,
 									const std::string outputPath);
 				private:
 					/** \brief Creates Mnobd configuration files
@@ -92,7 +92,7 @@ namespace IndustrialNetwork
 					  * \param configuration	Configuration output to be copied
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdTxt(const std::string outputPath, 
+					CliResult CreateMnobdTxt(const std::string outputPath,
 									const std::string configuration);
 
 					/** \brief Creates mnobd.cdc
@@ -100,7 +100,7 @@ namespace IndustrialNetwork
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdCdc(const std::string outputPath, 
+					CliResult CreateMnobdCdc(const std::string outputPath,
 									const std::ostringstream& buffer);
 
 					/** \brief Creates mnobdhex.txt
@@ -108,7 +108,7 @@ namespace IndustrialNetwork
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdHexTxt(const std::string outputPath, 
+					CliResult CreateMnobdHexTxt(const std::string outputPath,
 									const std::ostringstream& buffer);
 
 					/** \brief Creates CProcess image file
@@ -116,7 +116,7 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateCProcessImage(const std::uint8_t nodeId, 
+					CliResult CreateCProcessImage(const std::uint8_t nodeId,
 									const std::string outputPath);
 
 					/** \brief Creates XML process image file
@@ -124,7 +124,7 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateXmlProcessImage(const std::uint8_t nodeId, 
+					CliResult CreateXmlProcessImage(const std::uint8_t nodeId,
 									const std::string outputPath);
 
 					/** \brief Creates CSharp process image file
@@ -132,7 +132,7 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateCSharpProcessImage(const std::uint8_t nodeId, 
+					CliResult CreateCSharpProcessImage(const std::uint8_t nodeId,
 									const std::string outputPath);
 
 			}; // end of class ConfigurationGenerator

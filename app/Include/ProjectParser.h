@@ -153,7 +153,7 @@ namespace IndustrialNetwork
 					  * \param nodeId 			ID value of node
 					  * \return CliResult
 					  */
-					CliResult CreateDynamicChannels(const ParserElement& element, 
+					CliResult CreateDynamicChannels(const ParserElement& element,
 									const std::uint8_t nodeId);
 
 					/**

@@ -136,9 +136,9 @@ CliResult ProjectParser::CreateMnNodeResults(const std::string xmlPath)
 					std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
 					/** Update the forced objects of node */
-					CliResult clires = CreateForcedObjects(xmlParserElement, 
-													kForcedObjectNodeXpathExpression, 
-													forcedModularNodeObj, 
+					CliResult clires = CreateForcedObjects(xmlParserElement,
+													kForcedObjectNodeXpathExpression,
+													forcedModularNodeObj,
 													forcedModularNodeSubObj);
 					if (!clires.IsSuccessful())
 					{
@@ -249,9 +249,9 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string xmlPath)
 			}
 		}
 	}
-	catch (std::exception& ex)
+	catch (std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Parse RMN Node", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Parse RMN Node", e);
 	}
 
 	return CliResult();
@@ -463,9 +463,9 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string xmlPath)
 			}
 		}
 	}
-	catch (std::exception& ex)
+	catch (std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Parse CN Node", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Parse CN Node", e);
 	}
 
 	return CliResult();
@@ -1379,7 +1379,7 @@ CliResult ProjectParser::ImportProfileBodyDevice(const ParserElement& element,
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element, 
+CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 												const std::uint8_t nodeId)
 {
 	ParserResult pResult;
@@ -1401,7 +1401,7 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 			std::string maxNumber = pResult.parameters[row].at(4);
 			std::string addressOfset = pResult.parameters[row].at(5);
 			std::string bitAlignment = pResult.parameters[row].at(6);
-			
+
 			std::uint32_t start = 0;
 			std::uint32_t end = 0;
 			std::uint32_t mxNumber = 0;
@@ -1431,7 +1431,7 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 			
 			Result res = OpenConfiguratorCore::GetInstance().CreateDynamicChannel(
 						OpenConfiguratorCli::GetInstance().networkName,
-						nodeId, 
+						nodeId,
 						GetPlkDataType(dataType),
 						GetDynamicChannelAccessType(accessType),
 						start,
@@ -1439,13 +1439,13 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 						mxNumber,
 						ofset,
 						bitLign);
-				if (!res.IsSuccessful())
-				{
-					return CliLogger::GetInstance().HandleCoreApiFailed("Create dynamic channel", res);
-				}
+			if (!res.IsSuccessful())
+			{
+				return CliLogger::GetInstance().HandleCoreApiFailed("Create dynamic channel", res);
+			}
 		}
 	}
-	
+
 	return CliResult();
 }
 
@@ -1850,10 +1850,18 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 	std::string indexString = "/" + cnXdc;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
-	std::string fullPath = nextInitialPath.append(indexString);
+	std::string xdcPath = nextInitialPath.append(indexString);
 	CliResult res;
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(nextInitialPath);
+	/** Validate the XDC file */
+	res = ParameterValidator::GetInstance().IsXdcFileValid(indexString);
+	if (!res.IsSuccessful())
+	{
+		/** XDC file is not exists or invalid */
+		return res;
+	}
+
+	res = ParameterValidator::GetInstance().IsXdcSchemaValid(indexString);
 	if (!res.IsSuccessful())
 	{
 		/** XDC file schema is not valid */
@@ -1863,7 +1871,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 	ParserElement element;
 	CliResult ceres;
 
-	ceres = element.CreateElement(nextInitialPath);
+	ceres = element.CreateElement(indexString);
 	if (!ceres.IsSuccessful())
 	{
 		return ceres;
@@ -2012,10 +2020,18 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 	std::string indexString = "/" + cnXdc;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
-	std::string fullPath = nextInitialPath.append(indexString);
+	std::string xdcPath = nextInitialPath.append(indexString);
 	CliResult res;
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(nextInitialPath);
+	/** Validate the XDC file */
+	res = ParameterValidator::GetInstance().IsXdcFileValid(xdcPath);
+	if (!res.IsSuccessful())
+	{
+		/** XDC file is not exists or invalid */
+		return res;
+	}
+
+	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
 	if (!res.IsSuccessful())
 	{
 		/** XDC file schema is not valid */
@@ -2025,7 +2041,7 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 	ParserElement element;
 	CliResult ceres;
 
-	ceres = element.CreateElement(nextInitialPath);
+	ceres = element.CreateElement(xdcPath);
 	if (!ceres.IsSuccessful())
 	{
 		return ceres;
@@ -2248,10 +2264,18 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 	std::string indexString = "/" + modulePathToXDC;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
 	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
-	std::string fullPath = nextInitialPath.append(indexString);
+	std::string xdcPath = nextInitialPath.append(indexString);
 	CliResult res;
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(nextInitialPath);
+	/** Validate the XDC file */
+	res = ParameterValidator::GetInstance().IsXdcFileValid(xdcPath);
+	if (!res.IsSuccessful())
+	{
+		/** XDC file is not exists or invalid */
+		return res;
+	}
+
+	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
 	if (!res.IsSuccessful())
 	{
 		/** XDC file schema is not valid */
@@ -2261,7 +2285,7 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 	ParserElement element;
 	CliResult ceres;
 
-	ceres = element.CreateElement(nextInitialPath);
+	ceres = element.CreateElement(xdcPath);
 	if (!ceres.IsSuccessful())
 	{
 		return ceres;
@@ -2558,7 +2582,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						Result res = OpenConfiguratorCore::GetInstance().CreateModuleSubObject(
 								OpenConfiguratorCli::GetInstance().networkName,
 								nodeId, interfaceId,
-								modId, modPosition, objId, subObjId, 
+								modId, modPosition, objId, subObjId,
 								GetObjectType(subObjIdType),
 								subpResult.parameters[subrow].at(1),						/** sub object name */
 								GetPlkDataType(subpResult.parameters[subrow].at(4)), 		/** sub object dataType */
@@ -3207,7 +3231,6 @@ DynamicChannelAccessType ProjectParser::GetDynamicChannelAccessType(const std::s
 	}
 	
 	return DynamicChannelAccessType::UNDEFINED;
-	
 }
 
 ModuleAddressing ProjectParser::GetModuleAddressing(const std::string moduleAddressing)
