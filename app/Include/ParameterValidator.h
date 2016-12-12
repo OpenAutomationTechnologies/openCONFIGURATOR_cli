@@ -95,9 +95,11 @@ namespace IndustrialNetwork
 				private:
 					/** \brief Validates file existence and extension
 					  * \param fileName			File name to be validated
+					  * \param fileExtn			File extention expected
 					  * \return CliResult
 					  */
-					CliResult IsFileValid(const std::string fileName);
+					CliResult IsFileValid(const std::string fileName,
+									const std::string fileExtn);
 
 					/** \brief Validates the schema of given file
 					  * \param fileName			File to be validated

@@ -50,7 +50,7 @@ namespace IndustrialNetwork
 		namespace Application
 		{
 			/** Log file name if file logging enabled */
-			const std::string kOpenConfiguratorCliLogFileName = "OpenCONFIGURATOR_CLI.log";
+			const std::string kOpenConfiguratorCliLogFileName = "OpenCONFIGURATOR_CLI";
 
 			/** Types of messages LogMessage can accept */
 			enum class CliMessageType : std::uint8_t
@@ -62,7 +62,7 @@ namespace IndustrialNetwork
 			};
 
 			/** Types of languages LogMessage can accept */
-			enum class CLILanguageType : std::uint8_t
+			enum class CliLanguageType : std::uint8_t
 			{
 				EN = 0,				/** English */
 				DE = 1				/** German */

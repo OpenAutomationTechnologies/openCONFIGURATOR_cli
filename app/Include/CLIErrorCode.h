@@ -51,20 +51,22 @@ namespace IndustrialNetwork
 				enum class CliErrorCode : std::uint8_t
 				{
 					SUCCESS = 0,				/** Operation completed successfully */
+					USAGE = 1,					/** Usage of the application */
 					CORE_API_FAILED,			/** Core library API failed */
 					CLI_API_FAILED,				/** CLI library API failed */
 					EXCEPTION_CAUGHT,			/** Exception caught */
 					LESS_NO_OF_PARAMS,			/** Project XML file name and output path are mandatory */
 					OUTPUT_PATH_NOT_FOUND,		/** Project output path not found from command line parameters */
 					XML_FILE_NOT_FOUND,			/** Project XML file name is not found from command line parameters */
-					XML_FILE_NOT_EXISTS,		/** XML file does not exists */
-					XML_FILE_EXTN_INCORRECT,	/** XML file extension is incorrect */
+					FILE_NOT_EXISTS,			/** File does not exists */
+					FILE_EXTN_INCORRECT,		/** Extension of file is incorrect */
 					SCHEMA_FILE_NOT_EXISTS,		/** Schema file does not exists */
 					OUTPUT_PATH_NOT_EXISTS,		/** Output path not exists */
 					ERROR_LOADING_GRAMMER,		/** Error loading grammer to DOM Parser */
 					FILE_SCHEMA_NOT_VALID,		/** Schema of file is not valid */
 					NULL_POINTER_FOUND,			/** NULL pointer found */
 					NO_RESULT_FOR_XPATH,		/** There is no result for the Managing Node XPath */
+					UNABLE_TO_OPEN_LOG			/** Unable to open the log file */
 				};
 			} // end of namespace ErrorHandling
 		} // end of namespace Application

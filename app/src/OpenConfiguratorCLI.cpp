@@ -7,9 +7,33 @@
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 0.1
+ * \version 1.0
  *
  */
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
 
 #include "OpenConfiguratorCli.h"
 #include "ParameterValidator.h"
@@ -24,22 +48,23 @@ OpenConfiguratorCli::OpenConfiguratorCli()
 
 OpenConfiguratorCli::~OpenConfiguratorCli()
 {
-// REVIEW_COMMENT:
 }
 
 OpenConfiguratorCli& OpenConfiguratorCli::GetInstance()
 {
-	static OpenConfiguratorCli instance;// REVIEW_COMMENT:
+	static OpenConfiguratorCli instance;
+
 	return instance;
 }
 
 std::string OpenConfiguratorCli::GetNetworkName()
 {
 	networkName = boost::filesystem::basename(xmlFilePath);
+
 	return networkName;
 }
 
-CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<std::string> paramsList)
+CliResult OpenConfiguratorCli::GenerateConfigurationFiles(std::vector<std::string> paramsList)
 {
 	const std::uint8_t kMinimumNumberOfParameters = 3;
 	CliResult res;
@@ -48,7 +73,8 @@ CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<s
 	{
 		ShowUsage();
 
-		return CliResult();
+		return CliResult(CliErrorCode::USAGE, 
+							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
 	}
 
 	if (paramsList.size() < kMinimumNumberOfParameters)
@@ -59,7 +85,7 @@ CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<s
 							kMsgLessNoOfParams[CliLogger::GetInstance().languageIndex]);
 	}
 
-	if (GetXMLFileName(paramsList))
+	if (GetXmlFileName(paramsList))
 	{
 		if (GetOutputPath(paramsList))
 		{
@@ -78,7 +104,7 @@ CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<s
 			GetNetworkName();
 
 			/** Validate the parameters */
-			res = ParameterValidator::GetInstance().IsXMLFileValid(xmlFilePath);
+			res = ParameterValidator::GetInstance().IsXmlFileValid(xmlFilePath);
 			if (!res.IsSuccessful())
 			{
 				return res;
@@ -98,7 +124,7 @@ CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<s
 				}
 			}
 
-			res = ParameterValidator::GetInstance().IsXMLSchemaValid(xmlFilePath);
+			res = ParameterValidator::GetInstance().IsXmlSchemaValid(xmlFilePath);
 			if (!res.IsSuccessful())
 			{
 				/** XML file schema is not valid */
@@ -118,13 +144,13 @@ CliResult OpenConfiguratorCli::GeneratePOWERLINKConfigurationFiles(std::vector<s
 		else
 		{
 			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND, 
-							kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
+								kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	else
 	{
 		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND, 
-							kMsgXMLFileNotFound[CliLogger::GetInstance().languageIndex]);
+							kMsgXmlFileNotFound[CliLogger::GetInstance().languageIndex]);
 	}
 }
 
@@ -152,12 +178,12 @@ void OpenConfiguratorCli::ShowUsage()
 	std::cout << kMsgHelpParameter << std::endl;
 }
 
-bool OpenConfiguratorCli::GetXMLFileName(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetXmlFileName(std::vector<std::string> paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for project file option */
-		if ((paramsList.at(index) == "-p")  || (paramsList.at(index) == "--project"))
+		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0))
 		{
 			xmlFilePath = paramsList.at(index + 1);
 			break;
@@ -179,7 +205,7 @@ bool OpenConfiguratorCli::GetOutputPath(std::vector<std::string> paramsList)
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for output path option */
-		if ((paramsList.at(index) == "-o")  || (paramsList.at(index) == "--output"))
+		if ((paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
 		{
 			outputPath = paramsList.at(index + 1);
 			return true;
@@ -194,7 +220,7 @@ bool OpenConfiguratorCli::IsLanguageGerman(std::vector<std::string> paramsList)
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for German language option */
-		if ((paramsList.at(index) == "-de")  || (paramsList.at(index) == "--german"))
+		if ((paramsList.at(index).compare("-de") == 0)  || (paramsList.at(index).compare("--german") == 0))
 		{
 			return true;
 		}
@@ -208,7 +234,7 @@ bool OpenConfiguratorCli::IsLogDebug(std::vector<std::string> paramsList)
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for verbose option */
-		if ((paramsList.at(index) == "-d")  || (paramsList.at(index) == "--debug"))
+		if ((paramsList.at(index).compare("-d") == 0)  || (paramsList.at(index).compare("--debug") == 0))
 		{
 			return true;
 		}
@@ -222,7 +248,7 @@ bool OpenConfiguratorCli::GetHelpOption(std::vector<std::string> paramsList)
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for verbose option */
-		if ((paramsList.at(index) == "-h")  || (paramsList.at(index) == "--help"))
+		if ((paramsList.at(index).compare("-h") == 0)  || (paramsList.at(index).compare("--help") == 0))
 		{
 			return true;
 		}

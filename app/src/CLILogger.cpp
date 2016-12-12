@@ -7,8 +7,32 @@
  *
  * \version 0.1
  *
- */ // REVIEW_COMMENT: copyright and License
-//  REVIEW_COMMENT: Class name shall be CliLogger
+ */
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
+
 #include "IResult.h"
 #include "OpenConfiguratorCli.h"
 
@@ -18,7 +42,7 @@ CliLogger::CliLogger()
 
 	languageGerman = false;
 	/** Current language is English by default */
-	languageIndex = (std::uint8_t) CLILanguageType::EN;
+	languageIndex = (std::uint8_t)CliLanguageType::EN;
 
 	/** String descriptions for message types */
 	CliMessageTypeString.push_back("INFO");
@@ -39,21 +63,30 @@ CliLogger::~CliLogger()
 CliLogger& CliLogger::GetInstance()
 {
 	static CliLogger instance;
+
 	return instance;
 }
 
-void CliLogger::SetFileLog(bool set, std::string path = "") // REVIEW_COMMENT: CHeck the usage of bool
+void CliLogger::SetFileLog(const bool set, const std::string path = "")
 {
 	if (set == true)
-	{// REVIEW_COMMENT: Add code comment
-	// REVIEW_COMMENT: Name of the configuration shall be with time stamp
-		std::string logPath = path + "/" + kOpenConfiguratorCliLogFileName;
+	{
+		std::ostringstream dateTime;
+
+		/** Prepare log file name to be created under output path */
+		const boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+		boost::posix_time::time_facet* const timeFacet = new boost::posix_time::time_facet("%d%b%Y_%H%M%S");
+		dateTime.imbue(std::locale(dateTime.getloc(), timeFacet));
+		std::string logPath = path + "/" + kOpenConfiguratorCliLogFileName + dateTime.str() + ".log";
 
 		/** Open the output file stream for logging */
 		ofs.open(logPath, std::ofstream::out | std::ofstream::app);
 		if (!ofs.is_open())
 		{
-			LOG_WARN() << "Unable to open log file" << logPath << std::endl; // REVIEW_COMMENT: Use LogMessage
+			boost::format formatter(kMsgUnableToOpenLogFile[languageIndex]);
+			formatter % logPath.c_str();
+			
+			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_ERROR, formatter.str());
 		}
 		else
 		{
@@ -72,40 +105,28 @@ void CliLogger::SetFileLog(bool set, std::string path = "") // REVIEW_COMMENT: C
 	}
 }
 
-void CliLogger::SetLanguageToGerman(bool set)// REVIEW_COMMENT: CHeck the usage of bool
+void CliLogger::SetLanguageToGerman(const bool set)
 {
 	languageGerman = set;
 
-	languageIndex = (std::uint8_t) CLILanguageType::DE;// REVIEW_COMMENT: If set = true then set to German otherwise English
-	// REVIEW_COMMENT: no space after type conversion
-}
-
-void CliLogger::LogMessage(CliMessageType msgType, std::string logDescription)
-{
-	std::ostringstream message;
-
-	message << "[" << boost::posix_time::second_clock::local_time()				<< "] ";// REVIEW_COMMENT: avoid extra tabs
-	message << "[" << CliMessageTypeString.at((std::uint8_t)msgType).c_str()	<< "] ";// REVIEW_COMMENT: avoid extra tabs
-	message << logDescription.c_str() << "." << std::endl;
-
-	/** Pass the message to output log file if file logging enabled */
-	if (fileLog == true)
+	if (set == true)
 	{
-		ofs << message.str();
+		languageIndex = (std::uint8_t)CliLanguageType::DE;
 	}
 	else
 	{
-		std::cout << message.str(); // REVIEW_COMMENT: cout used to accomodate file logging as well
+		languageIndex = (std::uint8_t)CliLanguageType::EN;
 	}
 }
 
-void CliLogger::LogMessage(CliMessageType msgType, CliResult& result) // REVIEW_COMMENT: This function can call the previous function to avoid code repeateability
+void CliLogger::LogMessage(const CliMessageType msgType, 
+						   const std::string logDescription)
 {
 	std::ostringstream message;
 
-	message << "[" << boost::posix_time::second_clock::local_time()				<< "] ";// REVIEW_COMMENT: avoid extra tabs
-	message << "[" << CliMessageTypeString.at((std::uint8_t)msgType).c_str()	<< "] ";// REVIEW_COMMENT: avoid extra tabs
-	message << result.GetErrorMessage() << "." << std::endl;
+	message << "[" << boost::posix_time::second_clock::local_time() << "] ";
+	message << "[" << CliMessageTypeString.at((std::uint8_t)msgType).c_str() << "] ";
+	message << logDescription.c_str() << "." << std::endl;
 
 	/** Pass the message to output log file if file logging enabled */
 	if (fileLog == true)
@@ -117,42 +138,47 @@ void CliLogger::LogMessage(CliMessageType msgType, CliResult& result) // REVIEW_
 		std::cout << message.str();
 	}
 }
-// REVIEW_COMMENT: 80 characters limit per line
-CliResult CliLogger::HandleCliApiFailed(std::string apiDescription, CliResult& result) // REVIEW_COMMENT: use const for input param
+
+void CliLogger::LogMessage(const CliMessageType msgType, const CliResult& result)
+{
+	LogMessage(msgType, result.GetErrorMessage());
+}
+
+CliResult CliLogger::HandleCliApiFailed(const std::string apiDescription, 
+										const CliResult& result)
 {
 	/** Log the reason of CLI API failure details */
 	LogMessage(CliMessageType::CLI_ERROR, result);
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgCliApiFailed[languageIndex]);
-	formatter// REVIEW_COMMENT: keep it in a single line
-	% apiDescription.c_str();
+	formatter % apiDescription.c_str();
 
 	return CliResult(CliErrorCode::CLI_API_FAILED, formatter.str());
 }
 
-CliResult CliLogger::HandleCoreApiFailed(std::string apiDescription, Result& result)
+CliResult CliLogger::HandleCoreApiFailed(const std::string apiDescription,
+										 const Result& result)
 {
 	/** Log the reason of CLI API failure details */
 	LogMessage(CliMessageType::CLI_ERROR, result.GetErrorMessage());
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgCoreApiFailed[languageIndex]);
-	formatter// REVIEW_COMMENT: keep it in a single line
-	% apiDescription.c_str();
+	formatter % apiDescription.c_str();
 
 	return CliResult(CliErrorCode::CORE_API_FAILED, formatter.str());
 }
 
-CliResult CliLogger::HandleExceptionCaught(std::string apiDescription, std::exception& e)// REVIEW_COMMENT: 80 characters limit per line; avoid single letter variable name
+CliResult CliLogger::HandleExceptionCaught(const std::string apiDescription,
+										   const std::exception& e)
 {
 	/** Log the reason of CLI API failure details */
 	LogMessage(CliMessageType::CLI_ERROR, e.what());
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgExceptionCaught[languageIndex]);
-	formatter// REVIEW_COMMENT: keep it in a single line
-	% apiDescription.c_str();
+	formatter % apiDescription.c_str();
 
 	return CliResult(CliErrorCode::EXCEPTION_CAUGHT, formatter.str());
 }

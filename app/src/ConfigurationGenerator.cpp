@@ -5,35 +5,59 @@
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 0.1
+ * \version 1.0
  *
  */
+/*------------------------------------------------------------------------------
+Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the copyright holders nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------*/
 
 #include "ConfigurationGenerator.h"
 #include "ProjectParser.h"
 
 ConfigurationGenerator::ConfigurationGenerator()
 {
-// REVIEW_COMMENT:
 }
 
 ConfigurationGenerator::~ConfigurationGenerator()
 {
-// REVIEW_COMMENT:
 }
 
 ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 {
-	static ConfigurationGenerator instance;// REVIEW_COMMENT:
+	static ConfigurationGenerator instance;
+
 	return instance;
 }
 
-CliResult ConfigurationGenerator::GenerateConfigurationFiles(std::string xmlPath, std::string outputPath)
+CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string xmlPath, 
+															 const std::string outputPath)
 {
 	CliResult cliRes;
 
 	/** Parse the XML file */
-	cliRes = ProjectParser::GetInstance().ParserXMLFile(xmlPath);
+	cliRes = ProjectParser::GetInstance().ParseXmlFile(xmlPath);
 	if (!cliRes.IsSuccessful())
 	{
 		return CliLogger::GetInstance().HandleCliApiFailed("Parser XML File", cliRes);
@@ -59,11 +83,10 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(std::string xmlPath
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string outputPath)
+CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::string outputPath)
 {
 	std::vector<std::uint8_t> binOutput;		/** binary output vector */
 	std::string configurationOutput = "";		/** configuration output stream */
-// REVIEW_COMMENT:
 	Result res;
 	CliResult cliRes;
 
@@ -111,10 +134,9 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(std::string ou
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outputPath)
+CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::string outputPath)
 {
 	CliResult cliRes;
-
 	std::vector<std::uint8_t> nodeIdCollection;
 
 	Result res = OpenConfiguratorCore::GetInstance().GetAvailableNodeIds(
@@ -144,7 +166,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outp
 			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
 		}
 
-		cliRes = CreateXMLProcessImage(value, outputPath);
+		cliRes = CreateXmlProcessImage(value, outputPath);
 		if (!cliRes.IsSuccessful())
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
@@ -164,7 +186,8 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(std::string outp
     return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::string configuration)
+CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string outputPath, 
+												 const std::string configuration)
 {
 	try
 	{
@@ -174,19 +197,19 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(std::string outputPath, std::st
 		if (ofile.is_open())
 		{
 			ofile << configuration << std::endl;
-// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", e);
 	}
 
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::ostringstream& buffer)
+CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string outputPath, 
+												 const std::ostringstream& buffer)
 {
 	try
 	{
@@ -196,7 +219,6 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::os
 		if (ofile.is_open())
 		{
 			ofile << buffer.str() << std::endl;
-// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
@@ -208,7 +230,8 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(std::string outputPath, std::os
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std::ostringstream& buffer)
+CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath, 
+													const std::ostringstream& buffer)
 {
 	try
 	{
@@ -221,12 +244,12 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std:
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
             toStream << "0x";
-// REVIEW_COMMENT:
 			toStream << (std::uint8_t) ("%02X" , (buffer.str().at(cnt)));
             if (cnt != (buffer.str().size() - 1))
 			{
                 toStream << ",";
-            }// REVIEW_COMMENT:
+            }
+
             lineBreakCount++;
 
             if (lineBreakCount == kWordWrapLength)
@@ -251,16 +274,17 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(std::string outputPath, std:
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", e);
 	}
 
 	return CliResult();
 }
 
 
-CliResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId, 
+													  const std::string outputPath)
 {
 	std::string piDataOutput = "";
 
@@ -280,19 +304,19 @@ CliResult ConfigurationGenerator::CreateCProcessImage(std::uint8_t nodeId, std::
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput << std::endl;
-// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create CProcess Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create CProcess Image", e);
 	}
 
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeId, 
+														const std::string outputPath)
 {
 	std::string piDataOutput = "";
 
@@ -312,19 +336,19 @@ CliResult ConfigurationGenerator::CreateXMLProcessImage(std::uint8_t nodeId, std
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput.c_str() << std::endl;
-// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create XML Process Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create XML Process Image", e);
 	}
 
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, std::string outputPath)
+CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t nodeId, 
+														   const std::string outputPath)
 {
 	std::string piDataOutput = "";
 
@@ -344,13 +368,12 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(std::uint8_t nodeId, 
 		if (ofile.is_open())
 		{
 			ofile << piDataOutput << std::endl;
-// REVIEW_COMMENT:
 			ofile.close();
 		}
 	}
-	catch(std::exception ex)
+	catch(std::exception e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", ex);
+		return CliLogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", e);
 	}
 
 	return CliResult();

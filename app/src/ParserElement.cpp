@@ -48,16 +48,6 @@ ParserElement::~ParserElement()
 	/** Release the DOM elements */
 	delete [] domParser;
 
-	if (domElement)
-	{
-		domElement->release();
-	}
-
-	if (domDocument)
-	{
-		domDocument->release();
-	}
-
 	/** Release the Xerces usage */
 	xercesc::XMLPlatformUtils::Terminate();
 }

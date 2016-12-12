@@ -99,7 +99,7 @@ namespace IndustrialNetwork
 					  * \param paramsList		List of command line parameters
 					  * \return CliResult
 					  */
-					CliResult GeneratePOWERLINKConfigurationFiles(
+					CliResult GenerateConfigurationFiles(
 									const std::vector<std::string> paramsList);
 
 					/** The input XML file with path */
@@ -122,7 +122,7 @@ namespace IndustrialNetwork
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetXMLFileName(const std::vector<std::string> paramsList);
+					bool GetXmlFileName(const std::vector<std::string> paramsList);
 
 					/** \brief Searches for options '-o' or '--output' followed by
 					  *        the output path from command line parameters list

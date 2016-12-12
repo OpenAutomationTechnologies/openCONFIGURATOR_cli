@@ -69,6 +69,24 @@ namespace IndustrialNetwork
 					CliResult ParseXmlFile(const std::string xmlPath);
 
 				private:
+					/** \brief Creates MN node results
+					  * \param xmlPath			Name of the XML file with path
+					  * \return CliResult
+					  */
+					CliResult CreateMnNodeResults(const std::string xmlPath);
+
+					/** \brief Creates RMN node results
+					  * \param xmlPath			Name of the XML file with path
+					  * \return CliResult
+					  */
+					CliResult CreateRmnNodeResults(const std::string xmlPath);
+
+					/** \brief Creates CN node results
+					  * \param xmlPath			Name of the XML file with path
+					  * \return CliResult
+					  */
+					CliResult CreateCnNodeResults(const std::string xmlPath);
+
 					/** \brief Updates the XDC node information into core library
 					  * \param nodeId 			Node ID value of node
 					  * \param pathXdc 			XDC path of node
@@ -80,7 +98,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult UpdateNodeIdCollection(const std::uint8_t nodeId, 
-									const std::string& pathXdc, 
+									const std::string pathXdc, 
 									const std::vector<std::string> forcedObject, 
 									const std::vector<std::string> forcedSubObject, 
 									const std::string interfceId, 
