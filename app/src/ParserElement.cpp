@@ -1,16 +1,14 @@
 /**
- * \file main.cpp
+ * \file ParserElement.cpp
  *
- * \brief Implementation to receive the command line parameters for
- *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
- *        at the output path
+ * \brief Implementation of ParserElement module
  *
  * \author Kalycito Infotech Private Limited
  *
  * \version 1.0
  *
  */
- /*------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -35,33 +33,58 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
+#include "ParserElement.h"
 
-#include "OpenConfiguratorCli.h"
-
-int main(int parameterCount, char* parameter[])
+ParserElement::ParserElement()
 {
-	std::vector<std::string> paramList;
+	/** Initialize the Xerces usage */
+	xercesc::XMLPlatformUtils::Initialize();
 
-	/** Prepare the parameter list */
-	for (std::int32_t index = 1; index < parameterCount; index++)
-	{
-		paramList.push_back(parameter[index]);
-	}
+	domParser = new xercesc::XercesDOMParser();
+}
 
-	/** Generate output configuration files */
-	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
-	if (!result.IsSuccessful())
+ParserElement::~ParserElement()
+{
+	/** Release the DOM elements */
+	delete [] domParser;
+
+	/** Release the Xerces usage */
+	xercesc::XMLPlatformUtils::Terminate();
+}
+
+CliResult ParserElement::CreateElement(const std::string& file)
+{
+	try
 	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
+		filePath = file;
+
+		/** Input project XML file to DOM parse() function */
+		domParser->parse(filePath.c_str());
+
+		/** Store the entire project XML file in DOMDocument */
+		domDocument = domParser->getDocument();
+		if (domDocument == NULL)
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_ERROR, result);
+			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			formatter % "create DOM parser document";
+
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+		}
+
+		/** Store the Top node element of the document in root */
+		domElement = domDocument->getDocumentElement();
+		if (domElement == NULL)
+		{
+			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			formatter % "create DOM parser element";
+
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
 		}
 	}
-	else
+	catch (std::exception& e)
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_INFO, 
-					"POWERLINK configuration files generated successfully");
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Element", e);
 	}
 
-	return 0;
+	return CliResult();
 }

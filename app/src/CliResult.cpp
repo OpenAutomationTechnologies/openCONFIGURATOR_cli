@@ -1,16 +1,14 @@
 /**
- * \file main.cpp
+ * \file CliResult
  *
- * \brief Implementation to receive the command line parameters for
- *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
- *        at the output path
+ * \brief Error code handler using IResult of core library
  *
  * \author Kalycito Infotech Private Limited
  *
  * \version 1.0
  *
  */
- /*------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -35,33 +33,28 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
+#include "CliResult.h"
 
-#include "OpenConfiguratorCli.h"
-
-int main(int parameterCount, char* parameter[])
+CliResult::CliResult(const CliErrorCode& errorCode, const std::string& errorMessage = "") :
+	IResult<CliErrorCode>(errorCode, errorMessage)
 {
-	std::vector<std::string> paramList;
+}
 
-	/** Prepare the parameter list */
-	for (std::int32_t index = 1; index < parameterCount; index++)
-	{
-		paramList.push_back(parameter[index]);
-	}
+CliResult::CliResult(const CliErrorCode& errorCode) :
+	IResult<CliErrorCode>(errorCode)
+{
+}
 
-	/** Generate output configuration files */
-	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
-	if (!result.IsSuccessful())
-	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
-		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_ERROR, result);
-		}
-	}
-	else
-	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_INFO, 
-					"POWERLINK configuration files generated successfully");
-	}
+CliResult::CliResult() :
+	IResult<CliErrorCode>(CliErrorCode::SUCCESS)
+{
+}
 
-	return 0;
+CliResult::~CliResult()
+{
+}
+
+bool CliResult::IsSuccessful()
+{
+	return (this->GetErrorType() == CliErrorCode::SUCCESS);
 }

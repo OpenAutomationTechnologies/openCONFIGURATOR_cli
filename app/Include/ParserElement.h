@@ -1,16 +1,14 @@
 /**
- * \file main.cpp
+ * \class ParserElement
  *
- * \brief Implementation to receive the command line parameters for
- *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
- *        at the output path
+ * \brief Set of handles of a file to be parsed
  *
  * \author Kalycito Infotech Private Limited
  *
  * \version 1.0
  *
  */
- /*------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -35,33 +33,50 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
+#ifndef _PARSER_ELEMENT_H_
+#define _PARSER_ELEMENT_H_
 
 #include "OpenConfiguratorCli.h"
 
-int main(int parameterCount, char* parameter[])
+namespace IndustrialNetwork
 {
-	std::vector<std::string> paramList;
-
-	/** Prepare the parameter list */
-	for (std::int32_t index = 1; index < parameterCount; index++)
+	namespace POWERLINK
 	{
-		paramList.push_back(parameter[index]);
-	}
-
-	/** Generate output configuration files */
-	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
-	if (!result.IsSuccessful())
-	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
+		namespace Application
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_ERROR, result);
-		}
-	}
-	else
-	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_INFO, 
-					"POWERLINK configuration files generated successfully");
-	}
+			class ParserElement
+			{
+				public:
+					/** \brief Default constructor of the class 
+					  */
+					ParserElement();
 
-	return 0;
-}
+					/** \brief Destructor of the class 
+					  */
+					~ParserElement();
+
+					/** \brief Creates element for parsing
+					  * \param fileName		Name of XML ot XDC file to parse
+					  * \return CliResult
+					  */
+					CliResult CreateElement(const std::string& fileName);
+
+					/** Document handle */
+					xercesc::DOMDocument* domDocument;
+
+					/** Document element handle */
+					xercesc::DOMElement* domElement;
+
+				private:
+					/** file that has to be parsed */
+					std::string filePath;
+
+					/** DOM parser handle */
+					xercesc::XercesDOMParser* domParser;
+
+			}; // end of class ParserElement
+		} // end of namespace Application
+	} // end of namespace POWERLINK
+} // end of namespace IndustrialNetwork
+
+#endif // _PARSER_ELEMENT_H_
