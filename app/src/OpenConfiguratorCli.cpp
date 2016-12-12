@@ -64,7 +64,7 @@ std::string OpenConfiguratorCli::GetNetworkName()
 	return networkName;
 }
 
-CliResult OpenConfiguratorCli::GenerateConfigurationFiles(std::vector<std::string> paramsList)
+CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std::string>& paramsList)
 {
 	const std::uint8_t kMinimumNumberOfParameters = 3;
 	CliResult res;
@@ -178,7 +178,7 @@ void OpenConfiguratorCli::ShowUsage()
 	std::cout << kMsgHelpParameter << std::endl;
 }
 
-bool OpenConfiguratorCli::GetXmlFileName(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
@@ -200,7 +200,7 @@ bool OpenConfiguratorCli::GetXmlFileName(std::vector<std::string> paramsList)
 	return true;
 }
 
-bool OpenConfiguratorCli::GetOutputPath(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
@@ -215,7 +215,7 @@ bool OpenConfiguratorCli::GetOutputPath(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCli::IsLanguageGerman(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::IsLanguageGerman(const std::vector<std::string>& paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
@@ -229,7 +229,7 @@ bool OpenConfiguratorCli::IsLanguageGerman(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCli::IsLogDebug(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::IsLogDebug(const std::vector<std::string>& paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{
@@ -243,7 +243,7 @@ bool OpenConfiguratorCli::IsLogDebug(std::vector<std::string> paramsList)
 	return false;
 }
 
-bool OpenConfiguratorCli::GetHelpOption(std::vector<std::string> paramsList)
+bool OpenConfiguratorCli::GetHelpOption(const std::vector<std::string>& paramsList)
 {
 	for (std::uint8_t index = 0; index < paramsList.size(); index++)
 	{

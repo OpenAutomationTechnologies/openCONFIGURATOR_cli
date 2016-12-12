@@ -59,7 +59,7 @@ namespace IndustrialNetwork
 					  * \param fileName		Name of XML ot XDC file to parse
 					  * \return CliResult
 					  */
-					CliResult CreateElement(std::string fileName);
+					CliResult CreateElement(const std::string& fileName);
 
 					/** Document handle */
 					xercesc::DOMDocument* domDocument;

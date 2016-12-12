@@ -67,14 +67,13 @@ CliLogger& CliLogger::GetInstance()
 	return instance;
 }
 
-void CliLogger::SetFileLog(const bool set, const std::string path = "")
+void CliLogger::SetFileLog(const bool set, const std::string& path = "")
 {
 	if (set == true)
 	{
 		std::ostringstream dateTime;
 
 		/** Prepare log file name to be created under output path */
-		const boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
 		boost::posix_time::time_facet* const timeFacet = new boost::posix_time::time_facet("%d%b%Y_%H%M%S");
 		dateTime.imbue(std::locale(dateTime.getloc(), timeFacet));
 		std::string logPath = path + "/" + kOpenConfiguratorCliLogFileName + dateTime.str() + ".log";
@@ -120,7 +119,7 @@ void CliLogger::SetLanguageToGerman(const bool set)
 }
 
 void CliLogger::LogMessage(const CliMessageType msgType, 
-						   const std::string logDescription)
+						   const std::string& logDescription)
 {
 	std::ostringstream message;
 
@@ -144,7 +143,7 @@ void CliLogger::LogMessage(const CliMessageType msgType, const CliResult& result
 	LogMessage(msgType, result.GetErrorMessage());
 }
 
-CliResult CliLogger::HandleCliApiFailed(const std::string apiDescription, 
+CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription, 
 										const CliResult& result)
 {
 	/** Log the reason of CLI API failure details */
@@ -157,7 +156,7 @@ CliResult CliLogger::HandleCliApiFailed(const std::string apiDescription,
 	return CliResult(CliErrorCode::CLI_API_FAILED, formatter.str());
 }
 
-CliResult CliLogger::HandleCoreApiFailed(const std::string apiDescription,
+CliResult CliLogger::HandleCoreApiFailed(const std::string& apiDescription,
 										 const Result& result)
 {
 	/** Log the reason of CLI API failure details */
@@ -170,7 +169,7 @@ CliResult CliLogger::HandleCoreApiFailed(const std::string apiDescription,
 	return CliResult(CliErrorCode::CORE_API_FAILED, formatter.str());
 }
 
-CliResult CliLogger::HandleExceptionCaught(const std::string apiDescription,
+CliResult CliLogger::HandleExceptionCaught(const std::string& apiDescription,
 										   const std::exception& e)
 {
 	/** Log the reason of CLI API failure details */

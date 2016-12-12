@@ -67,47 +67,47 @@ namespace IndustrialNetwork
 					  * \param xmlFileName		XML file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXmlFileValid(const std::string xmlFileName);
+					CliResult IsXmlFileValid(const std::string& xmlFileName);
 
 					/** \brief Validates the XDC file existence and extension
 					  * \param xdcFileName		XDC file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXdcFileValid(const std::string xdcFileName);
+					CliResult IsXdcFileValid(const std::string& xdcFileName);
 
 					/** \brief Validates the output path existence
 					  * \param path				Output path to be validated
 					  * \return CliResult
 					  */
-					CliResult IsPathValid(const std::string path);
+					CliResult IsPathValid(const std::string& path);
 
 					/** \brief Validates the schema of XML file
 					  * \param xmlFileName		XML file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXmlSchemaValid(const std::string xmlFileName);
+					CliResult IsXmlSchemaValid(const std::string& xmlFileName);
 
 					/** \brief Validates the schema of XDC file
 					  * \param xdcFileName		XDC file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXdcSchemaValid(const std::string xdcFileName);
+					CliResult IsXdcSchemaValid(const std::string& xdcFileName);
 				private:
 					/** \brief Validates file existence and extension
 					  * \param fileName			File name to be validated
 					  * \param fileExtn			File extention expected
 					  * \return CliResult
 					  */
-					CliResult IsFileValid(const std::string fileName,
-									const std::string fileExtn);
+					CliResult IsFileValid(const std::string& fileName,
+									const std::string& fileExtn);
 
 					/** \brief Validates the schema of given file
 					  * \param fileName			File to be validated
 					  * \param schemaDefFile	Schema definition file for reference 
 					  * \return CliResult
 					  */
-					CliResult IsSchemaValid(const std::string fileName, 
-									const std::string schemaDefFile);
+					CliResult IsSchemaValid(const std::string& fileName, 
+									const std::string& schemaDefFile);
 
 			}; // end of class ParameterValidator
 		} // end of namespace Application

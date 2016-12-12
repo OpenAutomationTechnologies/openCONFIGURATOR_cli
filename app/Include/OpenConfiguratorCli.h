@@ -100,7 +100,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult GenerateConfigurationFiles(
-									const std::vector<std::string> paramsList);
+									const std::vector<std::string>& paramsList);
 
 					/** The input XML file with path */
 					std::string xmlFilePath;
@@ -122,35 +122,35 @@ namespace IndustrialNetwork
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetXmlFileName(const std::vector<std::string> paramsList);
+					bool GetXmlFileName(const std::vector<std::string>& paramsList);
 
 					/** \brief Searches for options '-o' or '--output' followed by
 					  *        the output path from command line parameters list
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetOutputPath(const std::vector<std::string> paramsList);
+					bool GetOutputPath(const std::vector<std::string>& paramsList);
 
 					/** \brief Searches for options '-de' or '--german'
 					  *        from command line parameters list
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool IsLanguageGerman(const std::vector<std::string> paramsList);
+					bool IsLanguageGerman(const std::vector<std::string>& paramsList);
 
 					/** \brief Searches for options '-v' or '--verbose'
 					  *        from command line parameters list
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool IsLogDebug(const std::vector<std::string> paramsList);
+					bool IsLogDebug(const std::vector<std::string>& paramsList);
 
 					/** \brief Searches for options '-h' or '--help'
 					  *        from command line parameters list
 					  * \param paramsList		List of command line parameters
 					  * \return true if option is found; false otherwise
 					  */
-					bool GetHelpOption(const std::vector<std::string> paramsList);
+					bool GetHelpOption(const std::vector<std::string>& paramsList);
 
 			}; // end of class OpenConfiguratorCli
 		} // end of namespace Application

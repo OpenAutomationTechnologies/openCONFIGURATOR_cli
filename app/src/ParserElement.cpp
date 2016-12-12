@@ -52,7 +52,7 @@ ParserElement::~ParserElement()
 	xercesc::XMLPlatformUtils::Terminate();
 }
 
-CliResult ParserElement::CreateElement(std::string file)
+CliResult ParserElement::CreateElement(const std::string& file)
 {
 	try
 	{

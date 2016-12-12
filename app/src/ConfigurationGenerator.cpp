@@ -51,8 +51,8 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 	return instance;
 }
 
-CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string xmlPath, 
-															 const std::string outputPath)
+CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& xmlPath, 
+															 const std::string& outputPath)
 {
 	CliResult cliRes;
 
@@ -83,7 +83,7 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string x
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::string outputPath)
+CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::string& outputPath)
 {
 	std::vector<std::uint8_t> binOutput;		/** binary output vector */
 	std::string configurationOutput = "";		/** configuration output stream */
@@ -134,7 +134,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::string outputPath)
+CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::string& outputPath)
 {
 	CliResult cliRes;
 	std::vector<std::uint8_t> nodeIdCollection;
@@ -151,11 +151,12 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
     for (std::uint32_t index = 0; index < nodeIdCollection.size(); index++)
 	{
 		std::uint8_t value = nodeIdCollection.at(index);
-		std::string outputPathExtended;
+		std::string outputPathExtended = outputPath;
 
 		if (value != MN_DEFAULT_NODE_ID)
 		{
 			outputPathExtended = outputPath + "/" + std::to_string(value);
+
 			continue;
 		}
 
@@ -187,8 +188,8 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
     return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string outputPath, 
-												 const std::string configuration)
+CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath, 
+												 const std::string& configuration)
 {
 	try
 	{
@@ -209,7 +210,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string outputPath,
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string outputPath, 
+CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath, 
 												 const std::ostringstream& buffer)
 {
 	try
@@ -231,7 +232,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string outputPath,
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath, 
+CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPath, 
 													const std::ostringstream& buffer)
 {
 	try
@@ -244,25 +245,25 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath
 		/** Formatting the mnob hex text stream */
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
-            toStream << "0x";
-			toStream << (std::uint8_t) ("%02X" , (buffer.str().at(cnt)));
-            if (cnt != (buffer.str().size() - 1))
+			toStream << "0x";
+			toStream << std::setw(2) << std::setfill('0') << std::hex << int(buffer.str().at(cnt));
+			if (cnt != (buffer.str().size() - 1))
 			{
-                toStream << ",";
-            }
+				toStream << ",";
+			}
 
-            lineBreakCount++;
+			lineBreakCount++;
 
-            if (lineBreakCount == kWordWrapLength)
+			if (lineBreakCount == kWordWrapLength)
 			{
-                toStream << "\n";
-                lineBreakCount = 0;
-            } 
+				toStream << "\n";
+				lineBreakCount = 0;
+			} 
 			else
 			{
-                toStream << " ";
-            }
-        }
+				toStream << " ";
+			}
+		}
 
 		std::string targetPath = outputPath + "/" + kMnobdHexTxtFileName;
 		std::ofstream ofile(targetPath);
@@ -285,7 +286,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string outputPath
 
 
 CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId, 
-													  const std::string outputPath)
+													  const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 
@@ -317,7 +318,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 }
 
 CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeId, 
-														const std::string outputPath)
+														const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 
@@ -349,7 +350,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 }
 
 CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t nodeId, 
-														   const std::string outputPath)
+														   const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 

@@ -89,7 +89,7 @@ namespace IndustrialNetwork
 					  * \path path		Logging file path
 					  * \return Nothing
 					  */
-					void SetFileLog(const bool set, const std::string path);
+					void SetFileLog(const bool set, const std::string& path);
 
 					/** \brief Sets the language to be used for logging
 					  * \param set		true for German; false for English
@@ -103,7 +103,7 @@ namespace IndustrialNetwork
 					  * \return Nothing
 					  */
 					void LogMessage(const CliMessageType msgType, 
-									const std::string logDescription);
+									const std::string& logDescription);
 
 					/** \brief Log message with given message type description
 					  * \param msgType			Log message type
@@ -118,7 +118,7 @@ namespace IndustrialNetwork
 					  * \param result			CliResult returned by the failed CLI API
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleCliApiFailed(const std::string apiDescription, 
+					CliResult HandleCliApiFailed(const std::string& apiDescription, 
 									const CliResult& result);
 
 					/** \brief Logs message for Core API failure
@@ -126,7 +126,7 @@ namespace IndustrialNetwork
 					  * \param result			Result returned by the failed Core API
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleCoreApiFailed(const std::string apiDescription, 
+					CliResult HandleCoreApiFailed(const std::string& apiDescription, 
 									const Result& result);
 
 					/** \brief Logs message when exception caught
@@ -134,7 +134,7 @@ namespace IndustrialNetwork
 					  * \param e				Exception ojbect
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleExceptionCaught(const std::string apiDescription, 
+					CliResult HandleExceptionCaught(const std::string& apiDescription, 
 									const std::exception& e);
 
 					/** Index of current language */

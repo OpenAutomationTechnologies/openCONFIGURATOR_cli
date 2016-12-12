@@ -46,8 +46,8 @@ ParserResult::~ParserResult()
 }
 
 CliResult ParserResult::CreateResult(const ParserElement& pElement,
-										const std::string transcodeString,
-										const std::string formatString)
+										const std::string& transcodeString,
+										const std::string& formatString)
 {
 	return CreateResult(pElement,
 						transcodeString,
@@ -56,8 +56,8 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 }
 
 CliResult ParserResult::CreateResult(const ParserElement& pElement,
-										const std::string transcodeString,
-										const std::string formatString,
+										const std::string& transcodeString,
+										const std::string& formatString,
 										const xercesc::DOMNode* parentNode)
 {
 	if (parentNode == NULL)
@@ -131,7 +131,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 }
 
 std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode, 
-											const std::string attributeName)
+											const std::string& attributeName)
 {
 	if (domNode == NULL)
 	{

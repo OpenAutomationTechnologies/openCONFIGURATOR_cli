@@ -72,35 +72,35 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult GenerateConfigurationFiles(const std::string xmlPath,
-									const std::string outputPath);
+					CliResult GenerateConfigurationFiles(const std::string& xmlPath,
+									const std::string& outputPath);
 				private:
 					/** \brief Creates Mnobd configuration files
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult BuildConciseDeviceConfiguration(const std::string outputPath);
+					CliResult BuildConciseDeviceConfiguration(const std::string& outputPath);
 
 					/** \brief Creates process images
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult BuildProcessImageDescriptions(const std::string outputPath);
+					CliResult BuildProcessImageDescriptions(const std::string& outputPath);
 
 					/** \brief Creates mnobd.txt
 					  * \param outputPath		Output path of the image files
 					  * \param configuration	Configuration output to be copied
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdTxt(const std::string outputPath,
-									const std::string configuration);
+					CliResult CreateMnobdTxt(const std::string& outputPath,
+									const std::string& configuration);
 
 					/** \brief Creates mnobd.cdc
 					  * \param outputPath		Output path of the image files
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdCdc(const std::string outputPath,
+					CliResult CreateMnobdCdc(const std::string& outputPath,
 									const std::ostringstream& buffer);
 
 					/** \brief Creates mnobdhex.txt
@@ -108,7 +108,7 @@ namespace IndustrialNetwork
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdHexTxt(const std::string outputPath,
+					CliResult CreateMnobdHexTxt(const std::string& outputPath,
 									const std::ostringstream& buffer);
 
 					/** \brief Creates CProcess image file
@@ -117,7 +117,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateCProcessImage(const std::uint8_t nodeId,
-									const std::string outputPath);
+									const std::string& outputPath);
 
 					/** \brief Creates XML process image file
 					  * \param nodeId			Node for which the process to be created
@@ -125,7 +125,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateXmlProcessImage(const std::uint8_t nodeId,
-									const std::string outputPath);
+									const std::string& outputPath);
 
 					/** \brief Creates CSharp process image file
 					  * \param nodeId			Node for which the process to be created
@@ -133,7 +133,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateCSharpProcessImage(const std::uint8_t nodeId,
-									const std::string outputPath);
+									const std::string& outputPath);
 
 			}; // end of class ConfigurationGenerator
 		} // end of namespace Application

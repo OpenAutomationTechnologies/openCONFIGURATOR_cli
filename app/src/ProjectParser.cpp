@@ -52,7 +52,7 @@ ProjectParser& ProjectParser::GetInstance()
 	return instance;
 }
 
-CliResult ProjectParser::ParseXmlFile(const std::string xmlPath)
+CliResult ProjectParser::ParseXmlFile(const std::string& xmlPath)
 {
 	/** Core Library API call to create Network */
 	Result res = OpenConfiguratorCore::GetInstance().CreateNetwork(
@@ -89,7 +89,7 @@ CliResult ProjectParser::ParseXmlFile(const std::string xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateMnNodeResults(const std::string xmlPath)
+CliResult ProjectParser::CreateMnNodeResults(const std::string& xmlPath)
 {
 	try
 	{
@@ -174,7 +174,7 @@ CliResult ProjectParser::CreateMnNodeResults(const std::string xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateRmnNodeResults(const std::string xmlPath)
+CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 {
 	try
 	{
@@ -257,7 +257,7 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateCnNodeResults(const std::string xmlPath)
+CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 {
 	try
 	{
@@ -281,7 +281,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string xmlPath)
 			}
 			else
 			{
-				for (std::int32_t row = 0; row < cnResult.parameters.size(); row++)
+				for (std::uint32_t row = 0; row < cnResult.parameters.size(); row++)
 				{
 					std::uint8_t nodeId = 0;
 
@@ -448,8 +448,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string xmlPath)
 															moduleResult.parameters[moduleRow].at(0),			/** Module name */
 															moduleResult.parameters[moduleRow].at(1),			/** Module position */
 															moduleResult.parameters[moduleRow].at(2),			/** Module address */
-															moduleResult.parameters[moduleRow].at(3),			/** Module pathtoXDC */
-															moduleResult.parameters[moduleRow].at(4));			/** Module enabled */
+															moduleResult.parameters[moduleRow].at(3));			/** Module pathtoXDC */
 										if (!foRes.IsSuccessful())
 										{
 											CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, foRes);
@@ -511,8 +510,8 @@ IEC_Datatype ProjectParser::GetIecDataType(const xercesc::DOMNode* node)
 
 CliResult ProjectParser::CreateStructDataType(const ParserElement& element, 
 											  const std::uint8_t nodeId, 
-											  const std::string interfaceId, 
-											  const std::string modId, 
+											  const std::string& interfaceId, 
+											  const std::string& modId, 
 											  const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -525,7 +524,7 @@ CliResult ProjectParser::CreateStructDataType(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			/** Core Library API call to create StructDatatype */
 			Result res = OpenConfiguratorCore::GetInstance().CreateStructDatatype(
@@ -551,7 +550,7 @@ CliResult ProjectParser::CreateStructDataType(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < varDecResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < varDecResult.parameters.size(); subrow++)
 				{
 					IEC_Datatype data = GetIecDataType(varDecResult.node.at(subrow));
 					/** Set default value to size if value is empty */
@@ -589,8 +588,8 @@ CliResult ProjectParser::CreateStructDataType(const ParserElement& element,
 
 CliResult ProjectParser::CreateArrayDataType(const ParserElement& element, 
 											 const std::uint8_t nodeId, 
-											 const std::string interfaceId, 
-											 const std::string modId, 
+											 const std::string& interfaceId, 
+											 const std::string& modId, 
 											 const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -603,7 +602,7 @@ CliResult ProjectParser::CreateArrayDataType(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParserResult subpResult;
 
@@ -618,7 +617,7 @@ CliResult ProjectParser::CreateArrayDataType(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
 					std::uint32_t lowerLimit = 1U;
 					std::uint32_t upperLimit = 1U;
@@ -659,8 +658,8 @@ CliResult ProjectParser::CreateArrayDataType(const ParserElement& element,
 
 CliResult ProjectParser::CreateDataType(const ParserElement& element, 
 										const std::uint8_t nodeId, 
-										const std::string interfaceId,
-										const std::string modId, 
+										const std::string& interfaceId,
+										const std::string& modId, 
 										const std::uint32_t modposition)
 {
 	CliResult res;
@@ -685,9 +684,9 @@ CliResult ProjectParser::CreateDataType(const ParserElement& element,
 CliResult ProjectParser::SetParamAllowedValue(const ParserElement & element,
 												const std::uint8_t nodeId,
 												const xercesc::DOMNode* node,
-										 		const std::string uniqueId,
-										 		const std::string interfaceId, 
-										 		const std::string modId, 
+										 		const std::string& uniqueId,
+										 		const std::string& interfaceId, 
+										 		const std::string& modId, 
 										 		const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -705,7 +704,7 @@ CliResult ProjectParser::SetParamAllowedValue(const ParserElement & element,
 		std::vector<std::string> allowedValuelist;
 		std::string uniqueIdOutput;
 
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			allowedValuelist.push_back(pResult.parameters[row].at(0));
 		}
@@ -735,9 +734,9 @@ CliResult ProjectParser::SetParamAllowedValue(const ParserElement & element,
 CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 												const std::uint8_t nodeId,
 												const xercesc::DOMNode* node,
-												const std::string uniqueId,
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& uniqueId,
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -752,7 +751,7 @@ CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParserResult minpResult;
 			ParserResult maxpResult;
@@ -804,9 +803,9 @@ CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 CliResult ProjectParser::SetParamActualValue(const ParserElement& element,
 												const std::uint8_t nodeId,
 												const xercesc::DOMNode* node,
-												const std::string uniqueId,
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& uniqueId,
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -846,9 +845,9 @@ CliResult ProjectParser::SetParamActualValue(const ParserElement& element,
 CliResult ProjectParser::SetParamDefaultValue(const ParserElement& element,
 												const std::uint8_t nodeId,
 												const xercesc::DOMNode* node,
-												const std::string uniqueId,
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& uniqueId,
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -887,8 +886,8 @@ CliResult ProjectParser::SetParamDefaultValue(const ParserElement& element,
 
 CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element, 
 												 const std::uint8_t nodeId, 
-												 const std::string interfaceId, 
-												 const std::string modId, 
+												 const std::string& interfaceId, 
+												 const std::string& modId, 
 												 const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -901,7 +900,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParameterAccess accessOfParameter = GetParameterAccess(pResult.parameters[row].at(1));
 			IEC_Datatype data = GetIecDataType(pResult.node.at(row));
@@ -927,7 +926,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
 						ParameterAccess paramAccessSubNode = GetParameterAccess(subpResult.parameters[subrow].at(1));
 
@@ -1004,9 +1003,9 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 													const std::uint8_t nodeId,
 													const xercesc::DOMNode* parameterGroupNode,
-													const std::string paramGroupUId, 
-													const std::string interfaceId, 
-													const std::string modId, 
+													const std::string& paramGroupUId, 
+													const std::string& interfaceId, 
+													const std::string& modId, 
 													const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -1021,7 +1020,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			if (pResult.parameters[row].at(1).empty())	/** Is conditionalUniqueIDRef empty */
 			{
@@ -1080,7 +1079,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
 					if (subpResult.parameters[subrow].at(2).empty())	/** Is actualValue empty */
 					{
@@ -1135,8 +1134,8 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 
 CliResult ProjectParser::CreateParameterGroup(const ParserElement& element, 
 												const std::uint8_t nodeId, 
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -1149,7 +1148,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
 					OpenConfiguratorCli::GetInstance().networkName,
@@ -1183,7 +1182,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
 					std::uint8_t bitoffset = 0;
 
@@ -1214,8 +1213,8 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 
 CliResult ProjectParser::CreateParameterList(const ParserElement& element, 
 												const std::uint8_t nodeId, 
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -1229,7 +1228,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParameterAccess access = GetParameterAccess(pResult.parameters[row].at(1));
 			IEC_Datatype data = GetIecDataType(pResult.node.at(row));
@@ -1274,7 +1273,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 				}
 				else
 				{
-					for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+					for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 						{
 							ParameterAccess paramAccess = GetParameterAccess(subpResult.parameters[subrow].at(1));
 
@@ -1342,8 +1341,8 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 
 CliResult ProjectParser::ImportProfileBodyDevice(const ParserElement& element, 
 														  const std::uint8_t nodeId, 
-														  const std::string interfaceId, 
-														  const std::string modId, 
+														  const std::string& interfaceId, 
+														  const std::string& modId, 
 														  const std::uint32_t modPosition)
 {
 	CliResult subcrres;
@@ -1392,7 +1391,7 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			std::string dataType = pResult.parameters[row].at(0);
 			std::string accessType = pResult.parameters[row].at(1);
@@ -1451,8 +1450,8 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 
 CliResult ProjectParser::CreateObject(const ParserElement& element, 
 										const std::uint8_t nodeId,
-										const std::vector<std::string> forcedObject, 
-										const std::vector<std::string> forcedSubObject)
+										const std::vector<std::string>& forcedObject, 
+										const std::vector<std::string>& forcedSubObject)
 {
 	ParserResult pResult;
 
@@ -1464,7 +1463,7 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			std::uint32_t objId = 0;
 			std::uint8_t objIdType = 0;
@@ -1599,7 +1598,7 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 			}
 			else
 			{
-				for (std::int32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
+				for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 				{
 					std::uint8_t subObjId = 0;
 					std::uint8_t subObjIdType = 0;
@@ -1711,10 +1710,10 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 
 CliResult ProjectParser::ImportProfileBodyCommn(const ParserElement& element, 
 												const std::uint8_t nodeId, 
-												const std::vector<std::string> forcedObject, 
-												const std::vector<std::string> forcedSubObject, 
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::vector<std::string>& forcedObject, 
+												const std::vector<std::string>& forcedSubObject, 
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	CliResult subcrres;
@@ -1756,9 +1755,9 @@ CliResult ProjectParser::CreateNwMgtGeneralFeatures(const ParserElement& element
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
-			for (std::int32_t param = 0; param < pResult.parameters[row].size(); param++)
+			for (std::uint32_t param = 0; param < pResult.parameters[row].size(); param++)
 			{
 				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
 									OpenConfiguratorCli::GetInstance().networkName,
@@ -1790,9 +1789,9 @@ CliResult ProjectParser::CreateNwMgtMnFeatures(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
-			for (std::int32_t param = 0; param < pResult.parameters[row].size(); param++)
+			for (std::uint32_t param = 0; param < pResult.parameters[row].size(); param++)
 			{
 				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
 					OpenConfiguratorCli::GetInstance().networkName,
@@ -1824,9 +1823,9 @@ CliResult ProjectParser::CreateNwMgtCnFeatures(const ParserElement& element,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
-			for (std::int32_t param = 0; param < pResult.parameters[row].size(); param++)
+			for (std::uint32_t param = 0; param < pResult.parameters[row].size(); param++)
 			{
 				Result res = OpenConfiguratorCore::GetInstance().SetFeatureValue(
 					OpenConfiguratorCli::GetInstance().networkName,
@@ -1854,14 +1853,14 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 	CliResult res;
 
 	/** Validate the XDC file */
-	res = ParameterValidator::GetInstance().IsXdcFileValid(indexString);
+	res = ParameterValidator::GetInstance().IsXdcFileValid(xdcPath);
 	if (!res.IsSuccessful())
 	{
 		/** XDC file is not exists or invalid */
 		return res;
 	}
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(indexString);
+	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
 	if (!res.IsSuccessful())
 	{
 		/** XDC file schema is not valid */
@@ -1871,7 +1870,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 	ParserElement element;
 	CliResult ceres;
 
-	ceres = element.CreateElement(indexString);
+	ceres = element.CreateElement(xdcPath);
 	if (!ceres.IsSuccessful())
 	{
 		return ceres;
@@ -1888,7 +1887,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 		}
 		else
 		{
-			for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+			for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 			{
 				std::uint32_t maxModules = 0;
 
@@ -2010,11 +2009,11 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 }
 
 CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId, 
-												const std::string cnXdc,
-												const std::vector<std::string> forcedObject,
-												const std::vector<std::string> forcedSubObject, 
-												const std::string interfaceId, 
-												const std::string modId, 
+												const std::string& cnXdc,
+												const std::vector<std::string>& forcedObject,
+												const std::vector<std::string>& forcedSubObject, 
+												const std::string& interfaceId, 
+												const std::string& modId, 
 												const std::uint32_t modPosition)
 {
 	std::string indexString = "/" + cnXdc;
@@ -2096,7 +2095,7 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 }
 
 CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement, 
-											  const std::string xPathExpression, 
+											  const std::string& xPathExpression, 
 											  const std::uint8_t nodeId)
 {
 	ParserResult pResult;
@@ -2225,7 +2224,7 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 
 CliResult ProjectParser::SetNodeAssignment(const NodeAssignment nodeassign, 
 										   const std::uint8_t nodeId, 
-										   const std::string value)
+										   const std::string& value)
 {
 	if (value.compare("true") == 0)
 	{
@@ -2252,14 +2251,13 @@ CliResult ProjectParser::SetNodeAssignment(const NodeAssignment nodeassign,
 }
 
 CliResult ProjectParser::CreateModule(const std::uint8_t nodeId, 
-										const std::vector<std::string> forcedObject, 
-										const std::vector<std::string> forcedSubObject, 
-										const std::string interfacecUId, 
-										const std::string moduleName, 
-										const std::string modulePosition, 
-										const std::string moduleAddress, 
-										const std::string modulePathToXDC, 
-										const std::string moduleEnabled)
+										const std::vector<std::string>& forcedObject, 
+										const std::vector<std::string>& forcedSubObject, 
+										const std::string& interfacecUId, 
+										const std::string& moduleName, 
+										const std::string& modulePosition, 
+										const std::string& moduleAddress, 
+										const std::string& modulePathToXDC)
 {
 	std::string indexString = "/" + modulePathToXDC;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
@@ -2302,7 +2300,7 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 		}
 		else
 		{
-			for(std::int32_t moduleSubRow = 0; moduleSubRow < pResult.parameters.size(); moduleSubRow++)
+			for (std::uint32_t moduleSubRow = 0; moduleSubRow < pResult.parameters.size(); moduleSubRow++)
 			{
 				std::uint8_t minPosition = 0;
 				std::uint8_t maxPosition = MAX_MODULE_POSITION;
@@ -2378,10 +2376,10 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 
 CliResult ProjectParser::CreateModuleObject(const ParserElement& element, 
 											const std::uint8_t nodeId, 
-											const std::vector<std::string> forcedObject, 
-											const std::vector<std::string> forcedSubObject, 
-											const std::string interfaceId, 
-											const std::string modId, 
+											const std::vector<std::string>& forcedObject, 
+											const std::vector<std::string>& forcedSubObject, 
+											const std::string& interfaceId, 
+											const std::string& modId, 
 											const std::uint32_t modPosition)
 {
 	ParserResult pResult;
@@ -2681,8 +2679,8 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 }
 
 std::uint32_t ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId, 
-											   const std::string interfaceId, 
-											   const std::string modId, 
+											   const std::string& interfaceId, 
+											   const std::string& modId, 
 											   const std::uint32_t modposition,
 											   const std::uint32_t objId) 
 {
@@ -2704,8 +2702,8 @@ std::uint32_t ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId,
 }
 
 std::int32_t ProjectParser::GetNewSubObjectIndex(const std::uint8_t nodeId, 
-												 const std::string interfaceId, 
-												 const std::string modId, 
+												 const std::string& interfaceId, 
+												 const std::string& modId, 
 												 const std::uint32_t modPosition,
 												 const std::uint8_t subObjId) 
 {
@@ -2727,10 +2725,10 @@ std::int32_t ProjectParser::GetNewSubObjectIndex(const std::uint8_t nodeId,
 }
 
 std::string ProjectParser::GetNewParameterId(const std::uint8_t nodeId, 
-											 const std::string interfaceId, 
-											 const std::string modId, 
+											 const std::string& interfaceId, 
+											 const std::string& modId, 
 											 const std::uint32_t modPosition, 
-											 const std::string uniqueID)
+											 const std::string& uniqueID)
 {
 	std::string parameterName;
 
@@ -2749,7 +2747,7 @@ std::string ProjectParser::GetNewParameterId(const std::uint8_t nodeId,
 }
 
 CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement, 
-												const std::string xPathExpression,
+												const std::string& xPathExpression,
 												std::vector<std::string>& forcedObj, 
 												std::vector<std::string>& forcedSubObj)
 {
@@ -2764,7 +2762,7 @@ CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement,
 	}
 	else
 	{
-		for (std::int32_t row = 0; row < pResult.parameters.size(); row++)
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			/** Updates the vector based on existing object */
 			std::string index = pResult.parameters[row].at(0);
@@ -2779,18 +2777,18 @@ CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement,
 	return CliResult();
 }
 
-CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string> forcedObject, 
-											 const std::vector<std::string> forcedSubObject, 
+CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& forcedObject, 
+											 const std::vector<std::string>& forcedSubObject, 
 											 const std::uint8_t nodeId, 
-											 const std::string objectIndex, 
-											 const std::string SubobjectIndex, 
+											 const std::string& objectIndex, 
+											 const std::string& SubobjectIndex, 
 											 const std::uint32_t objectId, 
 											 const std::uint8_t subObjectId, 
-											 const std::string objectValue, 
-											 const std::string subobjectValue, 
+											 const std::string& objectValue, 
+											 const std::string& subobjectValue, 
 											 const bool value,
-											 const std::string interfaceId, 
-											 const std::string modId, 
+											 const std::string& interfaceId, 
+											 const std::string& modId, 
 											 const std::uint32_t modPosition)
 {
 	if (!forcedObject.empty())
@@ -2880,85 +2878,85 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string> forc
 	return CliResult();
 }
 
-IEC_Datatype ProjectParser::GetDataType(const std::string dataType)
+IEC_Datatype ProjectParser::GetDataType(const std::string& dataType)
 {
-	if (dataType == "UNDEFINED")
+	if (dataType.compare("UNDEFINED") == 0)
 	{
 		return IEC_Datatype::UNDEFINED;
 	}
-	else if (dataType == "BITSTRING")
+	else if (dataType.compare("BITSTRING") == 0)
 	{
 		return IEC_Datatype::BITSTRING;
 	}
-	else if (dataType == "BOOL")
+	else if (dataType.compare("BOOL") == 0)
 	{
 		return IEC_Datatype::BOOL;
 	}
-	else if (dataType == "BYTE")
+	else if (dataType.compare("BYTE") == 0)
 	{
 		return IEC_Datatype::BYTE;
 	}
-	else if (dataType == "_CHAR")
+	else if (dataType.compare("_CHAR") == 0)
 	{
 		return IEC_Datatype::_CHAR;
 	}
-	else if (dataType == "WORD")
+	else if (dataType.compare("WORD") == 0)
 	{
 		return IEC_Datatype::WORD;
 	}
-	else if (dataType == "DWORD")
+	else if (dataType.compare("DWORD") == 0)
 	{
 		return IEC_Datatype::DWORD;
 	}
-	else if (dataType == "LWORD")
+	else if (dataType.compare("LWORD") == 0)
 	{
 		return IEC_Datatype::LWORD;
 	}
-	else if (dataType == "SINT")
+	else if (dataType.compare("SINT") == 0)
 	{
 		return IEC_Datatype::SINT;
 	}
-	else if (dataType == "INT")
+	else if (dataType.compare("INT") == 0)
 	{
 		return IEC_Datatype::INT;
 	}
-	else if (dataType == "DINT")
+	else if (dataType.compare("DINT") == 0)
 	{
 		return IEC_Datatype::DINT;
 	}
-	else if (dataType == "LINT")
+	else if (dataType.compare("LINT") == 0)
 	{
 		return IEC_Datatype::LINT;
 	}
-	else if (dataType == "USINT")
+	else if (dataType.compare("USINT") == 0)
 	{
 		return IEC_Datatype::USINT;
 	}
-	else if (dataType == "UINT")
+	else if (dataType.compare("UINT") == 0)
 	{
 		return IEC_Datatype::UINT;
 	}
-	else if (dataType == "UDINT")
+	else if (dataType.compare("UDINT") == 0)
 	{
 		return IEC_Datatype::UDINT;
 	}
-	else if (dataType == "ULINT")
+	else if (dataType.compare("ULINT") == 0)
 	{
 		return IEC_Datatype::ULINT;
 	}
-	else if (dataType == "REAL")
+	else if (dataType.compare("REAL") == 0)
 	{
 		return IEC_Datatype::REAL;
 	}
-	else  if (dataType == "LREAL")
+	else  if (dataType.compare("LREAL") == 0)
 	{
 		return IEC_Datatype::LREAL;
 	}
-	else  if (dataType == "STRING")
+	else  if (dataType.compare("STRING") == 0)
 	{
 		return IEC_Datatype::STRING;
 	}
-	else if (dataType == "WSTRING")
+	else if (dataType.compare("WSTRING") == 0)
 	{
 		return IEC_Datatype::WSTRING;
 	}
@@ -2966,37 +2964,37 @@ IEC_Datatype ProjectParser::GetDataType(const std::string dataType)
 	return IEC_Datatype::UNDEFINED;
 }
 
-ParameterAccess ProjectParser::GetParameterAccess(const std::string access)
+ParameterAccess ProjectParser::GetParameterAccess(const std::string& access)
 {
-	if (access == "constant")
+	if (access.compare("constant") == 0)
 	{
 		return ParameterAccess::constant;
 	}
-	else if (access == "read")
+	else if (access.compare("read") == 0)
 	{
 		return ParameterAccess::read;
 	}
-	else if (access == "write")
+	else if (access.compare("write") == 0)
 	{
 		return ParameterAccess::write;
 	}
-	else if (access == "readWrite")
+	else if (access.compare("readWrite") == 0)
 	{
 		return ParameterAccess::readWrite;
 	}
-	else if (access == "readWriteInput")
+	else if (access.compare("readWriteInput") == 0)
 	{
 		return ParameterAccess::readWriteInput;
 	}
-	else if (access == "readWriteOutput")
+	else if (access.compare("readWriteOutput") == 0)
 	{
 		return ParameterAccess::readWriteOutput;
 	}
-	else if (access == "noAccess")
+	else if (access.compare("noAccess") == 0)
 	{
 		return ParameterAccess::noAccess;
 	}
-	else if (access == "undefined")
+	else if (access.compare("undefined") == 0)
 	{
 		return ParameterAccess::undefined;
 	}
@@ -3025,121 +3023,121 @@ ObjectType ProjectParser::GetObjectType(const std::uint8_t objType)
 	}
 }
 
-PlkDataType ProjectParser::GetPlkDataType(const std::string plkDataType)
+PlkDataType ProjectParser::GetPlkDataType(const std::string& plkDataType)
 {
-	if (plkDataType == "0000")
+	if (plkDataType.compare("0000") == 0)
 	{
 		return PlkDataType::UNDEFINED;
 	}
-	else if (plkDataType == "0001")
+	else if (plkDataType.compare("0001") == 0)
 	{
 		return PlkDataType::BOOLEAN;
 	}
-	else if (plkDataType == "0002")
+	else if (plkDataType.compare("0002") == 0)
 	{
 		return PlkDataType::INTEGER8;
 	}
-	else if (plkDataType == "0003")
+	else if (plkDataType.compare("0003") == 0)
 	{
 		return PlkDataType::INTEGER16;
 	}
-	else if (plkDataType == "0004")
+	else if (plkDataType.compare("0004") == 0)
 	{
 		return PlkDataType::INTEGER32;
 	}
-	else if (plkDataType == "0005")
+	else if (plkDataType.compare("0005") == 0)
 	{
 		return PlkDataType::UNSIGNED8;
 	}
-	else if (plkDataType == "0006")
+	else if (plkDataType.compare("0006") == 0)
 	{
 		return PlkDataType::UNSIGNED16;
 	}
-	else if (plkDataType == "0007")
+	else if (plkDataType.compare("0007") == 0)
 	{
 		return PlkDataType::UNSIGNED32;
 	}
-	else if (plkDataType == "0008")
+	else if (plkDataType.compare("0008") == 0)
 	{
 		return PlkDataType::REAL32;
 	}
-	else if (plkDataType == "0009")
+	else if (plkDataType.compare("0009") == 0)
 	{
 		return PlkDataType::VISIBLE_STRING;
 	}
-	else if (plkDataType == "000A")
+	else if (plkDataType.compare("000A") == 0)
 	{
 		return PlkDataType::OCTET_STRING;
 	}
-	else if (plkDataType == "000B")
+	else if (plkDataType.compare("000B") == 0)
 	{
 		return PlkDataType::UNICODE_STRING;
 	}
-	else if (plkDataType == "000C")
+	else if (plkDataType.compare("000C") == 0)
 	{
 		return PlkDataType::TIME_OF_DAY;
 	}
-	else if (plkDataType == "000D")
+	else if (plkDataType.compare("000D") == 0)
 	{
 		return PlkDataType::TIME_DIFF;
 	}
-	else if (plkDataType == "000F")
+	else if (plkDataType.compare("000F") == 0)
 	{
 		return PlkDataType::Domain;
 	}
-	else if (plkDataType == "0010")
+	else if (plkDataType.compare("0010") == 0)
 	{
 		return PlkDataType::INTEGER24;
 	}
-	else if (plkDataType == "0011")
+	else if (plkDataType.compare("0011") == 0)
 	{
 		return PlkDataType::REAL64;
 	}
-	else if (plkDataType == "0012")
+	else if (plkDataType.compare("0012") == 0)
 	{
 		return PlkDataType::INTEGER40;
 	}
-	else if (plkDataType == "0013")
+	else if (plkDataType.compare("0013") == 0)
 	{
 		return PlkDataType::INTEGER48;
 	}
-	else if (plkDataType == "0014")
+	else if (plkDataType.compare("0014") == 0)
 	{
 		return PlkDataType::INTEGER56;
 	}
-	else if (plkDataType == "0015")
+	else if (plkDataType.compare("0015") == 0)
 	{
 		return PlkDataType::INTEGER64;
 	}
-	else if (plkDataType == "0016")
+	else if (plkDataType.compare("0016") == 0)
 	{
 		return PlkDataType::UNSIGNED24;
 	}
-	else if (plkDataType == "0018")
+	else if (plkDataType.compare("0018") == 0)
 	{
 		return PlkDataType::UNSIGNED40;
 	}
-	else if (plkDataType == "0019")
+	else if (plkDataType.compare("0019") == 0)
 	{
 		return PlkDataType::UNSIGNED48;
 	}
-	else if (plkDataType == "001A")
+	else if (plkDataType.compare("001A") == 0)
 	{
 		return PlkDataType::UNSIGNED56;
 	}
-	else if (plkDataType == "001B")
+	else if (plkDataType.compare("001B") == 0)
 	{
 		return PlkDataType::UNSIGNED64;
 	}
-	else if (plkDataType == "0401")
+	else if (plkDataType.compare("0401") == 0)
 	{
 		return PlkDataType::MAC_ADDRESS;
 	}
-	else if (plkDataType == "0402")
+	else if (plkDataType.compare("0402") == 0)
 	{
 		return PlkDataType::IP_ADDRESS;
 	}
-	else if (plkDataType == "0403")
+	else if (plkDataType.compare("0403") == 0)
 	{
 		return PlkDataType::NETTIME;
 	}
@@ -3147,37 +3145,37 @@ PlkDataType ProjectParser::GetPlkDataType(const std::string plkDataType)
 	return PlkDataType::UNDEFINED;
 }
 
-AccessType ProjectParser::GetObjAccessType(const std::string accessType)
+AccessType ProjectParser::GetObjAccessType(const std::string& accessType)
 {
-	if (accessType == "undefined")
+	if (accessType.compare("undefined") == 0)
 	{
 		return AccessType::UNDEFINED;
 	}
-	else if (accessType == "rw")
+	else if (accessType.compare("rw") == 0)
 	{
 		return AccessType::RW;
 	}
-	else if (accessType == "rws")
+	else if (accessType.compare("rws") == 0)
 	{
 		return AccessType::RWS;
 	}
-	else if (accessType == "wo")
+	else if (accessType.compare("wo") == 0)
 	{
 		return AccessType::WO;
 	}
-	else if (accessType == "wos")
+	else if (accessType.compare("wos") == 0)
 	{
 		return AccessType::WOS;
 	}
-	else if (accessType == "ro")
+	else if (accessType.compare("ro") == 0)
 	{
 		return AccessType::RO;
 	}
-	else if (accessType == "const")
+	else if (accessType.compare("const") == 0)
 	{
 		return AccessType::CONST;
 	}
-	else if (accessType == "cond")
+	else if (accessType.compare("cond") == 0)
 	{
 		return AccessType::COND;
 	}
@@ -3185,29 +3183,29 @@ AccessType ProjectParser::GetObjAccessType(const std::string accessType)
 	return AccessType::UNDEFINED;
 }
 
-PDOMapping ProjectParser::GetPdoMapping(const std::string pdoMapp)
+PDOMapping ProjectParser::GetPdoMapping(const std::string& pdoMapp)
 {
-	if (pdoMapp == "undefined")
+	if (pdoMapp.compare("undefined") == 0)
 	{
 		return PDOMapping::UNDEFINED;
 	}
-	else  if (pdoMapp == "no")
+	else  if (pdoMapp.compare("no") == 0)
 	{
 		return PDOMapping::NO;
 	}
-	else if (pdoMapp == "default")
+	else if (pdoMapp.compare("default") == 0)
 	{
 		return PDOMapping::DEFAULT;
 	}
-	else if (pdoMapp == "optional")
+	else if (pdoMapp.compare("optional") == 0)
 	{
 		return PDOMapping::OPTIONAL;
 	}
-	else if (pdoMapp == "TPDO")
+	else if (pdoMapp.compare("TPDO") == 0)
 	{
 		return PDOMapping::TPDO;
 	}
-	else if (pdoMapp == "RPDO")
+	else if (pdoMapp.compare("RPDO") == 0)
 	{
 		return PDOMapping::RPDO;
 	}
@@ -3215,7 +3213,7 @@ PDOMapping ProjectParser::GetPdoMapping(const std::string pdoMapp)
 	return PDOMapping::UNDEFINED;
 }
 
-DynamicChannelAccessType ProjectParser::GetDynamicChannelAccessType(const std::string accessType)
+DynamicChannelAccessType ProjectParser::GetDynamicChannelAccessType(const std::string& accessType)
 {
 	if (accessType.compare("readOnly") == 0)
 	{
@@ -3233,17 +3231,17 @@ DynamicChannelAccessType ProjectParser::GetDynamicChannelAccessType(const std::s
 	return DynamicChannelAccessType::UNDEFINED;
 }
 
-ModuleAddressing ProjectParser::GetModuleAddressing(const std::string moduleAddressing)
+ModuleAddressing ProjectParser::GetModuleAddressing(const std::string& moduleAddressing)
 {
-	if (moduleAddressing == "manual")
+	if (moduleAddressing.compare("manual") == 0)
 	{
 		return ModuleAddressing::MANUAL;
 	}
-	else if (moduleAddressing == "position")
+	else if (moduleAddressing.compare("position") == 0)
 	{
 		return ModuleAddressing::POSITION;
 	}
-	else if (moduleAddressing == "next")
+	else if (moduleAddressing.compare("next") == 0)
 	{
 		return ModuleAddressing::NEXT;
 	}
@@ -3251,13 +3249,13 @@ ModuleAddressing ProjectParser::GetModuleAddressing(const std::string moduleAddr
 	return ModuleAddressing::NEXT;
 }
 
-SortNumber ProjectParser::GetSortNumber(const std::string sortNumber)
+SortNumber ProjectParser::GetSortNumber(const std::string& sortNumber)
 {
-	if (sortNumber == "continuous")
+	if (sortNumber.compare("continuous") == 0)
 	{
 		return SortNumber::CONTINUOUS;
 	}
-	else if (sortNumber == "address")
+	else if (sortNumber.compare("address") == 0)
 	{
 		return SortNumber::ADDRESS;
 	}
@@ -3265,13 +3263,13 @@ SortNumber ProjectParser::GetSortNumber(const std::string sortNumber)
 	return SortNumber::CONTINUOUS;
 }
 
-SortMode ProjectParser::GetSortMode(const std::string sortMode)
+SortMode ProjectParser::GetSortMode(const std::string& sortMode)
 {
-	if (sortMode == "index")
+	if (sortMode.compare("index") == 0)
 	{
 		return SortMode::INDEX;
 	}
-	else if (sortMode == "subindex")
+	else if (sortMode.compare("subindex") == 0)
 	{
 		return SortMode::SUBINDEX;
 	}

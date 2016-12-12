@@ -50,8 +50,8 @@ ParameterValidator& ParameterValidator::GetInstance()
 	return instance;
 }
 
-CliResult ParameterValidator::IsFileValid(const std::string fileName, 
-											const std::string fileExtn)
+CliResult ParameterValidator::IsFileValid(const std::string& fileName, 
+											const std::string& fileExtn)
 {
 	try
 	{
@@ -79,17 +79,17 @@ CliResult ParameterValidator::IsFileValid(const std::string fileName,
 	return CliResult();
 }
 
-CliResult ParameterValidator::IsXmlFileValid(const std::string xmlFileName)
+CliResult ParameterValidator::IsXmlFileValid(const std::string& xmlFileName)
 {
 	return IsFileValid(xmlFileName, ".xml");
 }
 
-CliResult ParameterValidator::IsXdcFileValid(const std::string xdcFileName)
+CliResult ParameterValidator::IsXdcFileValid(const std::string& xdcFileName)
 {
 	return IsFileValid(xdcFileName, ".xdc");
 }
 
-CliResult ParameterValidator::IsPathValid(const std::string path)
+CliResult ParameterValidator::IsPathValid(const std::string& path)
 {
 	try
 	{
@@ -109,18 +109,18 @@ CliResult ParameterValidator::IsPathValid(const std::string path)
 	return CliResult();
 }
 
-CliResult ParameterValidator::IsXmlSchemaValid(const std::string xmlFileName)
+CliResult ParameterValidator::IsXmlSchemaValid(const std::string& xmlFileName)
 {
 	return IsSchemaValid(xmlFileName, kXmlSchemaDefinitionFileName);
 }
 
-CliResult ParameterValidator::IsXdcSchemaValid(const std::string xdcFileName)
+CliResult ParameterValidator::IsXdcSchemaValid(const std::string& xdcFileName)
 {
 	return IsSchemaValid(xdcFileName, kXdcSchemaDefinitionFileName);
 }
 
-CliResult ParameterValidator::IsSchemaValid(const std::string fileName, 
-											const std::string schemaDefFile)
+CliResult ParameterValidator::IsSchemaValid(const std::string& fileName, 
+											const std::string& schemaDefFile)
 {
 	try
 	{
