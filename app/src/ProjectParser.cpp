@@ -142,7 +142,7 @@ CliResult ProjectParser::CreateMnNodeResults(const std::string& xmlPath)
 													forcedModularNodeSubObj);
 					if (!clires.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+						LOG_WARN() << clires.GetErrorMessage();
 					}
 
 					/** Core Library API calls to import the XDD of node */
@@ -160,7 +160,7 @@ CliResult ProjectParser::CreateMnNodeResults(const std::string& xmlPath)
 					clires = CreateNodeAssignment(xmlParserElement, kMnXpathExpression, nodeId);
 					if (!clires.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+						LOG_WARN() << clires.GetErrorMessage();
 					}
 				}
 			}
@@ -194,7 +194,7 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 											kFormatStrRmnXpathExpression);
 			if (!crres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+				LOG_WARN() << crres.GetErrorMessage();
 			}
 			else
 			{
@@ -215,11 +215,9 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 										true);
 					if (!res.IsSuccessful())
 					{
-						CliResult CliResult;
+						CliResult cnclires = CliLogger::GetInstance().HandleCoreApiFailed("Create RMN Node", res);
 
-						CliResult = CliLogger::GetInstance().HandleCoreApiFailed("Create RMN Node", res);
-
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, CliResult);
+						LOG_WARN() << cnclires.GetErrorMessage();
 					}
 
 					CliResult clires;
@@ -234,7 +232,7 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 													"", "", 0U);
 					if (!clires.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+						LOG_WARN() << clires.GetErrorMessage();
 					}
 
 					/** Core Library API calls to update the node assignment of node */
@@ -243,7 +241,7 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 													nodeId);
 					if (!clires.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+						LOG_WARN() << clires.GetErrorMessage();
 					}
 				}
 			}
@@ -299,7 +297,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 														kFormatStrIntrfcXpathExpression);
 					if (!clires.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+						LOG_WARN() << clires.GetErrorMessage();
 
 						/** Core Library API call to create Node */
 						Result res = OpenConfiguratorCore::GetInstance().CreateNode(
@@ -311,7 +309,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 						{
 							subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 
 						CliResult clires;
@@ -334,7 +332,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 						{
 							clires = CliLogger::GetInstance().HandleCoreApiFailed("Enable CN Node", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 
 						std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
@@ -345,7 +343,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 														forcedModularNodeObj, forcedModularNodeSubObj);
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 						
 						/** Core Library API calls to import the XDC of node */
@@ -355,14 +353,14 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 															"", "", 0U);
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 						
 						/** Core Library API calls to update the node assignment of node */
 						subclires = CreateNodeAssignment(xmlParserElement, kCnXpathExpression, nodeId);
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 					}
 					else
@@ -376,7 +374,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 						{
 							subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 
 						std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
@@ -387,7 +385,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 															forcedModularNodeObj, forcedModularNodeSubObj);
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 
 						/** Core Library API calls to import the XDC of modular head node */
@@ -396,21 +394,21 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 															"", "", 0U);	
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 
 						/** Core Library API calls to update the node assignment of modular head node */
 						subclires = CreateNodeAssignment(xmlParserElement, kCnXpathExpression, nodeId);
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 
 						/** Core Library API calls to create interface of modular head node */
 						subclires = CreateInterface(nodeId, cnResult.parameters[row].at(1));	/** pathToXDC */
 						if (!subclires.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subclires);
+							LOG_WARN() << subclires.GetErrorMessage();
 						}
 						else
 						{
@@ -424,7 +422,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 																				kFormatStrModuleXpathExpression);
 								if (!clicrres.IsSuccessful())
 								{
-									CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clicrres);
+									LOG_WARN() << clicrres.GetErrorMessage();
 								}
 								else
 								{
@@ -439,7 +437,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 																	forcedModularNodeObj, forcedModularNodeSubObj);
 										if (!foRes.IsSuccessful())
 										{
-											CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, foRes);
+											LOG_WARN() << foRes.GetErrorMessage();
 										}
 
 										foRes = CreateModule(nodeId,
@@ -451,7 +449,7 @@ CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
 															moduleResult.parameters[moduleRow].at(3));			/** Module pathtoXDC */
 										if (!foRes.IsSuccessful())
 										{
-											CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, foRes);
+											LOG_WARN() << foRes.GetErrorMessage();
 										}
 									}
 								}
@@ -546,7 +544,7 @@ CliResult ProjectParser::CreateStructDataType(const ParserElement& element,
 										pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 			else
 			{
@@ -613,7 +611,7 @@ CliResult ProjectParser::CreateArrayDataType(const ParserElement& element,
 										pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 			else
 			{
@@ -668,14 +666,14 @@ CliResult ProjectParser::CreateDataType(const ParserElement& element,
 	res = CreateStructDataType(element, nodeId, interfaceId, modId, modposition);
 	if (!res.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+		LOG_WARN() << res.GetErrorMessage();
 	}
 
 	/** Creates array data type of node into the core library */
 	res = CreateArrayDataType(element, nodeId, interfaceId, modId, modposition);
 	if (!res.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+		LOG_WARN() << res.GetErrorMessage();
 	}
 
 	return CliResult();
@@ -896,7 +894,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 								kFormatStrParameterTemplateXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -964,7 +962,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 												modId, modPosition);
 				if (!subcrres.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+					LOG_WARN() << subcrres.GetErrorMessage();
 				}
 
 				/** Updates the allowed range of parameter template.*/
@@ -973,7 +971,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 												modId, modPosition);
 				if (!subcrres.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+					LOG_WARN() << subcrres.GetErrorMessage();
 				}
 
 				/** Updates the default value of parameter template.*/
@@ -982,7 +980,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 												modId, modPosition);
 				if (!subcrres.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+					LOG_WARN() << subcrres.GetErrorMessage();
 				}
 
 				/** Updates the actual value of parameter template.*/
@@ -991,7 +989,7 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 												modId, modPosition);
 				if (!subcrres.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+					LOG_WARN() << subcrres.GetErrorMessage();
 				}
 			}
 		}
@@ -1016,7 +1014,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 								parameterGroupNode);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -1075,7 +1073,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 										pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 			else
 			{
@@ -1144,7 +1142,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 									kFormatStrParameterGroupXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -1167,7 +1165,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 												modId, modPosition);
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 
 			ParserResult subpResult;
@@ -1178,7 +1176,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 										pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 			else
 			{
@@ -1224,7 +1222,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 											kFormatStrParameterXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -1304,7 +1302,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 											modId, modPosition);
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 
 			/** Updates the allowed range of parameter.*/
@@ -1313,7 +1311,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 											modId, modPosition);
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 
 			/** Updates the default value of parameter.*/
@@ -1322,7 +1320,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 											modId, modPosition);
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 
 			/** Updates the actual value of parameter.*/
@@ -1331,7 +1329,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 											modId, modPosition);
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 		}
 	}
@@ -1351,28 +1349,28 @@ CliResult ProjectParser::ImportProfileBodyDevice(const ParserElement& element,
 	subcrres = CreateDataType(element, nodeId, interfaceId, modId, modPosition);
 	if (!subcrres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+		LOG_WARN() << subcrres.GetErrorMessage();
 	}
 
 	/** Creates parameter template of node into the core library */
 	subcrres = CreateParameterTemplate(element, nodeId, interfaceId, modId, modPosition);
 	if (!subcrres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+		LOG_WARN() << subcrres.GetErrorMessage();
 	}
 
 	/** Creates parameter list of node into the core library */
 	subcrres = CreateParameterList(element, nodeId, interfaceId, modId, modPosition);
 	if (!subcrres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+		LOG_WARN() << subcrres.GetErrorMessage();
 	}
 
 	/** Creates parameter Group of node into the core library */
 	subcrres = CreateParameterGroup(element, nodeId, interfaceId, modId, modPosition);
 	if (!subcrres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+		LOG_WARN() << subcrres.GetErrorMessage();
 	}
 
 	return CliResult();
@@ -1387,7 +1385,7 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 											kFormatStrDynamicChnlXpathExpressionModule);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -1459,7 +1457,7 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 											kFormatStrObjectXpathExpression);
 	if (!crres.IsSuccessful())
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, crres);
+		LOG_WARN() << crres.GetErrorMessage();
 	}
 	else
 	{
@@ -1594,7 +1592,7 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 											pResult.node.at(row));
 			if (!subcrres.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+				LOG_WARN() << subcrres.GetErrorMessage();
 			}
 			else
 			{
@@ -1698,7 +1696,7 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 														subObjActualValue, false, "", "", 0U);
 					if (!cliRes.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, cliRes);
+						LOG_WARN() << cliRes.GetErrorMessage();
 					}
 				}
 			}
@@ -1725,7 +1723,7 @@ CliResult ProjectParser::ImportProfileBodyCommn(const ParserElement& element,
 								forcedSubObject);
 		if (!subcrres.IsSuccessful())
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+			LOG_WARN() << subcrres.GetErrorMessage();
 		}
 	}
 	else
@@ -1734,7 +1732,7 @@ CliResult ProjectParser::ImportProfileBodyCommn(const ParserElement& element,
 										interfaceId, modId, modPosition);
 		if (!subcrres.IsSuccessful())
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, subcrres);
+			LOG_WARN() << subcrres.GetErrorMessage();
 		}
 	}
 
@@ -1938,7 +1936,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 											kFormatStrAppLayerInterfaceXpathExpression);
 				if (!cliRes.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, cliRes);
+					LOG_WARN() << cliRes.GetErrorMessage();
 				}
 				else
 				{
@@ -1950,7 +1948,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 																			kFormatStrInterfaceRangeXpathExpression);
 						if (!rescli.IsSuccessful())
 						{
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, rescli);
+							LOG_WARN() << rescli.GetErrorMessage();
 						}
 						else
 						{
@@ -2050,14 +2048,14 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 		res = ImportProfileBodyDevice(element, nodeId, interfaceId, modId, modPosition);
 		if (!res.IsSuccessful())
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+			LOG_WARN() << res.GetErrorMessage();
 		}
 
 		res = ImportProfileBodyCommn(element, nodeId, forcedObject, forcedSubObject, 
 										interfaceId, modId, modPosition);
 		if (!res.IsSuccessful())
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+			LOG_WARN() << res.GetErrorMessage();
 		}
 
 		if (nodeId > MAX_CN_NODE_ID)
@@ -2065,7 +2063,7 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 			res = CreateDynamicChannels(element, nodeId);
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 			}
 		}
 
@@ -2074,19 +2072,19 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 			res = CreateNwMgtGeneralFeatures(element, nodeId);
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 			}
 
 			res = CreateNwMgtMnFeatures(element, nodeId);
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 			}
 
 			res = CreateNwMgtCnFeatures(element, nodeId);
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 			}
 		}
 	}
@@ -2115,7 +2113,7 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 												pResult.parameters[0].at(0));	/** TaransmitPres value */
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 			}
 		}
 		else
@@ -2125,7 +2123,7 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 				CliResult res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_IS_CN, nodeId, "true");
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 			}
 			else
@@ -2135,75 +2133,75 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_IS_CN, nodeId, "true");
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_MANDATORY_CN, 
 										nodeId, pResult.parameters[0].at(1));		/** isMandatory value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_START_CN, 
 										nodeId, pResult.parameters[0].at(2));			/** autostartNode value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_KEEPALIVE, 
 										nodeId, pResult.parameters[0].at(3));			/** resetInOperational value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_SWVERSIONCHECK, 
 										nodeId, pResult.parameters[0].at(4));	/** verifyAppSwVersion value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_SWUPDATE, 
 										nodeId, pResult.parameters[0].at(5));				/** autoAppSwUpdateAllowed value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_ASYNCONLY_NODE, 
 										nodeId, pResult.parameters[0].at(7));				/** isAsyncOnly value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_EXISTS, nodeId, "true");
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::MNT_NODEASSIGN_VALID, nodeId, "true");
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_RT1, 
 										nodeId, pResult.parameters[0].at(8));				/** isType1Router value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_RT2, 
 										nodeId, pResult.parameters[0].at(9));				/** isType2Router value */
 				if (!res.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+					LOG_WARN() << res.GetErrorMessage();
 				}
 
 				if (pResult.parameters[0].at(6).compare("true") == 0)						/** isChained value */
@@ -2365,7 +2363,7 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 														modpos);
 				if (!clires.IsSuccessful())
 				{
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 			}
 		}
@@ -2436,7 +2434,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Object", res);
 
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 				else
 				{
@@ -2452,7 +2450,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 					}
 				}
@@ -2475,7 +2473,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Parameter Object", res);
 
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 			}
 			else if ((dataType.empty()) && (!uniqueIdRef.empty()))
@@ -2497,7 +2495,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Parameter Object", res);
 
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 
 			}
@@ -2518,7 +2516,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Object", res);
 
-					CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 				else
 				{
@@ -2534,7 +2532,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 					}
 				}
@@ -2547,7 +2545,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 													pResult.node.at(row));
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);;
+				LOG_WARN() << res.GetErrorMessage();
 			}
 			else
 			{
@@ -2592,7 +2590,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Sub Object", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 						else
 						{
@@ -2613,7 +2611,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 								{
 									CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Limits", res);
 
-									CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+									LOG_WARN() << clires.GetErrorMessage();
 								}
 							}
 						}
@@ -2637,7 +2635,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Parameter Sub Object", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 					}
 					else if ((!subObjuniqueIdRef.empty()) && (subObjdataType.empty()))
@@ -2658,7 +2656,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Create Module Parameter Sub Object", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 					}
 					
@@ -2668,7 +2666,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 															interfaceId, modId, modPosition);
 					if (!result.IsSuccessful())
 					{
-						CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, result);
+						LOG_WARN() << result.GetErrorMessage();
 					}
 				}
 			}
@@ -2695,7 +2693,7 @@ std::uint32_t ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId,
 	{
 		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Index", res);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+		LOG_WARN() << clires.GetErrorMessage();
 	}
 
 	return index;
@@ -2718,7 +2716,7 @@ std::int32_t ProjectParser::GetNewSubObjectIndex(const std::uint8_t nodeId,
 	{
 		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Sub Index", res);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+		LOG_WARN() << clires.GetErrorMessage();
 	}
 
 	return subIndex;
@@ -2740,7 +2738,7 @@ std::string ProjectParser::GetNewParameterId(const std::uint8_t nodeId,
 	{
 		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Parameter Current Name", res);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+		LOG_WARN() << clires.GetErrorMessage();
 	}
 
 	return parameterName;
@@ -2831,7 +2829,7 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 						{
 							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Actual Value", res);
 
-							CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+							LOG_WARN() << clires.GetErrorMessage();
 						}
 					}
 				}
@@ -2866,7 +2864,7 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 							{
 								CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Actual Value", res);
 
-								CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, clires);
+								LOG_WARN() << clires.GetErrorMessage();
 							}
 						}
 					}

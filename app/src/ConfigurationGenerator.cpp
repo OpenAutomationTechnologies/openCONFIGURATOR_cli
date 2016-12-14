@@ -69,7 +69,7 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& 
 	{
 		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+		LOG_WARN() << res.GetErrorMessage();
 	}
 
 	cliRes = BuildProcessImageDescriptions(outputPath);
@@ -77,7 +77,7 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& 
 	{
 		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+		LOG_WARN() << res.GetErrorMessage();
 	}
 
 	return CliResult();
@@ -104,7 +104,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Txt", cliRes);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+		LOG_WARN() << funRes.GetErrorMessage();
 	}
 
 	std::ostringstream buffer;
@@ -120,7 +120,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Cdc", cliRes);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+		LOG_WARN() << funRes.GetErrorMessage();
 	}
 
 	cliRes = CreateMnobdHexTxt(outputPath, buffer);
@@ -128,7 +128,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Hex Txt", cliRes);
 
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+		LOG_WARN() << funRes.GetErrorMessage();
 	}
 
 	return CliResult();
@@ -165,7 +165,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
 
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+			LOG_WARN() << funRes.GetErrorMessage();
 		}
 
 		cliRes = CreateXmlProcessImage(value, outputPathExtended);
@@ -173,7 +173,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
 
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+			LOG_WARN() << funRes.GetErrorMessage();
 		}
 
 		cliRes = CreateCSharpProcessImage(value, outputPathExtended);
@@ -181,7 +181,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
 
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, funRes.GetErrorMessage());
+			LOG_WARN() << funRes.GetErrorMessage();
 		}
 	}
 
@@ -245,8 +245,19 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 		/** Formatting the mnob hex text stream */
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
+			std::ostringstream hexVal;
+			
+			hexVal << std::setw(2) << std::setfill('0') << std::hex << std::uppercase << std::int16_t(buffer.str().at(cnt));
 			toStream << "0x";
-			toStream << std::setw(2) << std::setfill('0') << std::hex << int(buffer.str().at(cnt));
+			if (hexVal.str().size() > 2)
+			{
+				toStream << hexVal.str().substr(2, 2).c_str();
+			}
+			else
+			{
+				toStream << hexVal.str().c_str();
+			}
+
 			if (cnt != (buffer.str().size() - 1))
 			{
 				toStream << ",";

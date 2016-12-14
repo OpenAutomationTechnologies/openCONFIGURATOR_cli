@@ -74,6 +74,8 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			const std::string kLogConfigurationFileName = "boost_log_settings.ini";
+
 			class OpenConfiguratorCli
 			{
 				public:

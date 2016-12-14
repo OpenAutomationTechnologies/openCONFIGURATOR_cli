@@ -138,8 +138,7 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 		boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		formatter % "Get Attribute Value";
 
-		CliResult res = CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+		LOG_WARN() << formatter.str();
 
 		return "";
 	}
@@ -183,7 +182,8 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 	catch (std::exception& e)
 	{
 		CliResult res = CliLogger::GetInstance().HandleExceptionCaught("Get Attribute Value", e);
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+
+		LOG_WARN() << res.GetErrorMessage();
 	}
 
 	return "";

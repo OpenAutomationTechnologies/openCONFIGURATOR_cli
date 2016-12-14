@@ -156,8 +156,7 @@ CliResult ParameterValidator::IsSchemaValid(const std::string& fileName,
 
 		if (domParserXdc->getErrorCount() != 0)
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_INFO, 
-												"DOM Parser error count" + domParserXdc->getErrorCount());
+			LOG_INFO() << "DOM Parser error count: " << domParserXdc->getErrorCount();
 
 			boost::format formatter(kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
 			formatter % fileName.c_str();

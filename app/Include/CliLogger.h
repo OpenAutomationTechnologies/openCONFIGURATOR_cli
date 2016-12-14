@@ -49,25 +49,6 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			/** Log file name if file logging enabled */
-			const std::string kOpenConfiguratorCliLogFileName = "OpenCONFIGURATOR_CLI";
-
-			/** Types of messages LogMessage can accept */
-			enum class CliMessageType : std::uint8_t
-			{
-				CLI_INFO = 0,
-				CLI_WARN,
-				CLI_ERROR,
-				CLI_DEBUG
-			};
-
-			/** Types of languages LogMessage can accept */
-			enum class CliLanguageType : std::uint8_t
-			{
-				EN = 0,				/** English */
-				DE = 1				/** German */
-			};
-
 			class CliLogger
 			{
 				public:
@@ -83,35 +64,6 @@ namespace IndustrialNetwork
 					  * \return Static instance of the class
 					  */
 					static CliLogger& GetInstance();
-
-					/** \brief Toggles the logging between console and file
-					  * \param set		true for file log; false for console log
-					  * \path path		Logging file path
-					  * \return Nothing
-					  */
-					void SetFileLog(const bool set, const std::string& path);
-
-					/** \brief Sets the language to be used for logging
-					  * \param set		true for German; false for English
-					  * \return Nothing
-					  */
-					void SetLanguageToGerman(const bool set);
-
-					/** \brief Log message with given message type description
-					  * \param msgType			Log message type
-					  * \param logDescription	Message string to be logged
-					  * \return Nothing
-					  */
-					void LogMessage(const CliMessageType msgType, 
-									const std::string& logDescription);
-
-					/** \brief Log message with given message type description
-					  * \param msgType			Log message type
-					  * \param result			CliResult returned by member functions
-					  * \return Nothing
-					  */
-					void LogMessage(const CliMessageType msgType, 
-									const CliResult& result);
 
 					/** \brief Logs message for CLI API failure
 					  * \param apiDescription	Description of the CLI API failure
@@ -137,21 +89,7 @@ namespace IndustrialNetwork
 					CliResult HandleExceptionCaught(const std::string& apiDescription, 
 									const std::exception& e);
 
-					/** Index of current language */
-					std::uint8_t languageIndex;
-				private:
-					/** File Log enabled status */
-					bool fileLog;
-
-					/** German language enabled status */
-					bool languageGerman;
-
-					/** Log file stream handle */
-					std::ofstream ofs;
-
-					/** Message type strings */
-					std::vector<std::string> CliMessageTypeString;
-
+					std::uint32_t languageIndex;
 			}; // end of class CliLogger
 		} // end of namespace Application
 	} // end of namespace POWERLINK

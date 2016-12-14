@@ -42,6 +42,13 @@ int main(int parameterCount, char* parameter[])
 {
 	std::vector<std::string> paramList;
 
+	/** Initialize logging configurations from ini file */
+	Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(kLogConfigurationFileName);
+	if (!confRes.IsSuccessful())
+	{
+		LOG_WARN() << confRes.GetErrorMessage();
+	}
+
 	/** Prepare the parameter list */
 	for (std::int32_t index = 1; index < parameterCount; index++)
 	{
@@ -54,13 +61,12 @@ int main(int parameterCount, char* parameter[])
 	{
 		if (result.GetErrorType() != CliErrorCode::USAGE)
 		{
-			CliLogger::GetInstance().LogMessage(CliMessageType::CLI_ERROR, result);
+			LOG_ERROR() << result.GetErrorMessage();
 		}
 	}
 	else
 	{
-		CliLogger::GetInstance().LogMessage(CliMessageType::CLI_INFO, 
-					"POWERLINK configuration files generated successfully");
+		LOG_INFO() << "POWERLINK configuration files generated successfully";
 	}
 
 	return 0;

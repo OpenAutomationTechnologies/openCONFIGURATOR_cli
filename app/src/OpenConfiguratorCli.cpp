@@ -92,13 +92,13 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			if (IsLanguageGerman(paramsList))
 			{
 				/** Initiate CliLogger for German language */
-				CliLogger::GetInstance().SetLanguageToGerman(true);
+				//SetLanguageToGerman
 			}
 
 			if (IsLogDebug(paramsList))
 			{
 				/** Initiate CliLogger for logging on console */
-				CliLogger::GetInstance().SetFileLog(true, outputPath);
+				//SetFileLog
 			}
 
 			GetNetworkName();
@@ -113,7 +113,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			res = ParameterValidator::GetInstance().IsPathValid(outputPath);
 			if (!res.IsSuccessful())
 			{
-				CliLogger::GetInstance().LogMessage(CliMessageType::CLI_WARN, res);
+				LOG_WARN() << res.GetErrorMessage();
 
 				/** Create the output path as it doesnt exists */
 				boost::filesystem::path dir(outputPath);
