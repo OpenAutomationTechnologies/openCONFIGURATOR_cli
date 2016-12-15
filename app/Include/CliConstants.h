@@ -49,6 +49,9 @@ namespace IndustrialNetwork
 				const std::string kMnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/MN";
 				const std::string kCnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/CN";
 				const std::string kRmnXpathExpression = "/openCONFIGURATORProject/NetworkConfiguration/NodeCollection/RMN";
+				const std::string kAutogenXpathExpression = "/openCONFIGURATORProject/ProjectConfiguration/AutoGenerationSettings";
+				const std::string kProjectConfXpathExpression = "/openCONFIGURATORProject/ProjectConfiguration";
+				const std::string kAutoSettingXpathExpression = kAutogenXpathExpression + "/Setting";
 				const std::string kStructXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/dataTypeList/struct";
 				const std::string kArrayXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/dataTypeList/array";
 				const std::string kParameterTemplateXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/ApplicationProcess/templateList/parameterTemplate";
@@ -89,6 +92,9 @@ namespace IndustrialNetwork
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name,enabled";
 				const std::string kFormatStrRmnXpathExpression = "nodeID,pathToXDC,name";
+				const std::string kFormatStrAutoGenXpathExpression = "id";
+				const std::string kFormatProjectConfXpathExpression = "activeAutoGenerationSetting";
+				const std::string kFormatStrAutoSetXpathExpression = "name,value,enabled";
 				const std::string kFormatStrStructXpathExpression = "uniqueID,name";
 				const std::string kFormatStrStructVarXpathExpression = "uniqueID,name,size";
 				const std::string kFormatStrArrayXpathExpression = "uniqueID,name";

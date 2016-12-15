@@ -92,13 +92,16 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			if (IsLanguageGerman(paramsList))
 			{
 				/** Initiate CliLogger for German language */
-				//SetLanguageToGerman
+				Result res = OpenConfiguratorCore::GetInstance().SetLoggingLanguage(Language::DE);
+				if (res.IsSuccessful())
+				{
+					CliLogger::GetInstance().languageIndex = (std::uint32_t)Language::DE;
+				}
 			}
 
 			if (IsLogDebug(paramsList))
 			{
-				/** Initiate CliLogger for logging on console */
-				//SetFileLog
+				/** Set logging option as file log */
 			}
 
 			GetNetworkName();
@@ -122,13 +125,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 					/** Failed to create the output path */
 					return res;
 				}
-			}
-
-			res = ParameterValidator::GetInstance().IsXmlSchemaValid(xmlFilePath);
-			if (!res.IsSuccessful())
-			{
-				/** XML file schema is not valid */
-				return res;
 			}
 
 			/** Parse and Generate configuration output */

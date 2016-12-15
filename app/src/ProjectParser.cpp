@@ -66,20 +66,35 @@ CliResult ProjectParser::ParseXmlFile(const std::string& xmlPath)
 	{
 		/** Create results for MN, RMN abd CN nodes */
 		CliResult clires;
+		ParserElement xmlParserElement;
+		CliResult ceres = xmlParserElement.CreateElement(xmlPath);
 
-		clires = CreateMnNodeResults(xmlPath);
+		ceres = ParameterValidator::GetInstance().IsXmlSchemaValid(xmlParserElement.domParser);
+		if (!ceres.IsSuccessful())
+		{
+			/** XML file schema is not valid */
+			return ceres;
+		}
+
+		clires = CreateProjectConfiguration(xmlParserElement);
 		if (!clires.IsSuccessful())
 		{
 			return clires;
 		}
 
-		clires = CreateRmnNodeResults(xmlPath);
+		clires = CreateMnNodeResults(xmlParserElement);
 		if (!clires.IsSuccessful())
 		{
 			return clires;
 		}
 
-		clires = CreateCnNodeResults(xmlPath);
+		clires = CreateRmnNodeResults(xmlParserElement);
+		if (!clires.IsSuccessful())
+		{
+			return clires;
+		}
+
+		clires = CreateCnNodeResults(xmlParserElement);
 		if (!clires.IsSuccessful())
 		{
 			return clires;
@@ -89,79 +104,169 @@ CliResult ProjectParser::ParseXmlFile(const std::string& xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateMnNodeResults(const std::string& xmlPath)
+CliResult ProjectParser::CreateProjectConfiguration(const ParserElement& element)
 {
 	try
 	{
-		ParserElement xmlParserElement;
-		ParserResult mnResult;
+		ParserResult configResult;
+		CliResult crres;
 
-		CliResult ceres = xmlParserElement.CreateElement(xmlPath);
-		if (!ceres.IsSuccessful())
+		crres = configResult.CreateResult(element, kAutogenXpathExpression,
+											kFormatStrAutoGenXpathExpression);
+		if (!crres.IsSuccessful())
 		{
-			return ceres;
+			return crres;
 		}
 		else
 		{
-			CliResult crres;
+			for (std::uint32_t row = 0; row < configResult.parameters.size(); row++)
+			{
+				/** Core Library API call to create Configuration */
+				Result res = OpenConfiguratorCore::GetInstance().CreateConfiguration(
+									OpenConfiguratorCli::GetInstance().networkName,
+									configResult.parameters[row].at(0));	/** ID */
+				if (!res.IsSuccessful())
+				{
+					return CliLogger::GetInstance().HandleCoreApiFailed("Create Configuration", res);
+				}
 
-			crres = mnResult.CreateResult(xmlParserElement, kMnXpathExpression,
-											kFormatStrMnXpathExpression);
+				ParserResult settingResult;
+
+				crres = settingResult.CreateResult(element, kAutoSettingXpathExpression,
+													kFormatStrAutoSetXpathExpression);
+				if (!crres.IsSuccessful())
+				{
+					return crres;
+				}
+				else
+				{
+					for (std::uint32_t subRow = 0; subRow < settingResult.parameters.size(); subRow++ )
+					{
+						/** Core Library API call to update settings */
+						Result res = OpenConfiguratorCore::GetInstance().CreateConfigurationSetting(
+									OpenConfiguratorCli::GetInstance().networkName,
+									configResult.parameters[row].at(0),			/** ID */
+									settingResult.parameters[subRow].at(0),		/** Name */
+									settingResult.parameters[subRow].at(1));	/** Value */
+						if (!res.IsSuccessful())
+						{
+							return CliLogger::GetInstance().HandleCoreApiFailed("Create Configuration Setting", res);
+						}
+
+						bool enabled = false;
+
+						/** enabled: empty => false; true => true; false => false */
+						if (settingResult.parameters[subRow].at(2).compare("true") == 0)
+						{
+							enabled = true;
+						}
+
+						/** Core Library API call to update settings value */
+						Result result = OpenConfiguratorCore::GetInstance().SetConfigurationSettingEnabled(
+											OpenConfiguratorCli::GetInstance().networkName,
+											configResult.parameters[row].at(0),		/** ID */
+											settingResult.parameters[subRow].at(0),	/** Name */
+											enabled);
+						if (!result.IsSuccessful())
+						{
+							return CliLogger::GetInstance().HandleCoreApiFailed("Create Configuration Setting Enabled", res);
+						}
+					}
+				}
+			}
+
+			ParserResult projectResult;
+
+			crres = projectResult.CreateResult(element, kProjectConfXpathExpression,
+												kFormatProjectConfXpathExpression);
 			if (!crres.IsSuccessful())
 			{
 				return crres;
 			}
 			else
 			{
-				for (std::uint32_t row = 0; row < mnResult.parameters.size(); row++)
+				/** Core Library API call to set active configuration value */
+				Result res = OpenConfiguratorCore::GetInstance().SetActiveConfiguration(
+								OpenConfiguratorCli::GetInstance().networkName,
+								projectResult.parameters[0].at(0));		/** ID */
+				if (!res.IsSuccessful())
 				{
-					std::uint8_t nodeId = 0;
+					return CliLogger::GetInstance().HandleCoreApiFailed("Set Active Configuration", res);
+				}
+			}
+		}
+	}
+	catch (std::exception& e)
+	{
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Project Configuration", e);
+	}
+	
+	return CliResult();
+}
 
-					if (!mnResult.parameters[row].at(0).empty())
-					{
-						nodeId = (std::uint8_t)std::stoi(mnResult.parameters[row].at(0).c_str());
-					}
+CliResult ProjectParser::CreateMnNodeResults(const ParserElement& element)
+{
+	try
+	{
+		ParserResult mnResult;
+		CliResult crres;
 
-					/** Core Library API call to create Node */
-					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
-										OpenConfiguratorCli::GetInstance().networkName,
-										nodeId, 
-										mnResult.parameters[row].at(2));	/** name */
-					if (!res.IsSuccessful())
-					{
-						return CliLogger::GetInstance().HandleCoreApiFailed("Create MN Node", res);
-					}
+		crres = mnResult.CreateResult(element, kMnXpathExpression,
+										kFormatStrMnXpathExpression);
+		if (!crres.IsSuccessful())
+		{
+			return crres;
+		}
+		else
+		{
+			for (std::uint32_t row = 0; row < mnResult.parameters.size(); row++)
+			{
+				std::uint8_t nodeId = 0;
 
-					std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
-					std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
+				if (!mnResult.parameters[row].at(0).empty())
+				{
+					nodeId = (std::uint8_t)std::stoi(mnResult.parameters[row].at(0));
+				}
 
-					/** Update the forced objects of node */
-					CliResult clires = CreateForcedObjects(xmlParserElement,
-													kForcedObjectNodeXpathExpression,
-													forcedModularNodeObj,
-													forcedModularNodeSubObj);
-					if (!clires.IsSuccessful())
-					{
-						LOG_WARN() << clires.GetErrorMessage();
-					}
+				/** Core Library API call to create Node */
+				Result res = OpenConfiguratorCore::GetInstance().CreateNode(
+									OpenConfiguratorCli::GetInstance().networkName,
+									nodeId, 
+									mnResult.parameters[row].at(2));	/** name */
+				if (!res.IsSuccessful())
+				{
+					return CliLogger::GetInstance().HandleCoreApiFailed("Create MN Node", res);
+				}
 
-					/** Core Library API calls to import the XDD of node */
-					clires = UpdateNodeIdCollection(nodeId,
-										mnResult.parameters[row].at(1),	/** pathToXDC */
-										forcedModularNodeObj, 
-										forcedModularNodeSubObj,
-										"", "", 0U);
-					if (!clires.IsSuccessful())
-					{
-						return CliLogger::GetInstance().HandleCliApiFailed("Update MN Node Id Collection", clires);
-					}
+				std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
+				std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
-					/** Core Library API calls to update the node assignment of node */
-					clires = CreateNodeAssignment(xmlParserElement, kMnXpathExpression, nodeId);
-					if (!clires.IsSuccessful())
-					{
-						LOG_WARN() << clires.GetErrorMessage();
-					}
+				/** Update the forced objects of node */
+				CliResult clires = CreateForcedObjects(element,
+												kForcedObjectNodeXpathExpression,
+												forcedModularNodeObj,
+												forcedModularNodeSubObj);
+				if (!clires.IsSuccessful())
+				{
+					LOG_WARN() << clires.GetErrorMessage();
+				}
+
+				/** Core Library API calls to import the XDD of node */
+				clires = UpdateNodeIdCollection(nodeId,
+									mnResult.parameters[row].at(1),	/** pathToXDC */
+									forcedModularNodeObj, 
+									forcedModularNodeSubObj,
+									"", "", 0U);
+				if (!clires.IsSuccessful())
+				{
+					return CliLogger::GetInstance().HandleCliApiFailed("Update MN Node Id Collection", clires);
+				}
+
+				/** Core Library API calls to update the node assignment of node */
+				clires = CreateNodeAssignment(element, kMnXpathExpression, nodeId);
+				if (!clires.IsSuccessful())
+				{
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 			}
 		}
@@ -174,75 +279,65 @@ CliResult ProjectParser::CreateMnNodeResults(const std::string& xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
+CliResult ProjectParser::CreateRmnNodeResults(const ParserElement& element)
 {
 	try
 	{
-		ParserElement xmlParserElement;
 		ParserResult rmnResult;
+		CliResult crres;
 
-		CliResult ceres = xmlParserElement.CreateElement(xmlPath);
-		if (!ceres.IsSuccessful())
+		crres = rmnResult.CreateResult(element, kRmnXpathExpression,
+										kFormatStrRmnXpathExpression);
+		if (!crres.IsSuccessful())
 		{
-			return ceres;
+			LOG_WARN() << crres.GetErrorMessage();
 		}
 		else
 		{
-			CliResult crres;
+			for (std::uint32_t row = 0; row < rmnResult.parameters.size(); row++)
+			{
+				std::uint8_t nodeId = 0;
 
-			crres = rmnResult.CreateResult(xmlParserElement, kRmnXpathExpression,
-											kFormatStrRmnXpathExpression);
-			if (!crres.IsSuccessful())
-			{
-				LOG_WARN() << crres.GetErrorMessage();
-			}
-			else
-			{
-				for (std::uint32_t row = 0; row < rmnResult.parameters.size(); row++)
+				if (!rmnResult.parameters[row].at(0).empty())
 				{
-					std::uint8_t nodeId = 0;
+					nodeId = (std::uint8_t)std::stoi(rmnResult.parameters[row].at(0));
+				}
 
-					if (!rmnResult.parameters[row].at(0).empty())
-					{
-						nodeId = (std::uint8_t)std::stoi(rmnResult.parameters[row].at(0).c_str());
-					}
+				/** Core Library API call to create Node */
+				Result res = OpenConfiguratorCore::GetInstance().CreateNode(
+									OpenConfiguratorCli::GetInstance().networkName,
+									nodeId,
+									rmnResult.parameters[row].at(2),		/** name */
+									true);
+				if (!res.IsSuccessful())
+				{
+					CliResult cnclires = CliLogger::GetInstance().HandleCoreApiFailed("Create RMN Node", res);
 
-					/** Core Library API call to create Node */
-					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
-										OpenConfiguratorCli::GetInstance().networkName,
-										nodeId,
-										rmnResult.parameters[row].at(2),		/** name */
-										true);
-					if (!res.IsSuccessful())
-					{
-						CliResult cnclires = CliLogger::GetInstance().HandleCoreApiFailed("Create RMN Node", res);
+					LOG_WARN() << cnclires.GetErrorMessage();
+				}
 
-						LOG_WARN() << cnclires.GetErrorMessage();
-					}
+				CliResult clires;
+				std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
+				std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
-					CliResult clires;
-					std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
-					std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
+				/** Core Library API calls to import the XDC of node */
+				clires = UpdateNodeIdCollection(nodeId,
+												rmnResult.parameters[row].at(1),	/** pathToXDC */
+												forcedModularNodeObj, 
+												forcedModularNodeSubObj, 
+												"", "", 0U);
+				if (!clires.IsSuccessful())
+				{
+					LOG_WARN() << clires.GetErrorMessage();
+				}
 
-					/** Core Library API calls to import the XDC of node */
-					clires = UpdateNodeIdCollection(nodeId,
-													rmnResult.parameters[row].at(1),	/** pathToXDC */
-													forcedModularNodeObj, 
-													forcedModularNodeSubObj, 
-													"", "", 0U);
-					if (!clires.IsSuccessful())
-					{
-						LOG_WARN() << clires.GetErrorMessage();
-					}
-
-					/** Core Library API calls to update the node assignment of node */
-					clires = CreateNodeAssignment(xmlParserElement, 
-													kRmnXpathExpression, 
-													nodeId);
-					if (!clires.IsSuccessful())
-					{
-						LOG_WARN() << clires.GetErrorMessage();
-					}
+				/** Core Library API calls to update the node assignment of node */
+				clires = CreateNodeAssignment(element, 
+												kRmnXpathExpression, 
+												nodeId);
+				if (!clires.IsSuccessful())
+				{
+					LOG_WARN() << clires.GetErrorMessage();
 				}
 			}
 		}
@@ -255,202 +350,190 @@ CliResult ProjectParser::CreateRmnNodeResults(const std::string& xmlPath)
 	return CliResult();
 }
 
-CliResult ProjectParser::CreateCnNodeResults(const std::string& xmlPath)
+CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 {
 	try
 	{
-		ParserElement xmlParserElement;
 		ParserResult cnResult;
 
-		CliResult ceres = xmlParserElement.CreateElement(xmlPath);
-		if (!ceres.IsSuccessful())
+		CliResult crres;
+
+		crres = cnResult.CreateResult(element, kCnXpathExpression,
+										kFormatStrCnXpathExpression);
+		if (!crres.IsSuccessful())
 		{
-			return ceres;
+			return crres;
 		}
 		else
 		{
-			CliResult crres;
+			for (std::uint32_t row = 0; row < cnResult.parameters.size(); row++)
+			{
+				std::uint8_t nodeId = 0;
 
-			crres = cnResult.CreateResult(xmlParserElement, kCnXpathExpression,
-											kFormatStrCnXpathExpression);
-			if (!crres.IsSuccessful())
-			{
-				return crres;
-			}
-			else
-			{
-				for (std::uint32_t row = 0; row < cnResult.parameters.size(); row++)
+				if (!cnResult.parameters[row].at(0).empty())
 				{
-					std::uint8_t nodeId = 0;
+					nodeId = (std::uint8_t)std::stoi(cnResult.parameters[row].at(0));
+				}
 
-					if (!cnResult.parameters[row].at(0).empty())
+				ParserResult subCnResult;
+				CliResult clires;
+				CliResult subclires;
+
+				clires = subCnResult.CreateResult(element, 
+													kIntrfcXpathExpression, 
+													kFormatStrIntrfcXpathExpression);
+				if (!clires.IsSuccessful())
+				{
+					LOG_WARN() << clires.GetErrorMessage();
+
+					/** Core Library API call to create Node */
+					Result res = OpenConfiguratorCore::GetInstance().CreateNode(
+								OpenConfiguratorCli::GetInstance().networkName,
+								nodeId, 
+								cnResult.parameters[row].at(2),		/** name */
+								false);
+					if (!res.IsSuccessful())
 					{
-						nodeId = (std::uint8_t)std::stoi(cnResult.parameters[row].at(0).c_str());
+						subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
+
+						LOG_WARN() << subclires.GetErrorMessage();
 					}
 
-					ParserResult subCnResult;
 					CliResult clires;
-					CliResult subclires;
+					bool enabled = true;
 
-					clires = subCnResult.CreateResult(xmlParserElement, 
-														kIntrfcXpathExpression, 
-														kFormatStrIntrfcXpathExpression);
-					if (!clires.IsSuccessful())
+					/** enabled: empty => true; true => true; false => false */
+					if (cnResult.parameters[row].at(3).compare("false") == 0)
 					{
+						enabled = false;
+					}
+
+					/** Core Library API call to create Node */
+					res = OpenConfiguratorCore::GetInstance().EnableNode(
+										OpenConfiguratorCli::GetInstance().networkName,
+										nodeId, enabled);
+					if (!res.IsSuccessful())
+					{
+						clires = CliLogger::GetInstance().HandleCoreApiFailed("Enable CN Node", res);
+
 						LOG_WARN() << clires.GetErrorMessage();
+					}
 
-						/** Core Library API call to create Node */
-						Result res = OpenConfiguratorCore::GetInstance().CreateNode(
-									OpenConfiguratorCli::GetInstance().networkName,
-									nodeId, 
-									cnResult.parameters[row].at(2),		/** name */
-									false);
-						if (!res.IsSuccessful())
-						{
-							subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
-
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-
-						CliResult clires;
-						bool enabled;
-
-						if (cnResult.parameters[row].at(3).compare("true") == 0)
-						{
-							enabled = true;
-						}
-						else
-						{
-							enabled = false;
-						}
-
-						/** Core Library API call to create Node */
-						res = OpenConfiguratorCore::GetInstance().EnableNode(
-											OpenConfiguratorCli::GetInstance().networkName,
-											nodeId, enabled);
-						if (!res.IsSuccessful())
-						{
-							clires = CliLogger::GetInstance().HandleCoreApiFailed("Enable CN Node", res);
-
-							LOG_WARN() << clires.GetErrorMessage();
-						}
-
-						std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
-						std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
+					std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
+					std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 					
-						/** Update the forced objects of modular head node */
-						subclires = CreateForcedObjects(xmlParserElement, kForcedObjectNodeXpathExpression, 
+					/** Update the forced objects of modular head node */
+					subclires = CreateForcedObjects(element, kForcedObjectNodeXpathExpression, 
+													forcedModularNodeObj, forcedModularNodeSubObj);
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+						
+					/** Core Library API calls to import the XDC of node */
+					subclires = UpdateNodeIdCollection(nodeId, 
+														cnResult.parameters[row].at(1),				/** pathToXDC */
+														forcedModularNodeObj, forcedModularNodeSubObj,
+														"", "", 0U);
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+						
+					/** Core Library API calls to update the node assignment of node */
+					subclires = CreateNodeAssignment(element, kCnXpathExpression, nodeId);
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+				}
+				else
+				{
+					/** Core Library API call to create Modular Node */
+					Result res = OpenConfiguratorCore::GetInstance().CreateModularHeadNode(
+										OpenConfiguratorCli::GetInstance().networkName,
+										nodeId, 
+										cnResult.parameters[row].at(2));		/** name */
+					if (!res.IsSuccessful())
+					{
+						subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
+
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+
+					std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
+					std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
+
+					/** Update the forced objects of modular head node */
+					subclires = CreateForcedObjects(element, kForcedObjectNodeXpathExpression, 
 														forcedModularNodeObj, forcedModularNodeSubObj);
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-						
-						/** Core Library API calls to import the XDC of node */
-						subclires = UpdateNodeIdCollection(nodeId, 
-															cnResult.parameters[row].at(1),				/** pathToXDC */
-															forcedModularNodeObj, forcedModularNodeSubObj,
-															"", "", 0U);
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-						
-						/** Core Library API calls to update the node assignment of node */
-						subclires = CreateNodeAssignment(xmlParserElement, kCnXpathExpression, nodeId);
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+
+					/** Core Library API calls to import the XDC of modular head node */
+					subclires = UpdateNodeIdCollection(nodeId, cnResult.parameters[row].at(1),	/** pathToXDC */
+														forcedModularNodeObj, forcedModularNodeSubObj, 
+														"", "", 0U);	
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+
+					/** Core Library API calls to update the node assignment of modular head node */
+					subclires = CreateNodeAssignment(element, kCnXpathExpression, nodeId);
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
+					}
+
+					/** Core Library API calls to create interface of modular head node */
+					subclires = CreateInterface(nodeId, cnResult.parameters[row].at(1));	/** pathToXDC */
+					if (!subclires.IsSuccessful())
+					{
+						LOG_WARN() << subclires.GetErrorMessage();
 					}
 					else
 					{
-						/** Core Library API call to create Modular Node */
-						Result res = OpenConfiguratorCore::GetInstance().CreateModularHeadNode(
-											OpenConfiguratorCli::GetInstance().networkName,
-											nodeId, 
-											cnResult.parameters[row].at(2));		/** name */
-						if (!res.IsSuccessful())
+						ParserResult moduleResult;
+						CliResult clicrres;
+
+						for(std::uint32_t subRow = 0; subRow < subCnResult.parameters.size(); subRow++)
 						{
-							subclires = CliLogger::GetInstance().HandleCoreApiFailed("Create CN Node", res);
-
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-
-						std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
-						std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
-
-						/** Update the forced objects of modular head node */
-						subclires = CreateForcedObjects(xmlParserElement, kForcedObjectNodeXpathExpression, 
-															forcedModularNodeObj, forcedModularNodeSubObj);
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-
-						/** Core Library API calls to import the XDC of modular head node */
-						subclires = UpdateNodeIdCollection(nodeId, cnResult.parameters[row].at(1),	/** pathToXDC */
-															forcedModularNodeObj, forcedModularNodeSubObj, 
-															"", "", 0U);	
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-
-						/** Core Library API calls to update the node assignment of modular head node */
-						subclires = CreateNodeAssignment(xmlParserElement, kCnXpathExpression, nodeId);
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-
-						/** Core Library API calls to create interface of modular head node */
-						subclires = CreateInterface(nodeId, cnResult.parameters[row].at(1));	/** pathToXDC */
-						if (!subclires.IsSuccessful())
-						{
-							LOG_WARN() << subclires.GetErrorMessage();
-						}
-						else
-						{
-							ParserResult moduleResult;
-							CliResult clicrres;
-
-							for(std::uint32_t subRow = 0; subRow < subCnResult.parameters.size(); subRow++)
+							clicrres = moduleResult.CreateResult(element, 
+																			kModuleXpathExpression,
+																			kFormatStrModuleXpathExpression);
+							if (!clicrres.IsSuccessful())
 							{
-								clicrres = moduleResult.CreateResult(xmlParserElement, 
-																				kModuleXpathExpression,
-																				kFormatStrModuleXpathExpression);
-								if (!clicrres.IsSuccessful())
-								{
-									LOG_WARN() << clicrres.GetErrorMessage();
-								}
-								else
-								{
-									CliResult foRes;
-									std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
-									std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
+								LOG_WARN() << clicrres.GetErrorMessage();
+							}
+							else
+							{
+								CliResult foRes;
+								std::vector<std::string> forcedModularNodeObj;		/** Group of forced objects in Node */
+								std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
-									for(std::uint32_t moduleRow = 0; moduleRow < moduleResult.parameters.size(); moduleRow++)
+								for(std::uint32_t moduleRow = 0; moduleRow < moduleResult.parameters.size(); moduleRow++)
+								{
+									/** Update the forced objects of modular node */
+									foRes = CreateForcedObjects(element, kForcedObjectModuleXpathExpression,
+																forcedModularNodeObj, forcedModularNodeSubObj);
+									if (!foRes.IsSuccessful())
 									{
-										/** Update the forced objects of modular node */
-										foRes = CreateForcedObjects(xmlParserElement, kForcedObjectModuleXpathExpression,
-																	forcedModularNodeObj, forcedModularNodeSubObj);
-										if (!foRes.IsSuccessful())
-										{
-											LOG_WARN() << foRes.GetErrorMessage();
-										}
+										LOG_WARN() << foRes.GetErrorMessage();
+									}
 
-										foRes = CreateModule(nodeId,
-															forcedModularNodeObj, forcedModularNodeSubObj,
-															subCnResult.parameters[subRow].at(0),				/** Interface Unique ID */
-															moduleResult.parameters[moduleRow].at(0),			/** Module name */
-															moduleResult.parameters[moduleRow].at(1),			/** Module position */
-															moduleResult.parameters[moduleRow].at(2),			/** Module address */
-															moduleResult.parameters[moduleRow].at(3));			/** Module pathtoXDC */
-										if (!foRes.IsSuccessful())
-										{
-											LOG_WARN() << foRes.GetErrorMessage();
-										}
+									foRes = CreateModule(nodeId,
+														forcedModularNodeObj, forcedModularNodeSubObj,
+														subCnResult.parameters[subRow].at(0),				/** Interface Unique ID */
+														moduleResult.parameters[moduleRow].at(0),			/** Module name */
+														moduleResult.parameters[moduleRow].at(1),			/** Module position */
+														moduleResult.parameters[moduleRow].at(2),			/** Module address */
+														moduleResult.parameters[moduleRow].at(3));			/** Module pathtoXDC */
+									if (!foRes.IsSuccessful())
+									{
+										LOG_WARN() << foRes.GetErrorMessage();
 									}
 								}
 							}
@@ -556,7 +639,7 @@ CliResult ProjectParser::CreateStructDataType(const ParserElement& element,
 
 					if (!varDecResult.parameters[subrow].at(2).empty())
 					{
-						varDeclSize = (std::uint32_t)std::stoi(varDecResult.parameters[subrow].at(2).c_str());
+						varDeclSize = (std::uint32_t)std::stoi(varDecResult.parameters[subrow].at(2));
 					}
 
 					/** Core Library API call to create VarDeclaration */
@@ -622,12 +705,12 @@ CliResult ProjectParser::CreateArrayDataType(const ParserElement& element,
 
 					if (!subpResult.parameters[subrow].at(0).empty())
 					{
-						lowerLimit = (std::uint32_t)std::stoi(subpResult.parameters[subrow].at(0).c_str());
+						lowerLimit = (std::uint32_t)std::stoi(subpResult.parameters[subrow].at(0));
 					}
 
 					if (!subpResult.parameters[subrow].at(1).empty())
 					{
-						upperLimit = (std::uint32_t)std::stoi(subpResult.parameters[subrow].at(1).c_str());
+						upperLimit = (std::uint32_t)std::stoi(subpResult.parameters[subrow].at(1));
 					}
 
 					/** Core Library API call to create ArrayDatatype */
@@ -700,7 +783,7 @@ CliResult ProjectParser::SetParamAllowedValue(const ParserElement & element,
 	else
 	{
 		std::vector<std::string> allowedValuelist;
-		std::string uniqueIdOutput;
+		std::string uniqueIdOutput = uniqueId;
 
 		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
@@ -709,9 +792,16 @@ CliResult ProjectParser::SetParamAllowedValue(const ParserElement & element,
 
 		if (!modId.empty())
 		{
-			uniqueIdOutput = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
+			CliResult clires;
+
+			clires = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
 															interfaceId, modId, 
-															modPosition, uniqueId);
+															modPosition, uniqueId,
+															uniqueIdOutput);
+			if (!clires.IsSuccessful())
+			{
+				return CliLogger::GetInstance().HandleCliApiFailed("Get New Parameter Id", clires);
+			}
 		}
 
 		/** Core Library API call to set allowed parameter values */
@@ -753,10 +843,10 @@ CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 		{
 			ParserResult minpResult;
 			ParserResult maxpResult;
+			CliResult subcrres;
 			std::string minValue = "";
 			std::string maxValue = "";
-			CliResult subcrres;
-			std::string uniqueIdOutput;
+			std::string uniqueIdOutput = uniqueId;
 
 			subcrres = minpResult.CreateResult(element,
 										kParameterMinValueXpathExpression,
@@ -766,7 +856,6 @@ CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 			{
 				minValue = minpResult.parameters[0].at(0);
 			}
-
 
 			subcrres = maxpResult.CreateResult(element,
 										kParameterMaxValueXpathExpression,
@@ -779,9 +868,14 @@ CliResult ProjectParser::SetParamAllowedRange(const ParserElement& element,
 
 			if (!modId.empty())
 			{
-				uniqueIdOutput = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
+				subcrres = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
 																	interfaceId, modId, 
-																	modPosition, uniqueId);
+																	modPosition, uniqueId,
+																	uniqueIdOutput);
+				if (!subcrres.IsSuccessful())
+				{
+					return CliLogger::GetInstance().HandleCliApiFailed("Get New Parameter Id", subcrres);
+				}
 			}
 
 			/** Core Library API call to set allowed parameter values */
@@ -818,13 +912,20 @@ CliResult ProjectParser::SetParamActualValue(const ParserElement& element,
 	}
 	else
 	{
-		std::string uniqueIdOutput;
+		std::string uniqueIdOutput = uniqueId;
 
 		if (!modId.empty())
 		{
-			uniqueIdOutput = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
+			CliResult clires;
+
+			clires = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
 																interfaceId, modId, 
-																modPosition, uniqueId);
+																modPosition, uniqueId,
+																uniqueIdOutput);
+			if (!clires.IsSuccessful())
+			{
+				return CliLogger::GetInstance().HandleCliApiFailed("Get New Parameter Id", clires);
+			}
 		}
 
 		/** Core Library API call to set actual parameter values */
@@ -860,13 +961,18 @@ CliResult ProjectParser::SetParamDefaultValue(const ParserElement& element,
 	}
 	else
 	{
-		std::string uniqueIdOutput;
+		std::string uniqueIdOutput = uniqueId;
 
 		if (!modId.empty())
 		{
-			uniqueIdOutput = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
+			CliResult clires = ProjectParser::GetInstance().GetNewParameterId(nodeId, 
 																interfaceId, modId, 
-																modPosition, uniqueId);
+																modPosition, uniqueId,
+																uniqueIdOutput);
+			if (!clires.IsSuccessful())
+			{
+				return CliLogger::GetInstance().HandleCliApiFailed("Get New Parameter Id", clires);
+			}
 		}
 
 		/** Core Library API call to set actual parameter values */
@@ -1026,7 +1132,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 
 				if (!pResult.parameters[row].at(3).empty())
 				{
-					bitoffset = (std::uint8_t)std::stoi(pResult.parameters[row].at(3).c_str());
+					bitoffset = (std::uint8_t)std::stoi(pResult.parameters[row].at(3));
 				}
 
 				Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
@@ -1047,7 +1153,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 
 				if (!pResult.parameters[row].at(3).empty())
 				{
-					bitoffset = (std::uint8_t)std::stoi(pResult.parameters[row].at(3).c_str());
+					bitoffset = (std::uint8_t)std::stoi(pResult.parameters[row].at(3));
 				}
 
 				Result res = OpenConfiguratorCore::GetInstance().CreateParameterGroup(
@@ -1085,7 +1191,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 
 						if (!subpResult.parameters[subrow].at(3).empty())
 						{
-							bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3).c_str());
+							bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3));
 						}
 
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
@@ -1106,7 +1212,7 @@ CliResult ProjectParser::CreateChildParameterGroup(const ParserElement& element,
 
 						if (!subpResult.parameters[subrow].at(3).empty())
 						{
-							bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3).c_str());
+							bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3));
 						}
 
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
@@ -1186,7 +1292,7 @@ CliResult ProjectParser::CreateParameterGroup(const ParserElement& element,
 
 					if (!subpResult.parameters[subrow].at(3).empty())
 					{
-						bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3).c_str());
+						bitoffset = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(3));
 					}
 
 					Result res = OpenConfiguratorCore::GetInstance().CreateParameterReference(
@@ -1407,23 +1513,23 @@ CliResult ProjectParser::CreateDynamicChannels(const ParserElement& element,
 
 			if (!startIndex.empty())
 			{
-				start = (std::uint32_t)std::strtol(startIndex.c_str(), NULL, 16);
+				start = (std::uint32_t)std::stol(startIndex, NULL, 16);
 			}
 			if (!endIndex.empty())
 			{
-				end = (std::uint32_t)std::strtol(endIndex.c_str(), NULL, 16);
+				end = (std::uint32_t)std::stol(endIndex, NULL, 16);
 			}
 			if (!maxNumber.empty())
 			{
-				mxNumber = (std::uint32_t)std::strtol(maxNumber.c_str(), NULL, 16);
+				mxNumber = (std::uint32_t)std::stol(maxNumber, NULL, 16);
 			}
 			if (!addressOfset.empty())
 			{
-				ofset = (std::uint32_t)std::strtol(addressOfset.c_str(), NULL, 16);
+				ofset = (std::uint32_t)std::stol(addressOfset, NULL, 16);
 			}
 			if (!bitAlignment.empty())
 			{
-				bitLign = (std::uint8_t)std::strtol(bitAlignment.c_str(), NULL, 16);
+				bitLign = (std::uint8_t)std::stol(bitAlignment, NULL, 16);
 			}
 			
 			Result res = OpenConfiguratorCore::GetInstance().CreateDynamicChannel(
@@ -1468,11 +1574,11 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 
 			if (!pResult.parameters[row].at(0).empty())
 			{
-				objId = (std::uint32_t)std::strtol(pResult.parameters[row].at(0).c_str(), NULL, 16);
+				objId = (std::uint32_t)std::stol(pResult.parameters[row].at(0), NULL, 16);
 			}
 			if (!pResult.parameters[row].at(2).empty())
 			{
-				objIdType = (std::uint8_t)std::stoi(pResult.parameters[row].at(2).c_str());
+				objIdType = (std::uint8_t)std::stoi(pResult.parameters[row].at(2));
 			}
 			std::string accessType = pResult.parameters[row].at(5);
 			std::string dataType = pResult.parameters[row].at(4);
@@ -1603,11 +1709,11 @@ CliResult ProjectParser::CreateObject(const ParserElement& element,
 
 					if (!subpResult.parameters[subrow].at(0).empty())
 					{
-						subObjId = (std::uint8_t)std::strtol(subpResult.parameters[subrow].at(0).c_str(), NULL, 16);
+						subObjId = (std::uint8_t)std::stol(subpResult.parameters[subrow].at(0), NULL, 16);
 					}
 					if (!subpResult.parameters[subrow].at(2).empty())
 					{
-						subObjIdType = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(2).c_str());
+						subObjIdType = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(2));
 					}
 					std::string subObjaccessType = subpResult.parameters[subrow].at(5);
 					std::string subObjActualValue = subpResult.parameters[subrow].at(7);
@@ -1761,7 +1867,7 @@ CliResult ProjectParser::CreateNwMgtGeneralFeatures(const ParserElement& element
 									OpenConfiguratorCli::GetInstance().networkName,
 									nodeId,
 									((GeneralFeatureEnum) param),
-									pResult.parameters[row].at(param).c_str());
+									pResult.parameters[row].at(param));
 				if (!res.IsSuccessful())
 				{
 					return CliLogger::GetInstance().HandleCoreApiFailed("Set Feature Value", res);
@@ -1795,7 +1901,7 @@ CliResult ProjectParser::CreateNwMgtMnFeatures(const ParserElement& element,
 					OpenConfiguratorCli::GetInstance().networkName,
 					nodeId,
 					(MNFeatureEnum) (param + (std::int32_t) MNFeatureEnum::DLLErrMNMultipleMN),
-					pResult.parameters[row].at(param).c_str());
+					pResult.parameters[row].at(param));
 				if (!res.IsSuccessful())
 				{
 					return CliLogger::GetInstance().HandleCoreApiFailed("Set Feature Value", res);
@@ -1829,7 +1935,7 @@ CliResult ProjectParser::CreateNwMgtCnFeatures(const ParserElement& element,
 					OpenConfiguratorCli::GetInstance().networkName,
 					nodeId,
 					(CNFeatureEnum) (param + (std::int32_t) CNFeatureEnum::DLLCNFeatureMultiplex),
-					pResult.parameters[row].at(param).c_str());
+					pResult.parameters[row].at(param));
 				if (!res.IsSuccessful())
 				{
 					return CliLogger::GetInstance().HandleCoreApiFailed("Set Feature Value", res);
@@ -1858,13 +1964,6 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 		return res;
 	}
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
-	if (!res.IsSuccessful())
-	{
-		/** XDC file schema is not valid */
-		return res;
-	}
-
 	ParserElement element;
 	CliResult ceres;
 
@@ -1876,6 +1975,13 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 	else
 	{
 		ParserResult pResult;
+
+		res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
+		if (!res.IsSuccessful())
+		{
+			/** XDC file schema is not valid */
+			return res;
+		}
 
 		CliResult res = pResult.CreateResult(element, kInterfaceXdcXpathExpression,
 												kFormatStrInterfaceXdcXpathExpression);
@@ -1892,7 +1998,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 				ModuleAddressing modAddress = GetModuleAddressing(pResult.parameters[row].at(2));					/** Module addressing */
 				if (!pResult.parameters[row].at(3).empty())
 				{
-					maxModules = (std::uint32_t)std::strtol(pResult.parameters[row].at(3).c_str(), NULL, 16);		/** Max Modules */	
+					maxModules = (std::uint32_t)std::stol(pResult.parameters[row].at(3), NULL, 16);		/** Max Modules */	
 				}
 
 				bool unusedSlot = false;
@@ -1961,22 +2067,22 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 
 								if (!subRangeResult.parameters[subRow].at(1).empty())
 								{
-									baseIndex = (std::uint32_t)std::strtol(subRangeResult.parameters[subRow].at(1).c_str(), NULL, 16);			/** Base index value */
+									baseIndex = (std::uint32_t)std::stol(subRangeResult.parameters[subRow].at(1), NULL, 16);			/** Base index value */
 								}
 								if (!subRangeResult.parameters[subRow].at(2).empty())
 								{
-									maxIndex = (std::uint32_t)std::strtol(subRangeResult.parameters[subRow].at(2).c_str(), NULL, 16);			/** Max index value */
+									maxIndex = (std::uint32_t)std::stol(subRangeResult.parameters[subRow].at(2), NULL, 16);			/** Max index value */
 								}
 								if (!subRangeResult.parameters[subRow].at(3).empty())
 								{
-									maxSubIndex = (std::uint32_t)std::strtol(subRangeResult.parameters[subRow].at(3).c_str(), NULL, 16);		/** Max Sub index value */
+									maxSubIndex = (std::uint32_t)std::stol(subRangeResult.parameters[subRow].at(3), NULL, 16);		/** Max Sub index value */
 								}
 								SortMode sortmodRange = GetSortMode(subRangeResult.parameters[subRow].at(4));									/** Sort mode value */
 								SortNumber sortRangeNumber = GetSortNumber(subRangeResult.parameters[subRow].at(5));							/** Sort number value */
 								PDOMapping mapping = GetPdoMapping(subRangeResult.parameters[subRow].at(6));									/** PDO mapping value */
 								if (!subRangeResult.parameters[subRow].at(7).empty())
 								{
-									rangeSortStep = (std::uint32_t)std::strtol(subRangeResult.parameters[subRow].at(7).c_str(), NULL, 16);		/** Sort step value */
+									rangeSortStep = (std::uint32_t)std::stol(subRangeResult.parameters[subRow].at(7), NULL, 16);		/** Sort step value */
 								}
 
 								Result res = OpenConfiguratorCore::GetInstance().CreateRange(
@@ -2028,13 +2134,6 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 		return res;
 	}
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
-	if (!res.IsSuccessful())
-	{
-		/** XDC file schema is not valid */
-		return res;
-	}
-
 	ParserElement element;
 	CliResult ceres;
 
@@ -2045,6 +2144,13 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 	}
 	else
 	{
+		res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
+		if (!res.IsSuccessful())
+		{
+			/** XDC file schema is not valid */
+			return res;
+		}
+
 		res = ImportProfileBodyDevice(element, nodeId, interfaceId, modId, modPosition);
 		if (!res.IsSuccessful())
 		{
@@ -2098,7 +2204,7 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 {
 	ParserResult pResult;
 
-	CliResult crres = pResult.CreateResult(pElement, xPathExpression.c_str(),
+	CliResult crres = pResult.CreateResult(pElement, xPathExpression,
 											kFormatStrxPathExpression);
 	if (!crres.IsSuccessful())
 	{
@@ -2271,13 +2377,6 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 		return res;
 	}
 
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(xdcPath);
-	if (!res.IsSuccessful())
-	{
-		/** XDC file schema is not valid */
-		return res;
-	}
-
 	ParserElement element;
 	CliResult ceres;
 
@@ -2290,7 +2389,14 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 	{
 		ParserResult pResult;
 
-		res = pResult.CreateResult(element, kModuleNodeXpathExpression.c_str(),
+		res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
+		if (!res.IsSuccessful())
+		{
+			/** XDC file schema is not valid */
+			return res;
+		}
+
+		res = pResult.CreateResult(element, kModuleNodeXpathExpression,
 									kFormatStrModuleNodeXpathExpression);
 		if (!res.IsSuccessful())
 		{
@@ -2311,31 +2417,31 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 				ModuleAddressing modAddressing = GetModuleAddressing(pResult.parameters[moduleSubRow].at(2));	/** Module addressing */
 				if (!pResult.parameters[moduleSubRow].at(3).empty())
 				{
-					minPosition = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(3).c_str());		/** Module min position */
+					minPosition = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(3));		/** Module min position */
 				}
 				if (!pResult.parameters[moduleSubRow].at(4).empty())
 				{
-					maxPosition = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(4).c_str());		/** Module max position */
+					maxPosition = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(4));		/** Module max position */
 				}
 				if (!pResult.parameters[moduleSubRow].at(5).empty())
 				{
-					minAddress = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(5).c_str());		/** Module min adress */
+					minAddress = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(5));		/** Module min adress */
 				}
 				if (!pResult.parameters[moduleSubRow].at(6).empty())
 				{
-					maxAddress = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(6).c_str());		/** Module max address */
+					maxAddress = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(6));		/** Module max address */
 				}
 				if (!pResult.parameters[moduleSubRow].at(7).empty())
 				{
-					maxCount = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(7).c_str());			/** Module max count */
+					maxCount = (std::uint8_t)std::stoi(pResult.parameters[moduleSubRow].at(7));			/** Module max count */
 				}
 				if (!modulePosition.empty())
 				{
-					modpos = (std::uint32_t)std::strtol(modulePosition.c_str(), NULL, 16);
+					modpos = (std::uint32_t)std::stol(modulePosition, NULL, 16);
 				}
 				if (!moduleAddress.empty())
 				{
-					moduleAdrs = (std::uint32_t)std::strtol(moduleAddress.c_str(), NULL, 16);
+					moduleAdrs = (std::uint32_t)std::stol(moduleAddress, NULL, 16);
 				}
 
 				Result res = OpenConfiguratorCore::GetInstance().CreateModule(OpenConfiguratorCli::GetInstance().networkName, 
@@ -2381,8 +2487,8 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 											const std::uint32_t modPosition)
 {
 	ParserResult pResult;
-	CliResult clires = pResult.CreateResult(element, kObjectXpathExpression.c_str(),
-								kFormatStrObjectXpathExpressionModule);
+	CliResult clires = pResult.CreateResult(element, kObjectXpathExpression,
+											kFormatStrObjectXpathExpressionModule);
 
 	if (!clires.IsSuccessful())
 	{
@@ -2396,14 +2502,14 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 
 			if (!pResult.parameters[row].at(0).empty())						/** Object Index */
 			{
-				objId = (std::uint32_t)std::strtol(pResult.parameters[row].at(0).c_str(), NULL, 16);
+				objId = (std::uint32_t)std::stol(pResult.parameters[row].at(0), NULL, 16);
 			}
 
 			std::uint8_t objIdType = 0;
 
 			if (!pResult.parameters[row].at(2).empty())
 			{
-				objIdType = (std::uint8_t)std::stoi(pResult.parameters[row].at(2).c_str());
+				objIdType = (std::uint8_t)std::stoi(pResult.parameters[row].at(2));
 			}
 			std::string accessType = pResult.parameters[row].at(5);			/** Access Type */
 			std::string dataType = pResult.parameters[row].at(4);			/** data Type */
@@ -2440,17 +2546,29 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					if ((!pResult.parameters[row].at(9).empty()) || (!pResult.parameters[row].at(10).empty()))
 					{
-						Result res = OpenConfiguratorCore::GetInstance().SetObjectLimits(
-								OpenConfiguratorCli::GetInstance().networkName,
-								nodeId, 
-								GetNewObjectIndex(nodeId, interfaceId, modId, modPosition, objId),
-								pResult.parameters[row].at(9),				/** lowLimit */
-								pResult.parameters[row].at(10));			/** highLimit */
-						if (!res.IsSuccessful())
-						{
-							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
+						CliResult oiclires;
+						std::uint32_t objIndex = 0;
 
-							LOG_WARN() << clires.GetErrorMessage();
+						oiclires = GetNewObjectIndex(nodeId, interfaceId, modId, 
+													modPosition, objId, objIndex);
+						if (!oiclires.IsSuccessful())
+						{
+							LOG_WARN() << oiclires.GetErrorMessage();
+						}
+						else
+						{
+							Result res = OpenConfiguratorCore::GetInstance().SetObjectLimits(
+									OpenConfiguratorCli::GetInstance().networkName,
+									nodeId, 
+									objIndex,
+									pResult.parameters[row].at(9),				/** lowLimit */
+									pResult.parameters[row].at(10));			/** highLimit */
+							if (!res.IsSuccessful())
+							{
+								CliResult soclires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
+
+								LOG_WARN() << soclires.GetErrorMessage();
+							}
 						}
 					}
 				}
@@ -2522,17 +2640,29 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 				{
 					if ((!pResult.parameters[row].at(9).empty()) || (!pResult.parameters[row].at(10).empty()))
 					{
-						Result res = OpenConfiguratorCore::GetInstance().SetObjectLimits(
-								OpenConfiguratorCli::GetInstance().networkName,
-								nodeId, 
-								GetNewObjectIndex(nodeId, interfaceId, modId, modPosition, objId),
-								pResult.parameters[row].at(9),				/** lowLimit */
-								pResult.parameters[row].at(10));			/** highLimit */
-						if (!res.IsSuccessful())
-						{
-							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
+						CliResult oiclires;
+						std::uint32_t objIndex = 0;
 
-							LOG_WARN() << clires.GetErrorMessage();
+						oiclires = GetNewObjectIndex(nodeId, interfaceId, modId, 
+													modPosition, objId, objIndex);
+						if (!oiclires.IsSuccessful())
+						{
+							LOG_WARN() << oiclires.GetErrorMessage();
+						}
+						else
+						{
+							Result res = OpenConfiguratorCore::GetInstance().SetObjectLimits(
+									OpenConfiguratorCli::GetInstance().networkName,
+									nodeId, 
+									objIndex,
+									pResult.parameters[row].at(9),				/** lowLimit */
+									pResult.parameters[row].at(10));			/** highLimit */
+							if (!res.IsSuccessful())
+							{
+								CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Limits", res);
+
+								LOG_WARN() << clires.GetErrorMessage();
+							}
 						}
 					}
 				}
@@ -2540,7 +2670,7 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 
 			ParserResult subpResult;
 
-			CliResult res = subpResult.CreateResult(element, kSubObjectXpathExpression.c_str(),
+			CliResult res = subpResult.CreateResult(element, kSubObjectXpathExpression,
 													kFormatStrSubObjectXpathExpression,
 													pResult.node.at(row));
 			if (!res.IsSuccessful())
@@ -2556,11 +2686,11 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 
 					if (!subpResult.parameters[subrow].at(0).empty())
 					{
-						subObjId = (std::uint8_t)std::strtol(subpResult.parameters[subrow].at(0).c_str(), NULL, 16);
+						subObjId = (std::uint8_t)std::stol(subpResult.parameters[subrow].at(0), NULL, 16);
 					}
 					if (!subpResult.parameters[subrow].at(2).empty())
 					{
-						subObjIdType = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(2).c_str());
+						subObjIdType = (std::uint8_t)std::stoi(subpResult.parameters[subrow].at(2));
 					}
 					std::string subObjaccessType = subpResult.parameters[subrow].at(5);		/** Access type */
 					std::string subObjActualValue = subpResult.parameters[subrow].at(7);	/** Actual value */
@@ -2598,20 +2728,41 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 							if ((!subpResult.parameters[subrow].at(9).empty()) || 
 								(!subpResult.parameters[subrow].at(10).empty()))
 							{
-								Result res = OpenConfiguratorCore::GetInstance().SetSubObjectLimits(
-										OpenConfiguratorCli::GetInstance().networkName,
-										nodeId, 
-										GetNewObjectIndex(nodeId, interfaceId, modId, modPosition, objId),
-											(std::uint8_t)GetNewSubObjectIndex(nodeId, interfaceId, 
-																			modId, modPosition, 
-																			subObjId),
-											subpResult.parameters[subrow].at(9),			/** sub object lowLimit */
-											subpResult.parameters[subrow].at(10));			/** sub object highLimit */
-								if (!res.IsSuccessful())
-								{
-									CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Limits", res);
+								CliResult oiclires;
+								std::uint32_t objIndex = 0;
+								std::uint32_t subObjIndex = 0;
 
-									LOG_WARN() << clires.GetErrorMessage();
+								oiclires = GetNewObjectIndex(nodeId, interfaceId, modId, 
+																modPosition, objId, objIndex);
+								if (!oiclires.IsSuccessful())
+								{
+									LOG_WARN() << oiclires.GetErrorMessage();
+								}
+								else
+								{
+									CliResult soiclires = GetNewSubObjectIndex(nodeId, interfaceId, 
+																				modId, modPosition, 
+																				subObjId, subObjIndex);
+									if (!soiclires.IsSuccessful())
+									{
+										LOG_WARN() << soiclires.GetErrorMessage();
+									}
+									else
+									{
+										Result res = OpenConfiguratorCore::GetInstance().SetSubObjectLimits(
+													OpenConfiguratorCli::GetInstance().networkName,
+													nodeId, 
+													objIndex,
+													(std::uint8_t)subObjIndex,
+													subpResult.parameters[subrow].at(9),			/** sub object lowLimit */
+													subpResult.parameters[subrow].at(10));			/** sub object highLimit */
+										if (!res.IsSuccessful())
+										{
+											CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Limits", res);
+
+											LOG_WARN() << clires.GetErrorMessage();
+										}
+									}
 								}
 							}
 						}
@@ -2676,13 +2827,13 @@ CliResult ProjectParser::CreateModuleObject(const ParserElement& element,
 	return CliResult();
 }
 
-std::uint32_t ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId, 
+CliResult ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId, 
 											   const std::string& interfaceId, 
 											   const std::string& modId, 
 											   const std::uint32_t modposition,
-											   const std::uint32_t objId) 
+											   const std::uint32_t objId,
+											   std::uint32_t& index) 
 {
-	std::uint32_t index = 0;
 	std::int32_t subIndex = 0;
 
 	Result res = OpenConfiguratorCore::GetInstance().GetModuleObjectCurrentIndex(
@@ -2691,57 +2842,59 @@ std::uint32_t ProjectParser::GetNewObjectIndex(const std::uint8_t nodeId,
 								modposition, objId, -1, index, subIndex);
 	if (!res.IsSuccessful())
 	{
-		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Index", res);
+		index = 0;
 
-		LOG_WARN() << clires.GetErrorMessage();
+		return CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Index", res);
 	}
 
-	return index;
+	return CliResult();
 }
 
-std::int32_t ProjectParser::GetNewSubObjectIndex(const std::uint8_t nodeId, 
+CliResult ProjectParser::GetNewSubObjectIndex(const std::uint8_t nodeId, 
 												 const std::string& interfaceId, 
 												 const std::string& modId, 
 												 const std::uint32_t modPosition,
-												 const std::uint8_t subObjId) 
+												 const std::uint8_t subObjId,
+												 std::uint32_t& subIndex) 
 {
 	std::uint32_t index = 0;
-	std::int32_t subIndex = 0;
+	std::int32_t subObjIndex = 0;
 
 	Result res = OpenConfiguratorCore::GetInstance().GetModuleObjectCurrentIndex(
 								OpenConfiguratorCli::GetInstance().networkName,
 								nodeId, interfaceId, modId, 
-								modPosition, 0, subObjId, index, subIndex);
+								modPosition, 0, subObjId, index, subObjIndex);
 	if (!res.IsSuccessful())
 	{
-		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Sub Index", res);
+		subIndex = 0;
 
-		LOG_WARN() << clires.GetErrorMessage();
+		return CliLogger::GetInstance().HandleCoreApiFailed("Get Module Object Current Sub Index", res);
 	}
 
-	return subIndex;
+	subIndex = (uint32_t)subObjIndex;
+
+	return CliResult();
 }
 
-std::string ProjectParser::GetNewParameterId(const std::uint8_t nodeId, 
+CliResult ProjectParser::GetNewParameterId(const std::uint8_t nodeId, 
 											 const std::string& interfaceId, 
 											 const std::string& modId, 
 											 const std::uint32_t modPosition, 
-											 const std::string& uniqueID)
+											 const std::string& uniqueID,
+											 std::string& paramId)
 {
-	std::string parameterName;
-
 	Result res = OpenConfiguratorCore::GetInstance().GetModuleParameterCurrentName(
 									OpenConfiguratorCli::GetInstance().networkName,
 									nodeId, interfaceId, modId, 
-									modPosition, uniqueID, parameterName);
+									modPosition, uniqueID, paramId);
 	if (!res.IsSuccessful())
 	{
-		CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Get Module Parameter Current Name", res);
+		paramId = "";
 
-		LOG_WARN() << clires.GetErrorMessage();
+		return CliLogger::GetInstance().HandleCoreApiFailed("Get Module Parameter Current Name", res);
 	}
 
-	return parameterName;
+	return CliResult();
 }
 
 CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement, 
@@ -2752,8 +2905,8 @@ CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement,
 	ParserResult pResult;
 	CliResult cliRes;
 
-	cliRes = pResult.CreateResult(pElement, xPathExpression.c_str(),
-										kFormatStrxPathExpressionObject);
+	cliRes = pResult.CreateResult(pElement, xPathExpression,
+									kFormatStrxPathExpressionObject);
 	if (!cliRes.IsSuccessful())
 	{
 		return CliResult();
@@ -2800,22 +2953,48 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 					if (objectIdOfVector.compare(objectIndex) == 0)
 					{
 						std::uint32_t objectIdOutput = 0;
-						std::uint8_t subObjectIdOutput = 0; 
+						std::uint32_t subObjectIdOutput = 0; 
 						Result res;
 
 						if (value)
 						{
-							objectIdOutput = GetNewObjectIndex(nodeId, interfaceId, modId, 
-															modPosition, objectId);
-							subObjectIdOutput = (std::uint8_t)(GetNewSubObjectIndex(nodeId, 
-															interfaceId, 
-															modId, modPosition,	
-															subObjectId));
+							CliResult oiclires;
 
-							res = OpenConfiguratorCore::GetInstance().SetSubObjectActualValue(
-											OpenConfiguratorCli::GetInstance().networkName,
-											nodeId, objectIdOutput, subObjectIdOutput, 
-											subobjectValue, true, false);
+							oiclires = GetNewObjectIndex(nodeId, interfaceId, modId, 
+															modPosition, objectId, 
+															objectIdOutput);
+							if (!oiclires.IsSuccessful())
+							{
+								LOG_WARN() << oiclires.GetErrorMessage();
+							}
+							else
+							{
+								CliResult soiclires;
+
+								soiclires = GetNewSubObjectIndex(nodeId, 
+																interfaceId, 
+																modId, modPosition,	
+																subObjectId,
+																subObjectIdOutput);
+								if (!soiclires.IsSuccessful())
+								{
+									LOG_WARN() << soiclires.GetErrorMessage();
+								}
+								else
+								{
+									res = OpenConfiguratorCore::GetInstance().SetSubObjectActualValue(
+													OpenConfiguratorCli::GetInstance().networkName,
+													nodeId, objectIdOutput, 
+													(std::uint8_t)subObjectIdOutput, 
+													subobjectValue, true, false);
+									if (!res.IsSuccessful())
+									{
+										CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Actual Value", res);
+
+										LOG_WARN() << clires.GetErrorMessage();
+									}
+								}
+							}
 						}
 						else
 						{
@@ -2823,13 +3002,12 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 											OpenConfiguratorCli::GetInstance().networkName,
 											nodeId, objectId, subObjectId, 
 											subobjectValue, true, false);
-						}
+							if (!res.IsSuccessful())
+							{
+								CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Actual Value", res);
 
-						if (!res.IsSuccessful())
-						{
-							CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Sub Object Actual Value", res);
-
-							LOG_WARN() << clires.GetErrorMessage();
+								LOG_WARN() << clires.GetErrorMessage();
+							}
 						}
 					}
 				}
@@ -2847,24 +3025,39 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 
 							if (value)
 							{
-								objectIdOutput = GetNewObjectIndex(nodeId, interfaceId, modId, modPosition, objectId);
+								CliResult oiclires;
 
-								res = OpenConfiguratorCore::GetInstance().SetObjectActualValue(
-													OpenConfiguratorCli::GetInstance().networkName,
-													nodeId, objectIdOutput, objectValue, true, false);
+								oiclires = GetNewObjectIndex(nodeId, interfaceId, modId, 
+																modPosition, objectId, 
+																objectIdOutput);
+								if (!oiclires.IsSuccessful())
+								{
+									LOG_WARN() << oiclires.GetErrorMessage();
+								}
+								else
+								{
+									res = OpenConfiguratorCore::GetInstance().SetObjectActualValue(
+														OpenConfiguratorCli::GetInstance().networkName,
+														nodeId, objectIdOutput, objectValue, true, false);
+									if (!res.IsSuccessful())
+									{
+										CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Actual Value", res);
+
+										LOG_WARN() << clires.GetErrorMessage();
+									}
+								}
 							}
 							else
 							{
 								res = OpenConfiguratorCore::GetInstance().SetObjectActualValue(
 													OpenConfiguratorCli::GetInstance().networkName,
 													nodeId, objectId, objectValue, true, false);
-							}
+								if (!res.IsSuccessful())
+								{
+									CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Actual Value", res);
 
-							if (!res.IsSuccessful())
-							{
-								CliResult clires = CliLogger::GetInstance().HandleCoreApiFailed("Set Object Actual Value", res);
-
-								LOG_WARN() << clires.GetErrorMessage();
+									LOG_WARN() << clires.GetErrorMessage();
+								}
 							}
 						}
 					}

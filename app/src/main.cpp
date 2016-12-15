@@ -66,7 +66,7 @@ int main(int parameterCount, char* parameter[])
 	}
 	else
 	{
-		LOG_INFO() << "POWERLINK configuration files generated successfully";
+		LOG_INFO() << kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex];
 	}
 
 	return 0;

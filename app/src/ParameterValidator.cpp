@@ -109,24 +109,23 @@ CliResult ParameterValidator::IsPathValid(const std::string& path)
 	return CliResult();
 }
 
-CliResult ParameterValidator::IsXmlSchemaValid(const std::string& xmlFileName)
+CliResult ParameterValidator::IsXmlSchemaValid(xercesc::XercesDOMParser* domParserXml)
 {
-	return IsSchemaValid(xmlFileName, kXmlSchemaDefinitionFileName);
+	return IsSchemaValid(domParserXml, kXmlSchemaDefinitionFileName);
 }
 
-CliResult ParameterValidator::IsXdcSchemaValid(const std::string& xdcFileName)
+CliResult ParameterValidator::IsXdcSchemaValid(xercesc::XercesDOMParser* domParserXdc)
 {
-	return IsSchemaValid(xdcFileName, kXdcSchemaDefinitionFileName);
+	return IsSchemaValid(domParserXdc, kXdcSchemaDefinitionFileName);
 }
 
-CliResult ParameterValidator::IsSchemaValid(const std::string& fileName, 
+CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser, 
 											const std::string& schemaDefFile)
 {
 	try
 	{
 		/** Initialize the Xerces usage */
 		xercesc::XMLPlatformUtils::Initialize();
-		xercesc::XercesDOMParser* domParserXdc = new xercesc::XercesDOMParser();
 
 		/** Validate for the schema file existance */
 		if (!boost::filesystem::exists(schemaDefFile))
@@ -137,10 +136,8 @@ CliResult ParameterValidator::IsSchemaValid(const std::string& fileName,
 			return CliResult(CliErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
 		}
 
-		/** Input project file to DOM parse() function */
-		domParserXdc->parse(fileName.c_str()); 
-
-		if (domParserXdc->loadGrammar(schemaDefFile.c_str(), 
+		/** Load schema file constraints */
+		if (domParser->loadGrammar(schemaDefFile.c_str(), 
 									xercesc::Grammar::SchemaGrammarType) == NULL)
 		{
 			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER, 
@@ -148,23 +145,19 @@ CliResult ParameterValidator::IsSchemaValid(const std::string& fileName,
 		}
 
 		/** Set validation checks required for the file */
-		domParserXdc->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-		domParserXdc->setDoNamespaces(true);
-		domParserXdc->setDoXInclude(true);
-		domParserXdc->setDoSchema(true);
-		domParserXdc->setValidationConstraintFatal(true);
+		domParser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+		domParser->setDoNamespaces(true);
+		domParser->setDoXInclude(true);
+		domParser->setDoSchema(true);
+		domParser->setValidationConstraintFatal(true);
 
-		if (domParserXdc->getErrorCount() != 0)
+		if (domParser->getErrorCount() != 0)
 		{
-			LOG_INFO() << "DOM Parser error count: " << domParserXdc->getErrorCount();
+			LOG_INFO() << "DOM Parser error count: " << domParser->getErrorCount();
 
-			boost::format formatter(kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
-			formatter % fileName.c_str();
-
-			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID, formatter.str());
+			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID,
+						kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
 		}
-
-		delete [] domParserXdc;
 
 		/** Release the Xerces usage */
 		xercesc::XMLPlatformUtils::Terminate();

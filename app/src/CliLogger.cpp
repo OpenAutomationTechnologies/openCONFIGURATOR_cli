@@ -37,7 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 CliLogger::CliLogger()
 {
-	languageIndex = 0;
+	languageIndex = (std::uint32_t)Language::EN;
 }
 
 CliLogger::~CliLogger()

@@ -67,13 +67,12 @@ namespace IndustrialNetwork
 					/** Document element handle */
 					xercesc::DOMElement* domElement;
 
-				private:
-					/** file that has to be parsed */
-					std::string filePath;
-
 					/** DOM parser handle */
 					xercesc::XercesDOMParser* domParser;
 
+				private:
+					/** file that has to be parsed */
+					std::string filePath;
 			}; // end of class ParserElement
 		} // end of namespace Application
 	} // end of namespace POWERLINK

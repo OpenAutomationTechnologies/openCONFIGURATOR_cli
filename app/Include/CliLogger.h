@@ -89,6 +89,7 @@ namespace IndustrialNetwork
 					CliResult HandleExceptionCaught(const std::string& apiDescription, 
 									const std::exception& e);
 
+					/** Index of the current language */
 					std::uint32_t languageIndex;
 			}; // end of class CliLogger
 		} // end of namespace Application

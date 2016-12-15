@@ -51,21 +51,22 @@ namespace IndustrialNetwork
 			namespace ErrorHandling
 			{
 				const std::string kMsgAppDescription[] = {"OpenCONFIGURATOR CLI Application", ""};
-				const std::string kMsgCoreApiFailed[] = {"Core library API: \"%s\" failed", ""};
-				const std::string kMsgCliApiFailed[] = {"CLI library API: \"%s\" failed", ""};
-				const std::string kMsgExceptionCaught[] = {"Exception caught at \"%s\"", ""};
+				const std::string kMsgCoreApiFailed[] = {"Core library API: \"%s\" failed", "\"%s\""};
+				const std::string kMsgCliApiFailed[] = {"CLI library API: \"%s\" failed", "\"%s\""};
+				const std::string kMsgExceptionCaught[] = {"Exception caught at \"%s\"", "\"%s\""};
 				const std::string kMsgLessNoOfParams[] = {"Project XML file name and output path are mandatory", ""};
 				const std::string kMsgOutputPathNotFound[] = {"Project output path not found from command line parameters", ""};
 				const std::string kMsgXmlFileNotFound[] = {"Project XML file name is not found from command line parameters", ""};
-				const std::string kMsgFileNotExists[] = {"File \"%s\" does not exists", ""};
-				const std::string kMsgFileExtnIncorrect[] = {"Extension of file \"%s\" is incorrect", ""};
-				const std::string kMsgSchemaFileNotExists[] = {"Schema file \"%s\" does not exists", ""};
-				const std::string kMsgOutputPathNotExiists[] = {"Output path \"%s\" not exists", ""};
+				const std::string kMsgFileNotExists[] = {"File \"%s\" does not exists", "\"%s\""};
+				const std::string kMsgFileExtnIncorrect[] = {"Extension of file \"%s\" is incorrect", "\"%s\""};
+				const std::string kMsgSchemaFileNotExists[] = {"Schema file \"%s\" does not exists", "\"%s\""};
+				const std::string kMsgOutputPathNotExiists[] = {"Output path \"%s\" not exists", "\"%s\""};
 				const std::string kMsgErrorLoadingGrammer[] = {"Error loading grammer to DOM Parser", ""};
-				const std::string kMsgFileSchemeNotValid[] = {"Schema of file \"%s\" is not valid", ""};
-				const std::string kMsgNullPtrFound[] = {"NULL pointer found on \"%s\" ", ""};
-				const std::string kMsgNoResultForXPath[] = {"There is no result for the XPath \"%s\"", ""};
-				const std::string kMsgUnableToOpenLogFile[] = {"Unable to open the log file \"%s\"", ""};
+				const std::string kMsgFileSchemeNotValid[] = {"Schema of file is not valid", ""};
+				const std::string kMsgNullPtrFound[] = {"NULL pointer found on \"%s\" ", "\"%s\""};
+				const std::string kMsgNoResultForXPath[] = {"There is no result for the XPath \"%s\"", "\"%s\""};
+				const std::string kMsgUnableToOpenLogFile[] = {"Unable to open the log file \"%s\"", "\"%s\""};
+				const std::string kMsgConfGenerationSuccess[] = {"POWERLINK configuration files generated successfully", ""};
 
 				/** \brief Functionalities to handle the error messages
 				  */

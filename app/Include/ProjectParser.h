@@ -69,23 +69,29 @@ namespace IndustrialNetwork
 					CliResult ParseXmlFile(const std::string& xmlPath);
 
 				private:
-					/** \brief Creates MN node results
-					  * \param xmlPath			Name of the XML file with path
+					/** \brief Creates deault configuration values for project
+					  * \param element 		Element that contains handle of XML
 					  * \return CliResult
 					  */
-					CliResult CreateMnNodeResults(const std::string& xmlPath);
+					CliResult CreateProjectConfiguration(const ParserElement& element);
+
+					/** \brief Creates MN node results
+					  * \param element 		Element that contains handle of XML
+					  * \return CliResult
+					  */
+					CliResult CreateMnNodeResults(const ParserElement& element);
 
 					/** \brief Creates RMN node results
-					  * \param xmlPath			Name of the XML file with path
+					  * \param element 		Element that contains handle of XML
 					  * \return CliResult
 					  */
-					CliResult CreateRmnNodeResults(const std::string& xmlPath);
+					CliResult CreateRmnNodeResults(const ParserElement& element);
 
 					/** \brief Creates CN node results
-					  * \param xmlPath			Name of the XML file with path
+					  * \param element 		Element that contains handle of XML
 					  * \return CliResult
 					  */
-					CliResult CreateCnNodeResults(const std::string& xmlPath);
+					CliResult CreateCnNodeResults(const ParserElement& element);
 
 					/** \brief Updates the XDC node information into core library
 					  * \param nodeId 			Node ID value of node
@@ -448,13 +454,15 @@ namespace IndustrialNetwork
 					  * \param modId 			ID value of module
 					  * \param modPosition 		Position value of module
 					  * \param objId 			ID value of module object
-					  * \return Index of new object
+					  * \param index			New object index output
+					  * \return CliResult
 					  */
-					std::uint32_t GetNewObjectIndex(const std::uint8_t nodeId, 
+					CliResult GetNewObjectIndex(const std::uint8_t nodeId, 
 									const std::string& interfaceId, 
 									const std::string& modId, 
 									const std::uint32_t modPosition, 
-									const std::uint32_t objId);
+									const std::uint32_t objId,
+									std::uint32_t& index);
 
 					/** \brief Gets sub-index of module sub-object from the library
 					  * \param nodeId 			ID value of node
@@ -462,13 +470,15 @@ namespace IndustrialNetwork
 					  * \param modId 			ID value of module
 					  * \param modPosition 		Position value of module
 					  * \param subObjId 		ID value of module sub object
-					  * \return Index of new sub object
+					  * \param subIndex			New sub object index output
+					  * \return CliResult
 					  */
-					std::int32_t GetNewSubObjectIndex(const std::uint8_t nodeId,
+					CliResult GetNewSubObjectIndex(const std::uint8_t nodeId,
 									const std::string& interfaceId, 
 									const std::string& modId, 
 									const std::uint32_t modPosition, 
-									const std::uint8_t subObjId);
+									const std::uint8_t subObjId,
+									std::uint32_t& subIndex);
 					
 					/** \brief Gets unique ID of parameter from the library
 					  * \param nodeId 			ID value of node
@@ -476,13 +486,15 @@ namespace IndustrialNetwork
 					  * \param modId 			ID value of module
 					  * \param modPosition 		Position value of module
 					  * \param uniqueID 		ID value of module parameters
-					  * \return Parameter unique ID
+					  * \param paramId			New parameter ID output
+					  * \return CliResult
 					  */
-					std::string GetNewParameterId(const std::uint8_t nodeId, 
+					 CliResult GetNewParameterId(const std::uint8_t nodeId, 
 									const std::string& interfaceId, 
 									const std::string& modId, 
 									const std::uint32_t modPosition, 
-									const std::string& uniqueID);
+									const std::string& uniqueID,
+									std::string& paramId);
 					
 					/** \brief Updates the forced object list of node
 					  * \param element 			Element that contains handle of XDC
