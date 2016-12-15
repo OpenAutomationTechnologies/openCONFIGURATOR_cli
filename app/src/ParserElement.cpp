@@ -81,7 +81,7 @@ CliResult ParserElement::CreateElement(const std::string& file)
 			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create Element", e);
 	}

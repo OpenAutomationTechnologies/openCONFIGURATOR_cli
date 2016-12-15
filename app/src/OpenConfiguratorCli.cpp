@@ -181,7 +181,16 @@ bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsL
 		/** Search for project file option */
 		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0))
 		{
-			xmlFilePath = paramsList.at(index + 1);
+			/* CHeck whether next element exists against number of parameters */
+			if ((index + 1) < paramsList.size())
+			{
+				xmlFilePath = paramsList.at(index + 1);
+			}
+			else
+			{
+				return false;
+			}
+
 			break;
 		}
 	}
@@ -203,8 +212,17 @@ bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsLi
 		/** Search for output path option */
 		if ((paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
 		{
-			outputPath = paramsList.at(index + 1);
-			return true;
+			/* CHeck whether next element exists against number of parameters */
+			if ((index + 1) < paramsList.size())
+			{
+				outputPath = paramsList.at(index + 1);
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 

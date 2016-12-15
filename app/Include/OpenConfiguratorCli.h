@@ -55,6 +55,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "CliErrorCode.h"
 #include "Result.h"
 #include "CliResult.h"
+#include "Language.h"
 #include "CliLogger.h"
 #include "CliConstants.h"
 

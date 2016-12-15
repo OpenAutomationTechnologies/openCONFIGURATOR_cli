@@ -71,7 +71,7 @@ CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 			return CliResult(CliErrorCode::FILE_EXTN_INCORRECT, formatter.str());
 		}
 	}
-	catch(std::exception& e)
+	catch(const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Is File Valid", e);
 	}
@@ -101,7 +101,7 @@ CliResult ParameterValidator::IsPathValid(const std::string& path)
 			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_EXISTS, formatter.str());
 		}
 	}
-	catch(std::exception& e)
+	catch(const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Is Path Valid", e);
 	}
@@ -162,7 +162,7 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 		/** Release the Xerces usage */
 		xercesc::XMLPlatformUtils::Terminate();
 	}
-	catch(std::exception& e)
+	catch(const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Is Schema Valid", e);
 	}

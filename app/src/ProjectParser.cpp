@@ -196,7 +196,7 @@ CliResult ProjectParser::CreateProjectConfiguration(const ParserElement& element
 			}
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create Project Configuration", e);
 	}
@@ -271,7 +271,7 @@ CliResult ProjectParser::CreateMnNodeResults(const ParserElement& element)
 			}
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Parse MN Node", e);
 	}
@@ -342,7 +342,7 @@ CliResult ProjectParser::CreateRmnNodeResults(const ParserElement& element)
 			}
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Parse RMN Node", e);
 	}
@@ -543,7 +543,7 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 			}
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Parse CN Node", e);
 	}

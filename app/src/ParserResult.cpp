@@ -122,7 +122,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 
 		nResult->release();
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().HandleExceptionCaught("Create Result", e);
 	}
@@ -179,7 +179,7 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 			}
 		}
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		CliResult res = CliLogger::GetInstance().HandleExceptionCaught("Get Attribute Value", e);
 
