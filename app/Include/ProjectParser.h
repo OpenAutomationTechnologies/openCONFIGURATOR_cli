@@ -113,12 +113,14 @@ namespace IndustrialNetwork
 
 					/** \brief Updates the modular node interface information of 
 					  *        XDC into core library
-					  * \param nodeId 		Node ID value of modular head node
-					  * \param pathXdc 		The XDC path of modular head node
+					  * \param nodeId 			Node ID value of modular head node
+					  * \param pathXdc 			The XDC path of modular head node
+					  * \param maxModPosition	Max module position output
 					  * \return CliResult
 					  */
 					CliResult CreateInterface(const std::uint8_t nodeId, 
-									const std::string& pathXdc);
+									const std::string& pathXdc,
+									std::uint8_t& maxModulePosition);
 
 					/** \brief Updates the Device POWERLINK profile body of 
 					  *        XDD/XDC into core library
@@ -419,6 +421,7 @@ namespace IndustrialNetwork
 					  * \param modulePosition 	Position value of module
 					  * \param moduleAddress 	Address value of module
 					  * \param modulePathToXDC 	PathToXDC value of module
+					  * \param maxModulePosition Max module position
 					  * \return CliResult
 					  */
 					CliResult CreateModule(const std::uint8_t nodeId, 
@@ -428,7 +431,8 @@ namespace IndustrialNetwork
 									const std::string& moduleName, 
 									const std::string& modulePosition, 
 									const std::string& moduleAddress, 
-									const std::string& modulePathToXDC);
+									const std::string& modulePathToXDC,
+									const std::uint8_t maxModulePosition);
 
 					/** \brief Creates the object list of modules from XDC into core library
 					  * \param element 			Element that contains handle of XDC

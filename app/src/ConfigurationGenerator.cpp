@@ -67,17 +67,13 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& 
 	cliRes = BuildConciseDeviceConfiguration(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
-
-		LOG_WARN() << res.GetErrorMessage();
+		return CliLogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
 	}
 
 	cliRes = BuildProcessImageDescriptions(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		CliResult res = CliLogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
-
-		LOG_WARN() << res.GetErrorMessage();
+		return CliLogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
 	}
 
 	return CliResult();
@@ -155,7 +151,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 
 		if (value != MN_DEFAULT_NODE_ID)
 		{
-			outputPathExtended = outputPath + "/" + std::to_string(value);
+			outputPathExtended = outputPath + kPathSeparator + std::to_string(value);
 
 			continue;
 		}
@@ -193,7 +189,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 {
 	try
 	{
-		std::string targetPath = outputPath + "/" + kMnobdTxtFileName;
+		std::string targetPath = outputPath + kPathSeparator + kMnobdTxtFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())
@@ -215,7 +211,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 {
 	try
 	{
-		std::string targetPath = outputPath + "/" + kMnobdCdcFileName;
+		std::string targetPath = outputPath + kPathSeparator + kMnobdCdcFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())
@@ -276,7 +272,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 			}
 		}
 
-		std::string targetPath = outputPath + "/" + kMnobdHexTxtFileName;
+		std::string targetPath = outputPath + kPathSeparator + kMnobdHexTxtFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())
@@ -311,7 +307,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 
 	try
 	{
-		std::string targetPath = outputPath + "/" + kXapHFileName;
+		std::string targetPath = outputPath + kPathSeparator + kXapHFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())
@@ -343,7 +339,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 
 	try
 	{
-		std::string targetPath = outputPath + "/" + kXapXmlFileName;
+		std::string targetPath = outputPath + kPathSeparator + kXapXmlFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())
@@ -375,7 +371,7 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t no
 
 	try
 	{
-		std::string targetPath = outputPath + "/" + kProcessImageFileName;
+		std::string targetPath = outputPath + kPathSeparator + kProcessImageFileName;
 		std::ofstream ofile(targetPath);
 
 		if (ofile.is_open())

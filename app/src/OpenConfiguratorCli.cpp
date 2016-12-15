@@ -182,7 +182,8 @@ bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsL
 		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0))
 		{
 			/* CHeck whether next element exists against number of parameters */
-			if ((index + 1) < paramsList.size())
+			std::uint8_t increment = 1;
+			if ((index + increment) < paramsList.size())
 			{
 				xmlFilePath = paramsList.at(index + 1);
 			}
@@ -213,7 +214,8 @@ bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsLi
 		if ((paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
 		{
 			/* CHeck whether next element exists against number of parameters */
-			if ((index + 1) < paramsList.size())
+			std::uint8_t increment = 1;
+			if ((index + increment) < paramsList.size())
 			{
 				outputPath = paramsList.at(index + 1);
 

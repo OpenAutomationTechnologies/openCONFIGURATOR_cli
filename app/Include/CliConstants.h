@@ -87,7 +87,6 @@ namespace IndustrialNetwork
 
 				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0;		/** 240 */
 				const std::uint8_t MAX_CN_NODE_ID = 0xEF;			/** 239 */
-				const std::uint8_t MAX_MODULE_POSITION = 0xFE;		/** 254 */
 
 				const std::string kFormatStrMnXpathExpression = "nodeID,pathToXDC,name";
 				const std::string kFormatStrCnXpathExpression = "nodeID,pathToXDC,name,enabled";
