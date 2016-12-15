@@ -1,16 +1,14 @@
 /**
- * \file main.cpp
+ * \file CliLogger.cpp
  *
- * \brief Implementation to receive the command line parameters for
- *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
- *        at the output path
+ * \brief Implementation of wrapper module
  *
  * \author Kalycito Infotech Private Limited
  *
- * \version 1.0
+ * \version 0.1
  *
  */
- /*------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -35,39 +33,59 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-
 #include "OpenConfiguratorCli.h"
 
-int main(int parameterCount, char* parameter[])
+CliLogger::CliLogger()
 {
-	std::vector<std::string> paramList;
+	languageIndex = (std::uint32_t)Language::EN;
+}
 
-	/** Initialize logging configurations from ini file */
-	/*Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(kLogConfigurationFileName);
-	if (!confRes.IsSuccessful())
-	{
-		LOG_WARN() << confRes.GetErrorMessage();
-	}*/
+CliLogger::~CliLogger()
+{
+}
 
-	/** Prepare the parameter list */
-	for (std::int32_t index = 1; index < parameterCount; index++)
-	{
-		paramList.push_back(parameter[index]);
-	}
+CliLogger& CliLogger::GetInstance()
+{
+	static CliLogger instance;
 
-	/** Generate output configuration files */
-	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
-	if (!result.IsSuccessful())
-	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
-		{
-			LOG_ERROR() << result.GetErrorMessage();
-		}
-	}
-	else
-	{
-		LOG_INFO() << kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex];
-	}
+	return instance;
+}
 
-	return 0;
+CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription, 
+										const CliResult& result)
+{
+	/** Log the reason of CLI API failure details */
+	LOG_ERROR() << result.GetErrorMessage();
+
+	/** Prepare the failure message with caller API name */
+	boost::format formatter(kMsgCliApiFailed[languageIndex]);
+	formatter % apiDescription.c_str();
+
+	return CliResult(CliErrorCode::CLI_API_FAILED, formatter.str());
+}
+
+CliResult CliLogger::HandleCoreApiFailed(const std::string& apiDescription,
+										 const Result& result)
+{
+	/** Log the reason of CLI API failure details */
+	LOG_ERROR() << result.GetErrorMessage();
+
+	/** Prepare the failure message with caller API name */
+	boost::format formatter(kMsgCoreApiFailed[languageIndex]);
+	formatter % apiDescription.c_str();
+
+	return CliResult(CliErrorCode::CORE_API_FAILED, formatter.str());
+}
+
+CliResult CliLogger::HandleExceptionCaught(const std::string& apiDescription,
+										   const std::exception& e)
+{
+	/** Log the reason of CLI API failure details */
+	LOG_ERROR() << e.what();
+
+	/** Prepare the failure message with caller API name */
+	boost::format formatter(kMsgExceptionCaught[languageIndex]);
+	formatter % apiDescription.c_str();
+
+	return CliResult(CliErrorCode::EXCEPTION_CAUGHT, formatter.str());
 }

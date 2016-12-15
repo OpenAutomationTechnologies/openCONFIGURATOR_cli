@@ -1,16 +1,14 @@
 /**
- * \file main.cpp
+ * \file CliResult
  *
- * \brief Implementation to receive the command line parameters for
- *        OpenCONFIGURATOR CLI and generate the POWERLINK configuration files
- *        at the output path
+ * \brief Error code handler using IResult of core library
  *
  * \author Kalycito Infotech Private Limited
  *
  * \version 1.0
  *
  */
- /*------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -35,39 +33,28 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
+#include "CliResult.h"
 
-#include "OpenConfiguratorCli.h"
-
-int main(int parameterCount, char* parameter[])
+CliResult::CliResult(const CliErrorCode& errorCode, const std::string& errorMessage = "") :
+	IResult<CliErrorCode>(errorCode, errorMessage)
 {
-	std::vector<std::string> paramList;
+}
 
-	/** Initialize logging configurations from ini file */
-	/*Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(kLogConfigurationFileName);
-	if (!confRes.IsSuccessful())
-	{
-		LOG_WARN() << confRes.GetErrorMessage();
-	}*/
+CliResult::CliResult(const CliErrorCode& errorCode) :
+	IResult<CliErrorCode>(errorCode)
+{
+}
 
-	/** Prepare the parameter list */
-	for (std::int32_t index = 1; index < parameterCount; index++)
-	{
-		paramList.push_back(parameter[index]);
-	}
+CliResult::CliResult() :
+	IResult<CliErrorCode>(CliErrorCode::SUCCESS)
+{
+}
 
-	/** Generate output configuration files */
-	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
-	if (!result.IsSuccessful())
-	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
-		{
-			LOG_ERROR() << result.GetErrorMessage();
-		}
-	}
-	else
-	{
-		LOG_INFO() << kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex];
-	}
+CliResult::~CliResult()
+{
+}
 
-	return 0;
+bool CliResult::IsSuccessful()
+{
+	return (this->GetErrorType() == CliErrorCode::SUCCESS);
 }
