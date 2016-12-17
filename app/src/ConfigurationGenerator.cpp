@@ -247,11 +247,11 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 			toStream << "0x";
 			if (hexVal.str().size() > 2)
 			{
-				toStream << hexVal.str().substr(2, 2).c_str();
+				toStream << hexVal.str().substr(2, 2);
 			}
 			else
 			{
-				toStream << hexVal.str().c_str();
+				toStream << hexVal.str();
 			}
 
 			if (cnt != (buffer.str().size() - 1))
@@ -344,7 +344,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 
 		if (ofile.is_open())
 		{
-			ofile << piDataOutput.c_str() << std::endl;
+			ofile << piDataOutput << std::endl;
 			ofile.close();
 		}
 	}

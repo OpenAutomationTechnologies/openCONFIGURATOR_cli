@@ -72,7 +72,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 	{
 		/** Get result of Managing Node */
 		xercesc::DOMXPathResult* nResult = pElement.domDocument->evaluate(
-											xercesc::XMLString::transcode(transcodeString.c_str()),
+											xercesc::XMLString::transcode(transcodeString.data()),
 											parentNode,
 											NULL,
 											xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
@@ -83,41 +83,39 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 		if (resultNodeValue == NULL)
 		{
 			boost::format formatter(kMsgNoResultForXPath[CliLogger::GetInstance().languageIndex]);
-			formatter % transcodeString.c_str();
+			formatter % transcodeString;
 
 			return CliResult(CliErrorCode::NO_RESULT_FOR_XPATH, formatter.str());
 		}
-		else
+
+		std::vector<std::string> attributeNames;
+		std::string subString;
+
+		/**  Convert the string into string stream */
+		std::stringstream splitString(formatString);
+
+		/**  Interpret the formatString and split in to attribute names */
+		while(std::getline(splitString, subString, ','))
 		{
-			std::vector<std::string> attributeNames;
-			std::string subString;
+			attributeNames.push_back(subString);
+		}
 
-			/**  Convert the string into string stream */
-			std::stringstream splitString(formatString);
+		XMLSize_t count = nResult->getSnapshotLength();
 
-			/**  Interpret the formatString and split in to attribute names */
-			while(std::getline(splitString, subString, ','))
+		/**  Parse the parameters */
+		for (XMLSize_t nIndex = 0; nIndex < count; nIndex++)
+		{
+			nResult->snapshotItem(nIndex);
+			node.push_back(nResult->getNodeValue());
+
+			std::vector<std::string> row;
+			for (std::uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
 			{
-				attributeNames.push_back(subString);
+				row.push_back(GetAttributeValue(node.at(nIndex), 
+								attributeNames.at(attrIndex)));
 			}
 
-			XMLSize_t count = nResult->getSnapshotLength();
-
-			/**  Parse the parameters */
-			for (XMLSize_t nIndex = 0; nIndex < count; nIndex++)
-			{
-				nResult->snapshotItem(nIndex);
-				node.push_back(nResult->getNodeValue());
-
-				std::vector<std::string> row;
-				for (std::uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
-				{
-					row.push_back(GetAttributeValue(node.at(nIndex), 
-									attributeNames.at(attrIndex)));
-				}
-
-				parameters.push_back(row);
-			}
+			parameters.push_back(row);
 		}
 
 		nResult->release();
@@ -133,47 +131,40 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode, 
 											const std::string& attributeName)
 {
-	if (domNode == NULL)
-	{
-		boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
-		formatter % "Get Attribute Value";
-
-		LOG_WARN() << formatter.str();
-
-		return "";
-	}
-
 	try
 	{
-		if (domNode->hasAttributes())
+		if (domNode != NULL)
 		{
-			xercesc::DOMNamedNodeMap* attributes = domNode->getAttributes();
-			const XMLSize_t attribCount = attributes->getLength();
-
-			for (XMLSize_t attribSize = 0; attribSize < attribCount; attribSize++)
+			if (domNode->hasAttributes())
 			{
-				xercesc::DOMNode* currentNode = attributes->item(attribSize);
-				if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
+				xercesc::DOMNamedNodeMap* attributes = domNode->getAttributes();
+				const XMLSize_t attribCount = attributes->getLength();
+
+				for (XMLSize_t attribSize = 0; attribSize < attribCount; attribSize++)
 				{
-					char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
-
-					if (attributeName.compare(attribute) == 0)
+					xercesc::DOMNode* currentNode = attributes->item(attribSize);
+					if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
 					{
-						char* val = xercesc::XMLString::transcode(
-										domNode->getAttributes()->getNamedItem(
-												xercesc::XMLString::transcode(attributeName.c_str())
-										)->getNodeValue()
-									);
+						char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
 
-						std::string value(val);
-						xercesc::XMLString::release(&val);
-						xercesc::XMLString::release(&attribute);
+						if (attributeName.compare(attribute) == 0)
+						{
+							char* val = xercesc::XMLString::transcode(
+											domNode->getAttributes()->getNamedItem(
+													xercesc::XMLString::transcode(attributeName.data())
+											)->getNodeValue()
+										);
 
-						return value;
-					}
-					else
-					{
-						xercesc::XMLString::release(&attribute);
+							std::string value(val);
+							xercesc::XMLString::release(&val);
+							xercesc::XMLString::release(&attribute);
+
+							return value;
+						}
+						else
+						{
+							xercesc::XMLString::release(&attribute);
+						}
 					}
 				}
 			}
@@ -183,8 +174,8 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 	{
 		CliResult res = CliLogger::GetInstance().HandleExceptionCaught("Get Attribute Value", e);
 
-		LOG_WARN() << res.GetErrorMessage();
+		LOG_ERROR() << res.GetErrorMessage();
 	}
 
-	return "";
+	return kDefaultAttributeValue;
 }

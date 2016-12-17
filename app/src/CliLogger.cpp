@@ -35,9 +35,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "OpenConfiguratorCli.h"
 
-CliLogger::CliLogger()
+CliLogger::CliLogger() :
+	languageIndex((std::uint32_t)Language::EN)
 {
-	languageIndex = (std::uint32_t)Language::EN;
 }
 
 CliLogger::~CliLogger()
@@ -59,7 +59,7 @@ CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription,
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgCliApiFailed[languageIndex]);
-	formatter % apiDescription.c_str();
+	formatter % apiDescription;
 
 	return CliResult(CliErrorCode::CLI_API_FAILED, formatter.str());
 }
@@ -72,7 +72,7 @@ CliResult CliLogger::HandleCoreApiFailed(const std::string& apiDescription,
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgCoreApiFailed[languageIndex]);
-	formatter % apiDescription.c_str();
+	formatter % apiDescription;
 
 	return CliResult(CliErrorCode::CORE_API_FAILED, formatter.str());
 }
@@ -85,7 +85,7 @@ CliResult CliLogger::HandleExceptionCaught(const std::string& apiDescription,
 
 	/** Prepare the failure message with caller API name */
 	boost::format formatter(kMsgExceptionCaught[languageIndex]);
-	formatter % apiDescription.c_str();
+	formatter % apiDescription;
 
 	return CliResult(CliErrorCode::EXCEPTION_CAUGHT, formatter.str());
 }

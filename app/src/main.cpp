@@ -42,13 +42,6 @@ int main(int parameterCount, char* parameter[])
 {
 	std::vector<std::string> paramList;
 
-	/** Initialize logging configurations from ini file */
-	/*Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(kLogConfigurationFileName);
-	if (!confRes.IsSuccessful())
-	{
-		LOG_WARN() << confRes.GetErrorMessage();
-	}*/
-
 	/** Prepare the parameter list */
 	for (std::int32_t index = 1; index < parameterCount; index++)
 	{

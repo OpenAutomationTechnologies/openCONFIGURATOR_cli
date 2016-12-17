@@ -125,6 +125,8 @@ namespace IndustrialNetwork
 				const std::string kFormatStrInterfaceRangeXpathExpression = "name,baseIndex,maxIndex,maxSubIndex,sortMode,sortNumber,PDOmapping,sortStep";
 				const std::string kFormatStrAppLayerInterfaceXpathExpression = "uniqueIDRef";
 				const std::string kFormatStrIntrfcXpathExpression = "id";
+
+				const std::string kDefaultAttributeValue;
 			} // end of namespace CliConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK

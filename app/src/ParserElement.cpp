@@ -37,10 +37,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ParserElement::ParserElement()
 {
+}
+
+ParserElement::ParserElement(std::string file) :
+	filePath(file)
+{
 	/** Initialize the Xerces usage */
 	xercesc::XMLPlatformUtils::Initialize();
 
 	domParser = new xercesc::XercesDOMParser();
+
+	/** Input project XML file to DOM parse() function */
+	domParser->parse(filePath.data());
 }
 
 ParserElement::~ParserElement()
@@ -52,14 +60,17 @@ ParserElement::~ParserElement()
 	xercesc::XMLPlatformUtils::Terminate();
 }
 
-CliResult ParserElement::CreateElement(const std::string& file)
+CliResult ParserElement::CreateElement()
 {
 	try
 	{
-		filePath = file;
+		if (!domParser)
+		{
+			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			formatter % "create parser element";
 
-		/** Input project XML file to DOM parse() function */
-		domParser->parse(filePath.c_str());
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+		}
 
 		/** Store the entire project XML file in DOMDocument */
 		domDocument = domParser->getDocument();

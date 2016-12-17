@@ -58,7 +58,7 @@ CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 		if (!boost::filesystem::exists(fileName))
 		{
 			boost::format formatter(kMsgFileNotExists[CliLogger::GetInstance().languageIndex]);
-			formatter % fileName.c_str();
+			formatter % fileName;
 
 			return CliResult(CliErrorCode::FILE_NOT_EXISTS, formatter.str());
 		}
@@ -66,7 +66,7 @@ CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 		if (boost::filesystem::extension(fileName).compare(fileExtn) != 0)
 		{
 			boost::format formatter(kMsgFileExtnIncorrect[CliLogger::GetInstance().languageIndex]);
-			formatter % fileName.c_str();
+			formatter % fileName;
 
 			return CliResult(CliErrorCode::FILE_EXTN_INCORRECT, formatter.str());
 		}
@@ -96,7 +96,7 @@ CliResult ParameterValidator::IsPathValid(const std::string& path)
 		if (!boost::filesystem::exists(path))
 		{
 			boost::format formatter(kMsgOutputPathNotExiists[CliLogger::GetInstance().languageIndex]);
-			formatter % path.c_str();
+			formatter % path;
 
 			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_EXISTS, formatter.str());
 		}
@@ -131,13 +131,13 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 		if (!boost::filesystem::exists(schemaDefFile))
 		{
 			boost::format formatter(kMsgSchemaFileNotExists[CliLogger::GetInstance().languageIndex]);
-			formatter % schemaDefFile.c_str();
+			formatter % schemaDefFile;
 
 			return CliResult(CliErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
 		}
 
 		/** Load schema file constraints */
-		if (domParser->loadGrammar(schemaDefFile.c_str(), 
+		if (domParser->loadGrammar(schemaDefFile.data(), 
 									xercesc::Grammar::SchemaGrammarType) == NULL)
 		{
 			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER, 

@@ -39,11 +39,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ParameterValidator.h"
 #include "ConfigurationGenerator.h"
 
-OpenConfiguratorCli::OpenConfiguratorCli()
+OpenConfiguratorCli::OpenConfiguratorCli() :
+	xmlFilePath(""),
+	outputPath(""),
+	networkName("")
 {
-	xmlFilePath = "";
-	outputPath = "";
-	networkName = "";
 }
 
 OpenConfiguratorCli::~OpenConfiguratorCli()
@@ -67,8 +67,31 @@ std::string OpenConfiguratorCli::GetNetworkName()
 CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std::string>& paramsList)
 {
 	const std::uint8_t kMinimumNumberOfParameters = 3;
+	std::ifstream boosLogInifile;
+	std::string outStream;
+	std::ostringstream logConfString;
 	CliResult res;
 
+	/** Initialize logging configurations from ini file */
+	boosLogInifile.open(kLogConfigurationFileName);
+	if (boosLogInifile.is_open())
+	{
+		while (!boosLogInifile.eof())
+		{
+			boosLogInifile >> outStream;
+			logConfString << outStream;
+		}
+		
+		boosLogInifile.close();
+
+		Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(logConfString.str());
+		if (!confRes.IsSuccessful())
+		{
+			LOG_WARN() << confRes.GetErrorMessage();
+		}
+	}
+
+	/** Validate the input arguments */
 	if (GetHelpOption(paramsList))
 	{
 		ShowUsage();
@@ -198,10 +221,18 @@ bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsL
 
 	/** if options '-p' or '--project' not found, consider the first parameter
 	     as the project XML file name */
-	if (xmlFilePath.empty())
+	if (xmlFilePath.empty() && (paramsList.size() > 0))
 	{
 		xmlFilePath = paramsList.at(0);
 	}
+
+	/** Is options '-p' or '--project' not found in parameter list */
+	if (xmlFilePath.empty())
+	{
+		return false;
+	}
+
+	networkName = boost::filesystem::basename(xmlFilePath);
 
 	return true;
 }

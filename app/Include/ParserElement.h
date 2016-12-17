@@ -51,15 +51,19 @@ namespace IndustrialNetwork
 					  */
 					ParserElement();
 
+					/** \brief Constructor of the class with file
+					  * \param file		Name of XML ot XDC file to parse
+					  */
+					ParserElement(std::string file);
+
 					/** \brief Destructor of the class 
 					  */
 					~ParserElement();
 
 					/** \brief Creates element for parsing
-					  * \param fileName		Name of XML ot XDC file to parse
 					  * \return CliResult
 					  */
-					CliResult CreateElement(const std::string& fileName);
+					CliResult CreateElement();
 
 					/** Document handle */
 					xercesc::DOMDocument* domDocument;

@@ -36,10 +36,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _CLI_LOGGER_H_
 #define _CLI_LOGGER_H_
 
+#include "Language.h"
 #include "Result.h"
 #include "CliErrorCode.h"
 #include "CliResult.h"
 
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
 
