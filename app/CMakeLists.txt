@@ -90,12 +90,12 @@ ENDIF(WIN32)
 ###############################################################################
 # Create the application
 ###############################################################################
-ADD_EXECUTABLE(openconfigurator ${LIB_SOURCES} ${LIB_HEADERS})
+ADD_EXECUTABLE(${OPEN_CONFIGURATOR_CLI_NAME} ${LIB_SOURCES} ${LIB_HEADERS})
 
 ###############################################################################
 # Link the application to the dependencies
 ###############################################################################
-TARGET_LINK_LIBRARIES(openconfigurator openconfigurator_core_lib ${XercesC_LIBRARY})
+TARGET_LINK_LIBRARIES(${OPEN_CONFIGURATOR_CLI_NAME} openconfigurator_core_lib ${XercesC_LIBRARY})
 
 ###############################################################################
 # Install the application and dependencies to bin directory
@@ -109,7 +109,7 @@ IF(WIN32)
 ENDIF()
 
 INSTALL(
-	TARGETS openconfigurator
+	TARGETS ${OPEN_CONFIGURATOR_CLI_NAME}
 	RUNTIME DESTINATION ${INSTALL_DIR}
 	LIBRARY DESTINATION ${INSTALL_DIR}
 )
