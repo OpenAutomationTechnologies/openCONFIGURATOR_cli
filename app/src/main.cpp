@@ -54,12 +54,18 @@ int main(int parameterCount, char* parameter[])
 	{
 		if (result.GetErrorType() != CliErrorCode::USAGE)
 		{
-			LOG_ERROR() << result.GetErrorMessage();
+			LOG_ERROR() << CliLogger::GetInstance().GetErrorString(result);
+
+			std::cout << kApplicationName << ": ERROR " << CliLogger::GetInstance().GetErrorString(result);
 		}
 	}
 	else
 	{
-		LOG_INFO() << kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex];
+		CliResult res(CliErrorCode::CONF_GENERATION_SUCCESS, 
+						kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex]);
+		LOG_INFO() << CliLogger::GetInstance().GetErrorString(res);
+
+		std::cout << kApplicationName << ": INFO " << CliLogger::GetInstance().GetErrorString(res);
 	}
 
 	return 0;

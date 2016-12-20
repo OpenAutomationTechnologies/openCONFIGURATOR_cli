@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OpenConfiguratorCli.h"
 #include "ParameterValidator.h"
 #include "ConfigurationGenerator.h"
+#include "ErrorCodeParser.h"
 
 OpenConfiguratorCli::OpenConfiguratorCli() :
 	xmlFilePath(""),
@@ -75,9 +76,15 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
 	}
 
-	isFileLoggingEnabled = IsLogDebug(paramsList);
+	/** Load the error code table */
+	res = ErrorCodeParser::GetInstance().LoadErrorCodeFile();
+	if (!res.IsSuccessful())
+	{
+		LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+	}
 
 	/** Initialize logging configurations from ini file */
+	isFileLoggingEnabled = IsLogDebug(paramsList);
 	boosLogInifile.open(kLogConfigurationFileName);
 	if (boosLogInifile.is_open())
 	{
@@ -108,7 +115,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(logConfString.str());
 		if (!confRes.IsSuccessful())
 		{
-			LOG_WARN() << confRes.GetErrorMessage();
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(confRes);
 		}
 	}
 

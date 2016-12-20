@@ -50,12 +50,20 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			/** Error code XML file from where the error table gets populate */
 			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
 
+			/** Structures of the error table */
 			struct ErrCoderDesc
 			{
 				Language lang;
 				std::string value;
+
+				ErrCoderDesc() : 
+					lang(Language::EN),
+					value("")
+				{
+		        }
 			};
 
 			struct ErrorCode
@@ -64,6 +72,14 @@ namespace IndustrialNetwork
 				std::uint32_t originalCode;
 				std::uint32_t toolCode;
 				std::vector<ErrCoderDesc> descriptions;
+
+				ErrorCode() : 
+					value(""),
+					originalCode(0xFFFF),
+					toolCode(0xFFFF),
+					descriptions()
+				{
+		        }
 			};
 
 			struct ErrorCodeComponent
@@ -71,6 +87,13 @@ namespace IndustrialNetwork
 				std::string component;
 				std::string componentVersion;
 				std::vector<ErrorCode> errorCodes;
+
+				ErrorCodeComponent() :
+					component(""),
+					componentVersion(""),
+					errorCodes()
+				{
+				}
 			};
 
 			/** \brief Component type of the error code
@@ -79,7 +102,7 @@ namespace IndustrialNetwork
 			{
 				const std::string kComponentLibrary = "library";
 				const std::string kComponentCli = "cli";
-			};
+			}
 
 			class ErrorCodeParser
 			{
@@ -102,14 +125,26 @@ namespace IndustrialNetwork
 					  */
 					CliResult LoadErrorCodeFile();
 
-					CliResult GetToolCode(const std::string compType, 
-											const std::uint32_t originalCode, 
+					/** \brief Gets the tool code for the original error code
+					  * \param compType			Components type
+					  * \param originalCode		Original error code
+					  * \param toolCode			Tool codeoutput
+					  * \return CliResult
+					  */
+					CliResult GetToolCode(const std::string& compType, 
+											const std::uint32_t& originalCode, 
 											std::uint32_t& toolCode);
 				private:
+					/** \brief Gets the tool code for the original error code
+					  * \param element 		Element that contains handle of XML
+					  * \return CliResult
+					  */
 					CliResult CreateErrorTable(const ParserElement& element);
 
+					/** Instance where all the loaded error code gets store */
 					std::vector<ErrorCodeComponent> errorCodeObject;
 
+					/** true if the error table loaded successful; false otherwise */
 					bool isErrorTableLoaded;
 
 			}; // end of class ErrorCodeParser

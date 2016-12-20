@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ErrorCodeParser.h"
 
 ErrorCodeParser::ErrorCodeParser() :
+	errorCodeObject(),
 	isErrorTableLoaded(false)
 {
 }
@@ -56,10 +57,18 @@ CliResult ErrorCodeParser::LoadErrorCodeFile()
 	/** Create results for error codes */
 	CliResult clires;
 	CliResult ceres;
+
+	/** Validate the parameters */
+	ceres = ParameterValidator::GetInstance().IsXmlFileValid(kErrorCodeXmlFile);
+	if (!ceres.IsSuccessful())
+	{
+		return ceres;
+	}
+
 	ParserElement xmlElement(kErrorCodeXmlFile);
 
 	/* Validate the XML file schema */
-	ceres = ParameterValidator::GetInstance().IsXmlSchemaValid(xmlElement.domParser);
+	ceres = ParameterValidator::GetInstance().IsErrCodeXmlSchemaValid(xmlElement.domParser);
 	if (!ceres.IsSuccessful())
 	{
 		/** XML file schema is not valid */
@@ -105,7 +114,8 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 		ecComponent.componentVersion = pResult.parameters[row].at(1);
 
 		subres = pSubResult.CreateResult(element, kErrorCode,
-											kFormatStrErrorCode);
+											kFormatStrErrorCode,
+											pResult.node.at(row));
 		if (!subres.IsSuccessful())
 		{
 			return subres;
@@ -130,7 +140,8 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 			}
 
 			descres = pDescResult.CreateResult(element, kErrorDescription,
-												kFormatStrErrorDescription);
+												kFormatStrErrorDescription,
+												pSubResult.node.at(subrow));
 			if (!descres.IsSuccessful())
 			{
 				return descres;
@@ -161,13 +172,13 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 	return CliResult();
 }
 
-CliResult ErrorCodeParser::GetToolCode(const std::string compType, 
-									   const std::uint32_t originalCode, 
+CliResult ErrorCodeParser::GetToolCode(const std::string& compType, 
+									   const std::uint32_t& originalCode, 
 									   std::uint32_t& toolCode)
 {
 	if (isErrorTableLoaded)
 	{
-		for (std::int32_t index = 0; index < errorCodeObject.size(); index++)
+		for (std::uint32_t index = 0; index < errorCodeObject.size(); index++)
 		{
 			std::uint32_t ecComponentIndex = 0;
 

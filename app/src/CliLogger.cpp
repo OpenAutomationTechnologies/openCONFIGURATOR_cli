@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
 #include "OpenConfiguratorCli.h"
+#include "ErrorCodeParser.h"
 
 CliLogger::CliLogger() :
 	languageIndex((std::uint32_t)Language::EN)
@@ -88,4 +89,38 @@ CliResult CliLogger::HandleExceptionCaught(const std::string& apiDescription,
 	formatter % apiDescription;
 
 	return CliResult(CliErrorCode::EXCEPTION_CAUGHT, formatter.str());
+}
+
+std::string CliLogger::GetErrorString(const CliResult& result)
+{
+	std::uint32_t toolCode;
+	std::ostringstream outString;
+
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli", 
+												(std::uint32_t)result.GetErrorType(), toolCode);
+	if (!res.IsSuccessful())
+	{
+		return result.GetErrorMessage();
+	}
+
+	outString << toolCode << ": " << result.GetErrorMessage();
+
+	return outString.str();
+}
+
+std::string CliLogger::GetErrorString(const Result& result)
+{
+	std::uint32_t toolCode;
+	std::ostringstream outString;
+
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library", 
+												(std::uint32_t)result.GetErrorType(), toolCode);
+	if (!res.IsSuccessful())
+	{
+		return result.GetErrorMessage();
+	}
+
+	outString << toolCode << ": " << result.GetErrorMessage();
+
+	return outString.str();
 }

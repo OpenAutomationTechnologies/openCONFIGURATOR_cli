@@ -67,6 +67,7 @@ namespace IndustrialNetwork
 					NULL_POINTER_FOUND,			/** NULL pointer found */
 					NO_RESULT_FOR_XPATH,		/** There is no result for the Managing Node XPath */
 					UNABLE_TO_OPEN_LOG,			/** Unable to open the log file */
+					CONF_GENERATION_SUCCESS,	/** POWERLINK configuration files generated successfully */
 					ERROR_TABLE_NOT_LOADED,		/** Error Table Not Loaded */
 					ERROR_INFO_NOT_FOUND		/** Error information not found */
 				};

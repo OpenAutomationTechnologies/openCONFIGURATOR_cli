@@ -35,11 +35,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ParserElement.h"
 
-ParserElement::ParserElement()
+ParserElement::ParserElement() :
+	domDocument(NULL),
+	domElement(NULL),
+	domParser(NULL),
+	filePath("")
 {
 }
 
 ParserElement::ParserElement(std::string file) :
+	domDocument(NULL),
+	domElement(NULL),
+	domParser(NULL),
 	filePath(file)
 {
 	/** Initialize the Xerces usage */

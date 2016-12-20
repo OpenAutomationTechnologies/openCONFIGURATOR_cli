@@ -119,6 +119,11 @@ CliResult ParameterValidator::IsXdcSchemaValid(xercesc::XercesDOMParser* domPars
 	return IsSchemaValid(domParserXdc, kXdcSchemaDefinitionFileName);
 }
 
+CliResult ParameterValidator::IsErrCodeXmlSchemaValid(xercesc::XercesDOMParser* domParserXml)
+{
+	return IsSchemaValid(domParserXml, kErrCodeXmlSchemaDefinitionFileName);
+}
+
 CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser, 
 											const std::string& schemaDefFile)
 {
@@ -153,8 +158,6 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 
 		if (domParser->getErrorCount() != 0)
 		{
-			LOG_INFO() << "DOM Parser error count: " << domParser->getErrorCount();
-
 			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID,
 						kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
 		}

@@ -85,8 +85,8 @@ namespace IndustrialNetwork
 				const std::string kForcedObjectNodeXpathExpression = kCnXpathExpression + "/ForcedObjects/Object";
 				const std::string kForcedObjectModuleXpathExpression = kModuleXpathExpression + "/ForcedObjects/Object";
 				const std::string kErrorCodeComponent = "/openCONFIGURATORErrorCodes/ErrorCodes";
-				const std::string kErrorCode = kErrorCodeComponent + "/ErrorCode";
-				const std::string kErrorDescription = kErrorCode + "/Description";
+				const std::string kErrorCode = "./ErrorCode";
+				const std::string kErrorDescription = "./Description";
 
 				const std::uint8_t MN_DEFAULT_NODE_ID = 0xF0;		/** 240 */
 				const std::uint8_t MAX_CN_NODE_ID = 0xEF;			/** 239 */
@@ -132,7 +132,9 @@ namespace IndustrialNetwork
 				const std::string kFormatStrErrorCode = "value,originalCode,toolCode";
 				const std::string kFormatStrErrorDescription = "xml:lang,value";
 
-				const std::string kDefaultAttributeValue;
+				const std::string kDefaultAttributeValue = "";
+
+				const std::string kApplicationName = "openCONFIGURATOR";
 			} // end of namespace CliConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK

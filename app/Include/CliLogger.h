@@ -91,6 +91,18 @@ namespace IndustrialNetwork
 					CliResult HandleExceptionCaught(const std::string& apiDescription, 
 									const std::exception& e);
 
+					/** \brief Generates the error string with tool code for CliResult
+					  * \param result	CliResult for which error string to be created
+					  * \return Error string with tool code
+					  */
+					std::string GetErrorString(const CliResult& result);
+
+					/** \brief Generates the error string with tool code for Result
+					  * \param result	Result for which error string to be created
+					  * \return Error string with tool code
+					  */
+					std::string GetErrorString(const Result& result);
+
 					/** Index of the current language */
 					std::uint32_t languageIndex;
 			}; // end of class CliLogger

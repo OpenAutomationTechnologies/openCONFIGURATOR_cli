@@ -100,7 +100,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Txt", cliRes);
 
-		LOG_WARN() << funRes.GetErrorMessage();
+		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 	}
 
 	std::ostringstream buffer;
@@ -116,7 +116,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Cdc", cliRes);
 
-		LOG_WARN() << funRes.GetErrorMessage();
+		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 	}
 
 	cliRes = CreateMnobdHexTxt(outputPath, buffer);
@@ -124,7 +124,7 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	{
 		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Hex Txt", cliRes);
 
-		LOG_WARN() << funRes.GetErrorMessage();
+		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 	}
 
 	return CliResult();
@@ -161,7 +161,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
 
-			LOG_WARN() << funRes.GetErrorMessage();
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 		}
 
 		cliRes = CreateXmlProcessImage(value, outputPathExtended);
@@ -169,7 +169,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
 
-			LOG_WARN() << funRes.GetErrorMessage();
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 		}
 
 		cliRes = CreateCSharpProcessImage(value, outputPathExtended);
@@ -177,7 +177,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		{
 			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
 
-			LOG_WARN() << funRes.GetErrorMessage();
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
 		}
 	}
 

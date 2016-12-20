@@ -46,6 +46,7 @@ namespace IndustrialNetwork
 		{
 			const std::string kXmlSchemaDefinitionFileName = "./resources/OC_ProjectFile/openCONFIGURATOR.xsd";
 			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
+			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
 
 			class ParameterValidator
 			{
@@ -92,6 +93,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult IsXdcSchemaValid(xercesc::XercesDOMParser* domParserXdc);
+
+					/** \brief Validates the schema of error code XML file
+					  * \param domParserXml		DOM parser handle of error code XML file
+					  * \return CliResult
+					  */
+					CliResult IsErrCodeXmlSchemaValid(xercesc::XercesDOMParser* domParserXml);
 				private:
 					/** \brief Validates file existence and extension
 					  * \param fileName			File name to be validated

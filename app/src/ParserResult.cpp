@@ -37,7 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OpenConfiguratorCli.h"
 #include "ParserResult.h"
 
-ParserResult::ParserResult()
+ParserResult::ParserResult() :
+	parameters(),
+	resultNodeValue(NULL),
+	node()
 {
 }
 
@@ -174,7 +177,7 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 	{
 		CliResult res = CliLogger::GetInstance().HandleExceptionCaught("Get Attribute Value", e);
 
-		LOG_ERROR() << res.GetErrorMessage();
+		LOG_ERROR() << CliLogger::GetInstance().GetErrorString(res);
 	}
 
 	return kDefaultAttributeValue;

@@ -394,6 +394,65 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		</ErrorCode>
 	</ErrorCodes>
 	<ErrorCodes component="cli" componentVersion="2.0.0">
-		<!-- CLI error codes to be added -->
+		<ErrorCode value="SUCCESS" originalCode="0" toolCode="5522">
+			<Description xml:lang="en" value="Cannot write to file."/>
+		</ErrorCode>
+		<ErrorCode value="USAGE" originalCode="1" toolCode="5523">
+			<Description xml:lang="en" value="Usage of the application"/>
+		</ErrorCode>
+		<ErrorCode value="CORE_API_FAILED" originalCode="2" toolCode="5524">
+			<Description xml:lang="en" value="Core library API failed"/>
+		</ErrorCode>
+		<ErrorCode value="CLI_API_FAILED" originalCode="3" toolCode="5525">
+			<Description xml:lang="en" value="CLI library API failed"/>
+		</ErrorCode>
+		<ErrorCode value="EXCEPTION_CAUGHT" originalCode="4" toolCode="5526">
+			<Description xml:lang="en" value="Exception caught"/>
+		</ErrorCode>
+		<ErrorCode value="LESS_NO_OF_PARAMS" originalCode="5" toolCode="5527">
+			<Description xml:lang="en" value="Project XML file name and output path are mandatory"/>
+		</ErrorCode>
+		<ErrorCode value="OUTPUT_PATH_NOT_FOUND" originalCode="6" toolCode="5528">
+			<Description xml:lang="en" value="Project output path not found from command line parameters"/>
+		</ErrorCode>
+		<ErrorCode value="XML_FILE_NOT_FOUND" originalCode="7" toolCode="5529">
+			<Description xml:lang="en" value="Project XML file name is not found from command line parameters"/>
+		</ErrorCode>
+		<ErrorCode value="FILE_NOT_EXISTS" originalCode="8" toolCode="5530">
+			<Description xml:lang="en" value="File does not exists"/>
+		</ErrorCode>
+		<ErrorCode value="FILE_EXTN_INCORRECT" originalCode="9" toolCode="5531">
+			<Description xml:lang="en" value="Extension of file is incorrect"/>
+		</ErrorCode>
+		<ErrorCode value="SCHEMA_FILE_NOT_EXISTS" originalCode="10" toolCode="5532">
+			<Description xml:lang="en" value="Schema file does not exists"/>
+		</ErrorCode>
+		<ErrorCode value="OUTPUT_PATH_NOT_EXISTS" originalCode="11" toolCode="5533">
+			<Description xml:lang="en" value="Output path not exists"/>
+		</ErrorCode>
+		<ErrorCode value="ERROR_LOADING_GRAMMER" originalCode="12" toolCode="5534">
+			<Description xml:lang="en" value="Error loading grammer to DOM Parser"/>
+		</ErrorCode>
+		<ErrorCode value="FILE_SCHEMA_NOT_VALID" originalCode="13" toolCode="5535">
+			<Description xml:lang="en" value="Schema of file is not valid"/>
+		</ErrorCode>
+		<ErrorCode value="NULL_POINTER_FOUND" originalCode="14" toolCode="5536">
+			<Description xml:lang="en" value="NULL pointer found"/>
+		</ErrorCode>
+		<ErrorCode value="NO_RESULT_FOR_XPATH" originalCode="15" toolCode="5537">
+			<Description xml:lang="en" value="There is no result for the Managing Node XPath"/>
+		</ErrorCode>
+		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="16" toolCode="5538">
+			<Description xml:lang="en" value="Unable to open the log file"/>
+		</ErrorCode>
+		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="17" toolCode="5539">
+			<Description xml:lang="en" value="POWERLINK configuration files generated successfully"/>
+		</ErrorCode>
+		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="18" toolCode="5540">
+			<Description xml:lang="en" value="Error Table Not Loaded"/>
+		</ErrorCode>
+		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="19" toolCode="5541">
+			<Description xml:lang="en" value="Error information not found"/>
+		</ErrorCode>
 	</ErrorCodes>
 </openCONFIGURATORErrorCodes>
