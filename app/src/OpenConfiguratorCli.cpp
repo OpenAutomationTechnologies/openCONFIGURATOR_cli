@@ -57,13 +57,6 @@ OpenConfiguratorCli& OpenConfiguratorCli::GetInstance()
 	return instance;
 }
 
-std::string OpenConfiguratorCli::GetNetworkName()
-{
-	networkName = boost::filesystem::basename(xmlFilePath);
-
-	return networkName;
-}
-
 CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std::string>& paramsList)
 {
 	const std::uint8_t kMinimumNumberOfParameters = 3;
@@ -71,15 +64,43 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	std::string outStream;
 	std::ostringstream logConfString;
 	CliResult res;
+	bool isFileLoggingEnabled = false;
+
+	/** Check for the help option */
+	if (GetHelpOption(paramsList))
+	{
+		ShowUsage();
+
+		return CliResult(CliErrorCode::USAGE, 
+							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
+	}
+
+	isFileLoggingEnabled = IsLogDebug(paramsList);
 
 	/** Initialize logging configurations from ini file */
 	boosLogInifile.open(kLogConfigurationFileName);
 	if (boosLogInifile.is_open())
 	{
-		while (!boosLogInifile.eof())
+		while (boosLogInifile)
 		{
-			boosLogInifile >> outStream;
-			logConfString << outStream;
+			std::getline(boosLogInifile, outStream);
+			logConfString << outStream << std::endl;
+			if (isFileLoggingEnabled)
+			{
+				/** Filter Console target */
+				if (outStream.compare("[Sinks.Console]") == 0)
+				{
+					logConfString << "Filter=\"%Target% contains \\\"Console\\\"\"" << std::endl;
+				}
+			}
+			else
+			{
+				/** Filter File target */
+				if (outStream.compare("[Sinks.File]") == 0)
+				{
+					logConfString << "Filter=\"%Target% contains \\\"File\\\"\"" << std::endl;
+				}
+			}
 		}
 		
 		boosLogInifile.close();
@@ -92,14 +113,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	}
 
 	/** Validate the input arguments */
-	if (GetHelpOption(paramsList))
-	{
-		ShowUsage();
-
-		return CliResult(CliErrorCode::USAGE, 
-							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
-	}
-
 	if (paramsList.size() < kMinimumNumberOfParameters)
 	{
 		ShowUsage();
@@ -121,13 +134,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 					CliLogger::GetInstance().languageIndex = (std::uint32_t)Language::DE;
 				}
 			}
-
-			if (IsLogDebug(paramsList))
-			{
-				/** Set logging option as file log */
-			}
-
-			GetNetworkName();
 
 			/** Validate the parameters */
 			res = ParameterValidator::GetInstance().IsXmlFileValid(xmlFilePath);

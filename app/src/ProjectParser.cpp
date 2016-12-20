@@ -3110,24 +3110,124 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 
 IEC_Datatype ProjectParser::GetDataType(const std::string& dataType)
 {
-	auto it = std::find(std::begin(IECDatatypeValues), std::end(IECDatatypeValues), dataType);
-
-	if (it != std::end(IECDatatypeValues))
-    {
-		return (IEC_Datatype)std::distance(std::begin(IECDatatypeValues), it);
-    }
-
+	if (dataType.compare("UNDEFINED") == 0)
+	{
+		return IEC_Datatype::UNDEFINED;
+	}
+	else if (dataType.compare("BITSTRING") == 0)
+	{
+		return IEC_Datatype::BITSTRING;
+	}
+	else if (dataType.compare("BOOL") == 0)
+	{
+		return IEC_Datatype::BOOL;
+	}
+	else if (dataType.compare("BYTE") == 0)
+	{
+		return IEC_Datatype::BYTE;
+	}
+	else if (dataType.compare("_CHAR") == 0)
+	{
+		return IEC_Datatype::_CHAR;
+	}
+	else if (dataType.compare("WORD") == 0)
+	{
+		return IEC_Datatype::WORD;
+	}
+	else if (dataType.compare("DWORD") == 0)
+	{
+		return IEC_Datatype::DWORD;
+	}
+	else if (dataType.compare("LWORD") == 0)
+	{
+		return IEC_Datatype::LWORD;
+	}
+	else if (dataType.compare("SINT") == 0)
+	{
+		return IEC_Datatype::SINT;
+	}
+	else if (dataType.compare("INT") == 0)
+	{
+		return IEC_Datatype::INT;
+	}
+	else if (dataType.compare("DINT") == 0)
+	{
+		return IEC_Datatype::DINT;
+	}
+	else if (dataType.compare("LINT") == 0)
+	{
+		return IEC_Datatype::LINT;
+	}
+	else if (dataType.compare("USINT") == 0)
+	{
+		return IEC_Datatype::USINT;
+	}
+	else if (dataType.compare("UINT") == 0)
+	{
+		return IEC_Datatype::UINT;
+	}
+	else if (dataType.compare("UDINT") == 0)
+	{
+		return IEC_Datatype::UDINT;
+	}
+	else if (dataType.compare("ULINT") == 0)
+	{
+		return IEC_Datatype::ULINT;
+	}
+	else if (dataType.compare("REAL") == 0)
+	{
+		return IEC_Datatype::REAL;
+	}
+	else if (dataType.compare("LREAL") == 0)
+	{
+		return IEC_Datatype::LREAL;
+	}
+	else if (dataType.compare("STRING") == 0)
+	{
+		return IEC_Datatype::STRING;
+	}
+	else if (dataType.compare("WSTRING") == 0)
+	{
+		return IEC_Datatype::WSTRING;
+	}
+	
 	return IEC_Datatype::UNDEFINED;
 }
 
 ParameterAccess ProjectParser::GetParameterAccess(const std::string& access)
 {
-	auto it = std::find(std::begin(ParameterAccessValues), std::end(ParameterAccessValues), access);
-
-	if (it != std::end(ParameterAccessValues))
-    {
-		return (ParameterAccess)std::distance(std::begin(ParameterAccessValues), it);
-    }
+	if (access.compare("constant") == 0)
+	{
+		return ParameterAccess::constant;
+	}
+	else if (access.compare("read") == 0)
+	{
+		return ParameterAccess::read;
+	}
+	else if (access.compare("write") == 0)
+	{
+		return ParameterAccess::write;
+	}
+	else if (access.compare("readWrite") == 0)
+	{
+		return ParameterAccess::readWrite;
+	}
+	else if (access.compare("readWriteInput") == 0)
+	{
+		return ParameterAccess::readWriteInput;
+	}
+	else if (access.compare("readWriteOutput") == 0)
+	{
+		return ParameterAccess::readWriteOutput;
+	}
+	else if (access.compare("noAccess") == 0)
+	{
+		return ParameterAccess::noAccess;
+	}
+	else if (access.compare("undefined") == 0)
+	{
+		return ParameterAccess::undefined;
+	}
 
 	return ParameterAccess::undefined;
 }
@@ -3155,29 +3255,78 @@ ObjectType ProjectParser::GetObjectType(const std::uint8_t objType)
 
 PlkDataType ProjectParser::GetPlkDataType(const std::string& plkDataType)
 {
-	return (PlkDataType)std::stoi(plkDataType, NULL, 16);
+	if (!plkDataType.empty())
+	{
+		return (PlkDataType)std::stoi(plkDataType, NULL, 16);
+	}
+
+	return PlkDataType::UNDEFINED;
 }
 
 AccessType ProjectParser::GetObjAccessType(const std::string& accessType)
 {
-	auto it = std::find(std::begin(AccessTypeValues), std::end(AccessTypeValues), accessType);
-
-	if (it != std::end(AccessTypeValues))
-    {
-		return (AccessType)std::distance(std::begin(AccessTypeValues), it);
-    }
+	if (accessType.compare("undefined") == 0)
+	{
+		return AccessType::UNDEFINED;
+	}
+	else if (accessType.compare("rw") == 0)
+	{
+		return AccessType::RW;
+	}
+	else if (accessType.compare("rws") == 0)
+	{
+		return AccessType::RWS;
+	}
+	else if (accessType.compare("wo") == 0)
+	{
+		return AccessType::WO;
+	}
+	else if (accessType.compare("wos") == 0)
+	{
+		return AccessType::WOS;
+	}
+	else if (accessType.compare("ro") == 0)
+	{
+		return AccessType::RO;
+	}
+	else if (accessType.compare("const") == 0)
+	{
+		return AccessType::CONST;
+	}
+	else if (accessType.compare("cond") == 0)
+	{
+		return AccessType::COND;
+	}
 
 	return AccessType::UNDEFINED;
 }
 
 PDOMapping ProjectParser::GetPdoMapping(const std::string& pdoMapp)
 {
-	auto it = std::find(std::begin(PDOMappingValues), std::end(PDOMappingValues), pdoMapp);
-
-	if (it != std::end(PDOMappingValues))
-    {
-		return (PDOMapping)std::distance(std::begin(PDOMappingValues), it);
-    }
+	if (pdoMapp.compare("undefined") == 0)
+	{
+		return PDOMapping::UNDEFINED;
+	}
+	else  if (pdoMapp.compare("no") == 0)
+	{
+		return PDOMapping::NO;
+	}
+	else if (pdoMapp.compare("default") == 0)
+	{
+		return PDOMapping::DEFAULT;
+	}
+	else if (pdoMapp.compare("optional") == 0)
+	{
+		return PDOMapping::OPTIONAL;
+	}
+	else if (pdoMapp.compare("TPDO") == 0)
+	{
+		return PDOMapping::TPDO;
+	}
+	else if (pdoMapp.compare("RPDO") == 0)
+	{
+		return PDOMapping::RPDO;
+	}
 
 	return PDOMapping::UNDEFINED;
 }

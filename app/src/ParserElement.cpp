@@ -54,7 +54,7 @@ ParserElement::ParserElement(std::string file) :
 ParserElement::~ParserElement()
 {
 	/** Release the DOM elements */
-	delete [] domParser;
+	delete domParser;
 
 	/** Release the Xerces usage */
 	xercesc::XMLPlatformUtils::Terminate();

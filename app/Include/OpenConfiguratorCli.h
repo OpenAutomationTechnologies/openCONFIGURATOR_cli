@@ -93,11 +93,6 @@ namespace IndustrialNetwork
 					  */
 					static OpenConfiguratorCli& GetInstance();
 
-					/** \brief Gets the network name of the XML file
-					  * \return Network name as string; "" in case of failure
-					  */
-					std::string GetNetworkName();
-
 					/** \brief Generates the configuration output files
 					  * \param paramsList		List of command line parameters
 					  * \return CliResult

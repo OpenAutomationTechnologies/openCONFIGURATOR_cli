@@ -1,7 +1,7 @@
 /**
- * \file CliErrorCode
+ * \file ErrorCodeParser
  *
- * \brief Error code enums of CLI application
+ * \brief Includes functionalities to load the error codes from XML file
  *
  * \author Kalycito Infotech Private Limited
  *
@@ -33,10 +33,16 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CLI_ERROR_CODE_H_
-#define _CLI_ERROR_CODE_H_
+#ifndef _ERROR_CODE_PARSER_H_
+#define _ERROR_CODE_PARSER_H_
 
-#include <cstdint>
+#include "OpenConfiguratorCli.h"
+#include "ParserElement.h"
+#include "ParserResult.h"
+#include "ParameterValidator.h"
+#include "Language.h"
+
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
 
 namespace IndustrialNetwork
 {
@@ -44,35 +50,71 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			namespace ErrorHandling
+			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
+
+			struct ErrCoderDesc
 			{
-				/** \brief Represents the error codes returned by the openCONFIGURATOR CLI
-				  */
-				enum class CliErrorCode : std::uint8_t
-				{
-					SUCCESS = 0,				/** Operation completed successfully */
-					USAGE = 1,					/** Usage of the application */
-					CORE_API_FAILED,			/** Core library API failed */
-					CLI_API_FAILED,				/** CLI library API failed */
-					EXCEPTION_CAUGHT,			/** Exception caught */
-					LESS_NO_OF_PARAMS,			/** Project XML file name and output path are mandatory */
-					OUTPUT_PATH_NOT_FOUND,		/** Project output path not found from command line parameters */
-					XML_FILE_NOT_FOUND,			/** Project XML file name is not found from command line parameters */
-					FILE_NOT_EXISTS,			/** File does not exists */
-					FILE_EXTN_INCORRECT,		/** Extension of file is incorrect */
-					SCHEMA_FILE_NOT_EXISTS,		/** Schema file does not exists */
-					OUTPUT_PATH_NOT_EXISTS,		/** Output path not exists */
-					ERROR_LOADING_GRAMMER,		/** Error loading grammer to DOM Parser */
-					FILE_SCHEMA_NOT_VALID,		/** Schema of file is not valid */
-					NULL_POINTER_FOUND,			/** NULL pointer found */
-					NO_RESULT_FOR_XPATH,		/** There is no result for the Managing Node XPath */
-					UNABLE_TO_OPEN_LOG,			/** Unable to open the log file */
-					ERROR_TABLE_NOT_LOADED,		/** Error Table Not Loaded */
-					ERROR_INFO_NOT_FOUND		/** Error information not found */
-				};
-			} // end of namespace ErrorHandling
+				Language lang;
+				std::string value;
+			};
+
+			struct ErrorCode
+			{
+				std::string value;
+				std::uint32_t originalCode;
+				std::uint32_t toolCode;
+				std::vector<ErrCoderDesc> descriptions;
+			};
+
+			struct ErrorCodeComponent
+			{
+				std::string component;
+				std::string componentVersion;
+				std::vector<ErrorCode> errorCodes;
+			};
+
+			/** \brief Component type of the error code
+			  */
+			namespace ComponentType
+			{
+				const std::string kComponentLibrary = "library";
+				const std::string kComponentCli = "cli";
+			};
+
+			class ErrorCodeParser
+			{
+				public:
+					/** \brief Default constructor of the class 
+					  */
+					ErrorCodeParser();
+
+					/** \brief Destructor of the class 
+					  */
+					~ErrorCodeParser();
+
+					/** \brief Creates single instance
+					  * \return Static instance of the class
+					  */
+					static ErrorCodeParser& GetInstance();
+
+					/** \brief Loads the error code XML file
+					  * \return CliResult
+					  */
+					CliResult LoadErrorCodeFile();
+
+					CliResult GetToolCode(const std::string compType, 
+											const std::uint32_t originalCode, 
+											std::uint32_t& toolCode);
+				private:
+					CliResult CreateErrorTable(const ParserElement& element);
+
+					std::vector<ErrorCodeComponent> errorCodeObject;
+
+					bool isErrorTableLoaded;
+
+			}; // end of class ErrorCodeParser
 		} // end of namespace Application
 	} // end of namespace POWERLINK
 } // end of namespace IndustrialNetwork
 
-#endif // _CLI_ERROR_CODE_H_
+#endif // _ERROR_CODE_PARSER_H_

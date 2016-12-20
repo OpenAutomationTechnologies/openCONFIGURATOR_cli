@@ -67,6 +67,8 @@ namespace IndustrialNetwork
 				const std::string kMsgNoResultForXPath[] = {"There is no result for the XPath \"%s\"", "\"%s\""};
 				const std::string kMsgUnableToOpenLogFile[] = {"Unable to open the log file \"%s\"", "\"%s\""};
 				const std::string kMsgConfGenerationSuccess[] = {"POWERLINK configuration files generated successfully", ""};
+				const std::string kMsgErrorTableNotLoaded[] = {"Error table not loaded", ""};
+				const std::string kMsgErrorInfoNotFound[] = {"Error information not found", ""};
 
 				/** \brief Functionalities to handle the error messages
 				  */
