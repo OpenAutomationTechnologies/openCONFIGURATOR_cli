@@ -111,9 +111,15 @@ IF (MSVC)
 	IF(${FOUND} EQUAL -1)
 		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/win32/x86/\${BUILD_TYPE}")
 		SET(INSTALL_DIR_VS "${CMAKE_SOURCE_DIR}/bin/win32/x86/$(Configuration)")
+		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
+                DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86/\${BUILD_TYPE}"
+                )
 	ELSE()
 		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/\${BUILD_TYPE}")
 		SET(INSTALL_DIR_VS "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/$(Configuration)")
+		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
+                DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/\${BUILD_TYPE}"
+                )
 	ENDIF()
 ENDIF()
 
