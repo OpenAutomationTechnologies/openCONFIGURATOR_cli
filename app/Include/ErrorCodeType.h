@@ -1,7 +1,7 @@
 /**
- * \file ErrorCodeParser
+ * \file ErrorCodeType
  *
- * \brief Includes functionalities to load the error codes from XML file
+ * \brief Includes the data members of Error Code type
  *
  * \author Kalycito Infotech Private Limited
  *
@@ -33,17 +33,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _ERROR_CODE_PARSER_H_
-#define _ERROR_CODE_PARSER_H_
+#ifndef _ERROR_CODE_TYPE_H_
+#define _ERROR_CODE_TYPE_H_
 
-#include "OpenConfiguratorCli.h"
-#include "ParserElement.h"
-#include "ParserResult.h"
-#include "ParameterValidator.h"
-#include "Language.h"
-#include "ErrorCodeCompType.h"
-
-using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+#include "ErrorCodeDescType.h"
 
 namespace IndustrialNetwork
 {
@@ -51,63 +44,43 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			/** Error code XML file from where the error table gets populate */
-			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
+			/** Unknown error code value */
+			const std::uint32_t kUnknownCodeValue = 0xFFFF;
 
-			/** \brief Component type of the error code
-			  */
-			namespace ComponentType
-			{
-				const std::string kComponentLibrary = "library";
-				const std::string kComponentCli = "cli";
-			}
-
-			class ErrorCodeParser
+			class ErrorCodeType
 			{
 				public:
 					/** \brief Default constructor of the class 
 					  */
-					ErrorCodeParser();
+					ErrorCodeType() : 
+						value(""),
+						originalCode(kUnknownCodeValue),
+						toolCode(kUnknownCodeValue),
+						descriptions()
+					{
+					}
 
 					/** \brief Destructor of the class 
 					  */
-					~ErrorCodeParser();
+					~ErrorCodeType()
+					{
+					}
 
-					/** \brief Creates single instance
-					  * \return Static instance of the class
-					  */
-					static ErrorCodeParser& GetInstance();
+					/** Enum name of the error code */
+					std::string value;
 
-					/** \brief Loads the error code XML file
-					  * \return CliResult
-					  */
-					CliResult LoadErrorCodeFile();
+					/** Original enum error code value */
+					std::uint32_t originalCode;
 
-					/** \brief Gets the tool code for the original error code
-					  * \param compType			Components type
-					  * \param originalCode		Original error code
-					  * \param toolCode			Tool codeoutput
-					  * \return CliResult
-					  */
-					CliResult GetToolCode(const std::string& compType,
-											const std::uint32_t& originalCode,
-											std::uint32_t& toolCode);
-				private:
-					/** \brief Gets the tool code for the original error code
-					  * \param element 		Element that contains handle of XML
-					  * \return CliResult
-					  */
-					CliResult CreateErrorTable(const ParserElement& element);
+					/** Tool code value of the error */
+					std::uint32_t toolCode;
 
-					/** Instance where all the loaded error code gets store */
-					std::vector<ErrorCodeCompType> errorCodeObject;
+					/** Error description messages for different languages */
+					std::vector<ErrorCodeDescType> descriptions;
 
-					/** true if the error table loaded successful; false otherwise */
-					bool isErrorTableLoaded;
-
-			}; // end of class ErrorCodeParser
+			}; // end of class ErrorCodeType
 		} // end of namespace Application
 	} // end of namespace POWERLINK
 } // end of namespace IndustrialNetwork
 
-#endif // _ERROR_CODE_PARSER_H_
+#endif // _ERROR_CODE_TYPE_H_

@@ -72,7 +72,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	{
 		ShowUsage();
 
-		return CliResult(CliErrorCode::USAGE, 
+		return CliResult(CliErrorCode::USAGE,
 							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
 	}
 
@@ -124,7 +124,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	{
 		ShowUsage();
 
-		return CliResult(CliErrorCode::LESS_NO_OF_PARAMS, 
+		return CliResult(CliErrorCode::LESS_NO_OF_PARAMS,
 							kMsgLessNoOfParams[CliLogger::GetInstance().languageIndex]);
 	}
 
@@ -175,13 +175,13 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		}
 		else
 		{
-			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND, 
+			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND,
 								kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	else
 	{
-		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND, 
+		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND,
 							kMsgXmlFileNotFound[CliLogger::GetInstance().languageIndex]);
 	}
 }
@@ -190,7 +190,7 @@ void OpenConfiguratorCli::ShowUsage()
 {
 	const std::string kMsgToolGenerator     = "Kalycito Infotech Private Limited ";
 	const std::string kMsgToolVendor        = "B&R Internal" ;
-	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR [options]";
+	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR.exe [options]";
 	const std::string kMsgOptions           = "Options: ";
 	const std::string kMsgProjectParameter  = " -p,--project <ProjectFile> \t Project XML file. ";
 	const std::string kMsgOutputParameter   = " -o,--output <OutputPath> \t Output path for generated files. ";

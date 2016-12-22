@@ -135,6 +135,7 @@ namespace IndustrialNetwork
 				const std::string kDefaultAttributeValue = "";
 
 				const std::string kApplicationName = "openCONFIGURATOR";
+
 			} // end of namespace CliConstants
 		} // end of namespace Application
 	} // end of namespace POWERLINK

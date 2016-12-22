@@ -97,6 +97,7 @@ namespace IndustrialNetwork
 						  */
 						bool IsSuccessful();
 				};
+
 			} // end of namespace ErrorHandling
 		} // end of namespace Application
 	} // end of namespace POWERLINK

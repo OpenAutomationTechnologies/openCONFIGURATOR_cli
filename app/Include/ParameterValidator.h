@@ -113,7 +113,7 @@ namespace IndustrialNetwork
 					  * \param schemaDefFile	Schema definition file for reference 
 					  * \return CliResult
 					  */
-					CliResult IsSchemaValid(xercesc::XercesDOMParser* domParser, 
+					CliResult IsSchemaValid(xercesc::XercesDOMParser* domParser,
 									const std::string& schemaDefFile);
 
 			}; // end of class ParameterValidator

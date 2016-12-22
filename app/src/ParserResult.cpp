@@ -114,7 +114,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 			std::vector<std::string> row;
 			for (std::uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
 			{
-				row.push_back(GetAttributeValue(node.at(nIndex), 
+				row.push_back(GetAttributeValue(node.at(nIndex),
 								attributeNames.at(attrIndex)));
 			}
 
@@ -131,7 +131,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 	return CliResult();
 }
 
-std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode, 
+std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 											const std::string& attributeName)
 {
 	try

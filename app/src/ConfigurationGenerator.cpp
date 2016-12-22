@@ -51,7 +51,7 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 	return instance;
 }
 
-CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& xmlPath, 
+CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& xmlPath,
 															 const std::string& outputPath)
 {
 	CliResult cliRes;
@@ -184,7 +184,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
     return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath, 
+CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 												 const std::string& configuration)
 {
 	try
@@ -206,7 +206,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath, 
+CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 												 const std::ostringstream& buffer)
 {
 	try
@@ -228,7 +228,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPath, 
+CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPath,
 													const std::ostringstream& buffer)
 {
 	try
@@ -292,7 +292,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 }
 
 
-CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId, 
+CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 													  const std::string& outputPath)
 {
 	std::string piDataOutput = "";
@@ -324,7 +324,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeId, 
+CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeId,
 														const std::string& outputPath)
 {
 	std::string piDataOutput = "";
@@ -356,7 +356,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 	return CliResult();
 }
 
-CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t nodeId, 
+CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t nodeId,
 														   const std::string& outputPath)
 {
 	std::string piDataOutput = "";

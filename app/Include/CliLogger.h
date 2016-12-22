@@ -72,7 +72,7 @@ namespace IndustrialNetwork
 					  * \param result			CliResult returned by the failed CLI API
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleCliApiFailed(const std::string& apiDescription, 
+					CliResult HandleCliApiFailed(const std::string& apiDescription,
 									const CliResult& result);
 
 					/** \brief Logs message for Core API failure
@@ -80,7 +80,7 @@ namespace IndustrialNetwork
 					  * \param result			Result returned by the failed Core API
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleCoreApiFailed(const std::string& apiDescription, 
+					CliResult HandleCoreApiFailed(const std::string& apiDescription,
 									const Result& result);
 
 					/** \brief Logs message when exception caught
@@ -88,7 +88,7 @@ namespace IndustrialNetwork
 					  * \param e				Exception ojbect
 					  * \return CliResult failure result with caller API name
 					  */
-					CliResult HandleExceptionCaught(const std::string& apiDescription, 
+					CliResult HandleExceptionCaught(const std::string& apiDescription,
 									const std::exception& e);
 
 					/** \brief Generates the error string with tool code for CliResult
@@ -105,6 +105,7 @@ namespace IndustrialNetwork
 
 					/** Index of the current language */
 					std::uint32_t languageIndex;
+
 			}; // end of class CliLogger
 		} // end of namespace Application
 	} // end of namespace POWERLINK

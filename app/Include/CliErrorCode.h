@@ -71,6 +71,7 @@ namespace IndustrialNetwork
 					ERROR_TABLE_NOT_LOADED,		/** Error Table Not Loaded */
 					ERROR_INFO_NOT_FOUND		/** Error information not found */
 				};
+
 			} // end of namespace ErrorHandling
 		} // end of namespace Application
 	} // end of namespace POWERLINK

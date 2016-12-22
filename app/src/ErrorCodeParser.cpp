@@ -102,69 +102,76 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 		return crres;
 	}
 
-	errorCodeObject.clear();
-	
-	for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
+	try
 	{
-		ParserResult pSubResult;
-		CliResult subres;
-		ErrorCodeComponent ecComponent;
-
-		ecComponent.component = pResult.parameters[row].at(0);
-		ecComponent.componentVersion = pResult.parameters[row].at(1);
-
-		subres = pSubResult.CreateResult(element, kErrorCode,
-											kFormatStrErrorCode,
-											pResult.node.at(row));
-		if (!subres.IsSuccessful())
+		errorCodeObject.clear();
+	
+		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
-			return subres;
-		}
+			ParserResult pSubResult;
+			CliResult subres;
+			ErrorCodeCompType ecComponent;
 
-		for (std::uint32_t subrow = 0; subrow < pSubResult.parameters.size(); subrow++)
-		{
-			ParserResult pDescResult;
-			CliResult descres;
-			ErrorCode errCode;
+			ecComponent.component = pResult.parameters[row].at(0);
+			ecComponent.componentVersion = pResult.parameters[row].at(1);
 
-			errCode.value = pSubResult.parameters[subrow].at(0);
-			errCode.originalCode = 0xFFFF;
-			if (!pSubResult.parameters[subrow].at(1).empty())
+			subres = pSubResult.CreateResult(element, kErrorCode,
+												kFormatStrErrorCode,
+												pResult.node.at(row));
+			if (!subres.IsSuccessful())
 			{
-				errCode.originalCode = stoi(pSubResult.parameters[subrow].at(1), NULL, 10);
-			}
-			errCode.toolCode = 0xFFFF;
-			if (!pSubResult.parameters[subrow].at(2).empty())
-			{
-				errCode.toolCode = stoi(pSubResult.parameters[subrow].at(2), NULL, 10);
+				return subres;
 			}
 
-			descres = pDescResult.CreateResult(element, kErrorDescription,
-												kFormatStrErrorDescription,
-												pSubResult.node.at(subrow));
-			if (!descres.IsSuccessful())
+			for (std::uint32_t subrow = 0; subrow < pSubResult.parameters.size(); subrow++)
 			{
-				return descres;
-			}
+				ParserResult pDescResult;
+				CliResult descres;
+				ErrorCodeType errCode;
 
-			for (std::uint32_t descrow = 0; descrow < pDescResult.parameters.size(); descrow++)
-			{
-				ErrCoderDesc errDesc;
-
-				errDesc.lang = Language::EN;
-				if (pDescResult.parameters[descrow].at(0).compare("de") == 0)
+				errCode.value = pSubResult.parameters[subrow].at(0);
+				errCode.originalCode = 0xFFFF;
+				if (!pSubResult.parameters[subrow].at(1).empty())
 				{
-					errDesc.lang = Language::DE;
+					errCode.originalCode = stoi(pSubResult.parameters[subrow].at(1), NULL, 10);
+				}
+				errCode.toolCode = 0xFFFF;
+				if (!pSubResult.parameters[subrow].at(2).empty())
+				{
+					errCode.toolCode = stoi(pSubResult.parameters[subrow].at(2), NULL, 10);
 				}
 
-				errDesc.value = pDescResult.parameters[descrow].at(1);
-				errCode.descriptions.push_back(errDesc);
+				descres = pDescResult.CreateResult(element, kErrorDescription,
+													kFormatStrErrorDescription,
+													pSubResult.node.at(subrow));
+				if (!descres.IsSuccessful())
+				{
+					return descres;
+				}
+
+				for (std::uint32_t descrow = 0; descrow < pDescResult.parameters.size(); descrow++)
+				{
+					ErrorCodeDescType errDesc;
+
+					errDesc.lang = Language::EN;
+					if (pDescResult.parameters[descrow].at(0).compare("de") == 0)
+					{
+						errDesc.lang = Language::DE;
+					}
+
+					errDesc.value = pDescResult.parameters[descrow].at(1);
+					errCode.descriptions.push_back(errDesc);
+				}
+
+				ecComponent.errorCodes.push_back(errCode);
 			}
 
-			ecComponent.errorCodes.push_back(errCode);
+			errorCodeObject.push_back(ecComponent);
 		}
-
-		errorCodeObject.push_back(ecComponent);
+	}
+	catch (const std::exception& e)
+	{
+		return CliLogger::GetInstance().HandleExceptionCaught("Create Error Table", e);
 	}
 
 	isErrorTableLoaded = true;
@@ -172,49 +179,45 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 	return CliResult();
 }
 
-CliResult ErrorCodeParser::GetToolCode(const std::string& compType, 
-									   const std::uint32_t& originalCode, 
+CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
+									   const std::uint32_t& originalCode,
 									   std::uint32_t& toolCode)
 {
-	if (isErrorTableLoaded)
+	if (!isErrorTableLoaded)
 	{
-		for (std::uint32_t index = 0; index < errorCodeObject.size(); index++)
-		{
-			std::uint32_t ecComponentIndex = 0;
-
-			if (compType.compare(ComponentType::kComponentLibrary) == 0)
-			{
-				ecComponentIndex = 0;
-			}
-			else if (compType.compare(ComponentType::kComponentCli) == 0)
-			{
-				ecComponentIndex = 1;
-			}
-			else
-			{
-				return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND, 
-						kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
-			}
-
-			for (ErrorCode errCode : errorCodeObject.at(ecComponentIndex).errorCodes)
-			{
-				if (errCode.originalCode == originalCode)
-				{
-					toolCode = errCode.toolCode;
-					return CliResult();
-				}
-			}
-
-			return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND, 
-						kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
-		}
-	}
-	else
-	{
-		return CliResult(CliErrorCode::ERROR_TABLE_NOT_LOADED, 
+		return CliResult(CliErrorCode::ERROR_TABLE_NOT_LOADED,
 				kMsgErrorTableNotLoaded[CliLogger::GetInstance().languageIndex]);
 	}
 
-	return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND, 
+	for (std::uint32_t index = 0; index < errorCodeObject.size(); index++)
+	{
+		std::uint32_t ecComponentIndex = 0;
+
+		if (compType.compare(ComponentType::kComponentLibrary) == 0)
+		{
+			ecComponentIndex = 0;
+		}
+		else if (compType.compare(ComponentType::kComponentCli) == 0)
+		{
+			ecComponentIndex = 1;
+		}
+		else
+		{
+			return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
+					kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
+		}
+
+		for (ErrorCodeType errCode : errorCodeObject.at(ecComponentIndex).errorCodes)
+		{
+			if (errCode.originalCode == originalCode)
+			{
+				toolCode = errCode.toolCode;
+
+				return CliResult();
+			}
+		}
+	}
+
+	return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
 						kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
 }

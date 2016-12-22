@@ -97,8 +97,7 @@ namespace IndustrialNetwork
 					  * \param paramsList		List of command line parameters
 					  * \return CliResult
 					  */
-					CliResult GenerateConfigurationFiles(
-									const std::vector<std::string>& paramsList);
+					CliResult GenerateConfigurationFiles(const std::vector<std::string>& paramsList);
 
 					/** The input XML file with path */
 					std::string xmlFilePath;

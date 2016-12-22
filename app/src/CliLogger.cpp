@@ -52,7 +52,7 @@ CliLogger& CliLogger::GetInstance()
 	return instance;
 }
 
-CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription, 
+CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription,
 										const CliResult& result)
 {
 	/** Log the reason of CLI API failure details */
@@ -96,8 +96,8 @@ std::string CliLogger::GetErrorString(const CliResult& result)
 	std::uint32_t toolCode;
 	std::ostringstream outString;
 
-	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli", 
-												(std::uint32_t)result.GetErrorType(), toolCode);
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli",
+						(std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
 		return result.GetErrorMessage();
@@ -113,8 +113,8 @@ std::string CliLogger::GetErrorString(const Result& result)
 	std::uint32_t toolCode;
 	std::ostringstream outString;
 
-	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library", 
-												(std::uint32_t)result.GetErrorType(), toolCode);
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library",
+							(std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
 		return result.GetErrorMessage();

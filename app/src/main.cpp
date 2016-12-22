@@ -61,7 +61,7 @@ int main(int parameterCount, char* parameter[])
 	}
 	else
 	{
-		CliResult res(CliErrorCode::CONF_GENERATION_SUCCESS, 
+		CliResult res(CliErrorCode::CONF_GENERATION_SUCCESS,
 						kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex]);
 		LOG_INFO() << CliLogger::GetInstance().GetErrorString(res);
 

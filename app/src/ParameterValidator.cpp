@@ -50,7 +50,7 @@ ParameterValidator& ParameterValidator::GetInstance()
 	return instance;
 }
 
-CliResult ParameterValidator::IsFileValid(const std::string& fileName, 
+CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 											const std::string& fileExtn)
 {
 	try
@@ -124,7 +124,7 @@ CliResult ParameterValidator::IsErrCodeXmlSchemaValid(xercesc::XercesDOMParser* 
 	return IsSchemaValid(domParserXml, kErrCodeXmlSchemaDefinitionFileName);
 }
 
-CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser, 
+CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 											const std::string& schemaDefFile)
 {
 	try
@@ -142,10 +142,10 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 		}
 
 		/** Load schema file constraints */
-		if (domParser->loadGrammar(schemaDefFile.data(), 
+		if (domParser->loadGrammar(schemaDefFile.data(),
 									xercesc::Grammar::SchemaGrammarType) == NULL)
 		{
-			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER, 
+			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER,
 								kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
 		}
 
