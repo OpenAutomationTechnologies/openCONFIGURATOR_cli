@@ -72,7 +72,7 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult GenerateConfigurationFiles(const std::string& xmlPath,
+					CliResult GenerateOutputFiles(const std::string& xmlPath,
 									const std::string& outputPath);
 				private:
 					/** \brief Creates Mnobd configuration files

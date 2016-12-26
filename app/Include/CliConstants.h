@@ -82,7 +82,9 @@ namespace IndustrialNetwork
 				const std::string kInterfaceRangeXpathExpression = kAppLayerInterfaceXpathExpression + "/rangeList/range";
 				const std::string kModuleNodeXpathExpression = "/ISO15745ProfileContainer/ISO15745Profile/ProfileBody/DeviceManager/moduleManagement/moduleInterface";
 				const std::string kModuleXpathExpression = kIntrfcXpathExpression + "/Module";
-				const std::string kForcedObjectNodeXpathExpression = kCnXpathExpression + "/ForcedObjects/Object";
+				const std::string kForcedObjectMnNodeXpathExpression = kMnXpathExpression + "/ForcedObjects/Object";
+				const std::string kForcedObjectRmnNodeXpathExpression = kRmnXpathExpression + "/ForcedObjects/Object";
+				const std::string kForcedObjectCnNodeXpathExpression = kCnXpathExpression + "/ForcedObjects/Object";
 				const std::string kForcedObjectModuleXpathExpression = kModuleXpathExpression + "/ForcedObjects/Object";
 				const std::string kErrorCodeComponent = "/openCONFIGURATORErrorCodes/ErrorCodes";
 				const std::string kErrorCode = "./ErrorCode";

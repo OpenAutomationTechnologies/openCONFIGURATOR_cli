@@ -50,10 +50,9 @@ namespace IndustrialNetwork
 				  */
 				enum class CliErrorCode : std::uint8_t
 				{
+					FAILURE = 0xFF,				/** Operation failed */
 					SUCCESS = 0,				/** Operation completed successfully */
 					USAGE = 1,					/** Usage of the application */
-					CORE_API_FAILED,			/** Core library API failed */
-					CLI_API_FAILED,				/** CLI library API failed */
 					EXCEPTION_CAUGHT,			/** Exception caught */
 					LESS_NO_OF_PARAMS,			/** Project XML file name and output path are mandatory */
 					OUTPUT_PATH_NOT_FOUND,		/** Project output path not found from command line parameters */

@@ -73,7 +73,7 @@ CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Is File Valid", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -103,7 +103,7 @@ CliResult ParameterValidator::IsPathValid(const std::string& path)
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Is Path Valid", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -146,7 +146,7 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 									xercesc::Grammar::SchemaGrammarType) == NULL)
 		{
 			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER,
-								kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
+					kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Set validation checks required for the file */
@@ -159,7 +159,7 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 		if (domParser->getErrorCount() != 0)
 		{
 			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID,
-						kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
+					kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Release the Xerces usage */
@@ -167,7 +167,7 @@ CliResult ParameterValidator::IsSchemaValid(xercesc::XercesDOMParser* domParser,
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Is Schema Valid", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();

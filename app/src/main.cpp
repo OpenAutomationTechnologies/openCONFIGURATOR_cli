@@ -52,11 +52,22 @@ int main(int parameterCount, char* parameter[])
 	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
 	if (!result.IsSuccessful())
 	{
-		if (result.GetErrorType() != CliErrorCode::USAGE)
+		switch(result.GetErrorType())
 		{
-			LOG_ERROR() << CliLogger::GetInstance().GetErrorString(result);
-
-			std::cout << kApplicationName << ": ERROR " << CliLogger::GetInstance().GetErrorString(result);
+			case CliErrorCode::USAGE:
+				break;
+			case CliErrorCode::FAILURE:
+				{
+					LOG_ERROR() << result.GetErrorMessage();
+					std::cout << kApplicationName << ": ERROR " << result.GetErrorMessage();
+				}
+				break;
+			default:
+				{
+					LOG_ERROR() << CliLogger::GetInstance().GetErrorString(result);
+					std::cout << kApplicationName << ": ERROR " << CliLogger::GetInstance().GetErrorString(result);
+				}
+				break;
 		}
 	}
 	else

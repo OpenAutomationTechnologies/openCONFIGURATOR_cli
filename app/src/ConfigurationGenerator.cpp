@@ -51,7 +51,7 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 	return instance;
 }
 
-CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& xmlPath,
+CliResult ConfigurationGenerator::GenerateOutputFiles(const std::string& xmlPath,
 															 const std::string& outputPath)
 {
 	CliResult cliRes;
@@ -60,20 +60,20 @@ CliResult ConfigurationGenerator::GenerateConfigurationFiles(const std::string& 
 	cliRes = ProjectParser::GetInstance().ParseXmlFile(xmlPath);
 	if (!cliRes.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCliApiFailed("Parser XML File", cliRes);
+		return cliRes;
 	}
 
 	/** Generate output files */
 	cliRes = BuildConciseDeviceConfiguration(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCliApiFailed("Build Concise Device Configuration", cliRes);
+		return cliRes;
 	}
 
 	cliRes = BuildProcessImageDescriptions(outputPath);
 	if (!cliRes.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCliApiFailed("Build Process Image Descriptions", cliRes);
+		return cliRes;
 	}
 
 	return CliResult();
@@ -92,15 +92,15 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 					binOutput);
 	if (!res.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCoreApiFailed("Build Configuration", res);
+		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	cliRes = CreateMnobdTxt(outputPath, configurationOutput);
 	if (!cliRes.IsSuccessful())
 	{
-		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Txt", cliRes);
+		LOG_ERROR() << CliLogger::GetInstance().GetErrorString(cliRes);
 
-		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+		return CliResult(CliErrorCode::FAILURE);
 	}
 
 	std::ostringstream buffer;
@@ -114,17 +114,13 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	cliRes = CreateMnobdCdc(outputPath, buffer);
 	if (!cliRes.IsSuccessful())
 	{
-		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Cdc", cliRes);
-
-		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+		return cliRes;
 	}
 
 	cliRes = CreateMnobdHexTxt(outputPath, buffer);
 	if (!cliRes.IsSuccessful())
 	{
-		CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create Mnobd Hex Txt", cliRes);
-
-		LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+		return cliRes;
 	}
 
 	return CliResult();
@@ -140,7 +136,7 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 					nodeIdCollection);
 	if (!res.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCoreApiFailed("Build Process Image Descriptions", res);
+		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	/** Create process image for CN nodes */
@@ -159,25 +155,19 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		cliRes = CreateCProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
-			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CProcess Image", cliRes);
-
-			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+			return cliRes;
 		}
 
 		cliRes = CreateXmlProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
-			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create XML Process Image", cliRes);
-
-			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+			return cliRes;
 		}
 
 		cliRes = CreateCSharpProcessImage(value, outputPathExtended);
 		if (!cliRes.IsSuccessful())
 		{
-			CliResult funRes = CliLogger::GetInstance().HandleCliApiFailed("Create CSharp Process Image", cliRes);
-
-			LOG_WARN() << CliLogger::GetInstance().GetErrorString(funRes);
+			return cliRes;
 		}
 	}
 
@@ -200,7 +190,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Txt", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -222,7 +212,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Cdc", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -285,7 +275,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Mnobd Hex Txt", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -302,7 +292,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCoreApiFailed("BuildC Process Image", res);
+		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	try
@@ -318,7 +308,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create CProcess Image", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -334,7 +324,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCoreApiFailed("Create XML Process Image", res);
+		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	try
@@ -350,7 +340,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create XML Process Image", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -366,7 +356,7 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t no
 					nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
-		return CliLogger::GetInstance().HandleCoreApiFailed("Create CSharp Process Image", res);
+		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	try
@@ -382,7 +372,7 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t no
 	}
 	catch(const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create CSharp Process Image", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();

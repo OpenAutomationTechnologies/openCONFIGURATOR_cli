@@ -73,7 +73,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		ShowUsage();
 
 		return CliResult(CliErrorCode::USAGE,
-							kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
+				kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
 	}
 
 	/** Load the error code table */
@@ -154,17 +154,24 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			{
 				LOG_WARN() << res.GetErrorMessage();
 
-				/** Create the output path as it doesnt exists */
-				boost::filesystem::path dir(outputPath);
-				if (!boost::filesystem::create_directory(dir))
+				try
 				{
-					/** Failed to create the output path */
-					return res;
+					/** Create the output path as it doesnt exists */
+					boost::filesystem::path dir(outputPath);
+					if (!boost::filesystem::create_directory(dir))
+					{
+						/** Failed to create the output path */
+						return res;
+					}
+				}
+				catch(const std::exception& e)
+				{
+					return CliLogger::GetInstance().GetFailureErrorString(e);
 				}
 			}
 
 			/** Parse and Generate configuration output */
-			res = ConfigurationGenerator::GetInstance().GenerateConfigurationFiles(xmlFilePath, outputPath);
+			res = ConfigurationGenerator::GetInstance().GenerateOutputFiles(xmlFilePath, outputPath);
 			if (!res.IsSuccessful())
 			{
 				/** Unable to parse XML or generate configuration files */

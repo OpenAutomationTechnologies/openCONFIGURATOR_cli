@@ -171,7 +171,7 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 	}
 	catch (const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Error Table", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	isErrorTableLoaded = true;
@@ -219,5 +219,5 @@ CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
 	}
 
 	return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
-						kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
+			kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
 }

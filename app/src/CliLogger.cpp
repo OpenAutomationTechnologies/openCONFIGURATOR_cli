@@ -52,45 +52,6 @@ CliLogger& CliLogger::GetInstance()
 	return instance;
 }
 
-CliResult CliLogger::HandleCliApiFailed(const std::string& apiDescription,
-										const CliResult& result)
-{
-	/** Log the reason of CLI API failure details */
-	LOG_ERROR() << result.GetErrorMessage();
-
-	/** Prepare the failure message with caller API name */
-	boost::format formatter(kMsgCliApiFailed[languageIndex]);
-	formatter % apiDescription;
-
-	return CliResult(CliErrorCode::CLI_API_FAILED, formatter.str());
-}
-
-CliResult CliLogger::HandleCoreApiFailed(const std::string& apiDescription,
-										 const Result& result)
-{
-	/** Log the reason of CLI API failure details */
-	LOG_ERROR() << result.GetErrorMessage();
-
-	/** Prepare the failure message with caller API name */
-	boost::format formatter(kMsgCoreApiFailed[languageIndex]);
-	formatter % apiDescription;
-
-	return CliResult(CliErrorCode::CORE_API_FAILED, formatter.str());
-}
-
-CliResult CliLogger::HandleExceptionCaught(const std::string& apiDescription,
-										   const std::exception& e)
-{
-	/** Log the reason of CLI API failure details */
-	LOG_ERROR() << e.what();
-
-	/** Prepare the failure message with caller API name */
-	boost::format formatter(kMsgExceptionCaught[languageIndex]);
-	formatter % apiDescription;
-
-	return CliResult(CliErrorCode::EXCEPTION_CAUGHT, formatter.str());
-}
-
 std::string CliLogger::GetErrorString(const CliResult& result)
 {
 	std::uint32_t toolCode;
@@ -100,6 +61,8 @@ std::string CliLogger::GetErrorString(const CliResult& result)
 						(std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
+		LOG_INFO() << res.GetErrorMessage();
+
 		return result.GetErrorMessage();
 	}
 
@@ -117,10 +80,51 @@ std::string CliLogger::GetErrorString(const Result& result)
 							(std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
+		LOG_INFO() << res.GetErrorMessage();
+
 		return result.GetErrorMessage();
 	}
 
 	outString << toolCode << ": " << result.GetErrorMessage();
 
 	return outString.str();
+}
+
+CliResult CliLogger::GetFailureErrorString(const std::exception& e)
+{
+	std::uint32_t toolCode;
+	std::ostringstream outString;
+
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli",
+						(std::uint32_t)CliErrorCode::EXCEPTION_CAUGHT, toolCode);
+	if (!res.IsSuccessful())
+	{
+		LOG_INFO() << res.GetErrorMessage();
+		outString << kMsgExceptionCaught[languageIndex] << " - " << e.what();
+
+		return CliResult(CliErrorCode::FAILURE, outString.str());
+	}
+
+	outString << toolCode << ": " << kMsgExceptionCaught[languageIndex] << " - " << e.what();
+
+	return CliResult(CliErrorCode::FAILURE, outString.str());
+}
+
+CliResult CliLogger::GetFailureErrorString(const Result& result)
+{
+	std::uint32_t toolCode;
+	std::ostringstream outString;
+
+	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library",
+						(std::uint32_t)result.GetErrorType(), toolCode);
+	if (!res.IsSuccessful())
+	{
+		LOG_INFO() << res.GetErrorMessage();
+
+		return CliResult(CliErrorCode::FAILURE, result.GetErrorMessage());
+	}
+
+	outString << toolCode << ": " << result.GetErrorMessage();
+
+	return CliResult(CliErrorCode::FAILURE, outString.str());
 }

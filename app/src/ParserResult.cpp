@@ -65,10 +65,8 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 {
 	if (parentNode == NULL)
 	{
-		boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
-		formatter % "Create Result";
-
-		return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+		return CliResult(CliErrorCode::NULL_POINTER_FOUND,
+				kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 	}
 
 	try
@@ -125,7 +123,7 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 	}
 	catch (const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Result", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();
@@ -175,9 +173,7 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 	}
 	catch (const std::exception& e)
 	{
-		CliResult res = CliLogger::GetInstance().HandleExceptionCaught("Get Attribute Value", e);
-
-		LOG_ERROR() << CliLogger::GetInstance().GetErrorString(res);
+		LOG_ERROR() << CliLogger::GetInstance().GetFailureErrorString(e).GetErrorMessage();
 	}
 
 	return kDefaultAttributeValue;

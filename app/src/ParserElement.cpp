@@ -73,35 +73,29 @@ CliResult ParserElement::CreateElement()
 	{
 		if (!domParser)
 		{
-			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
-			formatter % "create parser element";
-
-			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
+					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Store the entire project XML file in DOMDocument */
 		domDocument = domParser->getDocument();
 		if (domDocument == NULL)
 		{
-			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
-			formatter % "create DOM parser document";
-
-			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND, 
+					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Store the Top node element of the document in root */
 		domElement = domDocument->getDocumentElement();
 		if (domElement == NULL)
 		{
-			boost::format formatter(kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
-			formatter % "create DOM parser element";
-
-			return CliResult(CliErrorCode::NULL_POINTER_FOUND, formatter.str());
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
+					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	catch (const std::exception& e)
 	{
-		return CliLogger::GetInstance().HandleExceptionCaught("Create Element", e);
+		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
 	return CliResult();

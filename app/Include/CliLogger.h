@@ -67,30 +67,6 @@ namespace IndustrialNetwork
 					  */
 					static CliLogger& GetInstance();
 
-					/** \brief Logs message for CLI API failure
-					  * \param apiDescription	Description of the CLI API failure
-					  * \param result			CliResult returned by the failed CLI API
-					  * \return CliResult failure result with caller API name
-					  */
-					CliResult HandleCliApiFailed(const std::string& apiDescription,
-									const CliResult& result);
-
-					/** \brief Logs message for Core API failure
-					  * \param apiDescription	Description of the CLI API failure
-					  * \param result			Result returned by the failed Core API
-					  * \return CliResult failure result with caller API name
-					  */
-					CliResult HandleCoreApiFailed(const std::string& apiDescription,
-									const Result& result);
-
-					/** \brief Logs message when exception caught
-					  * \param apiDescription	Description of the CLI API failure
-					  * \param e				Exception ojbect
-					  * \return CliResult failure result with caller API name
-					  */
-					CliResult HandleExceptionCaught(const std::string& apiDescription,
-									const std::exception& e);
-
 					/** \brief Generates the error string with tool code for CliResult
 					  * \param result	CliResult for which error string to be created
 					  * \return Error string with tool code
@@ -102,6 +78,18 @@ namespace IndustrialNetwork
 					  * \return Error string with tool code
 					  */
 					std::string GetErrorString(const Result& result);
+
+					/** \brief Generates the failure error string for exception
+					  * \param e		Exception ojbect
+					  * \return CliResult
+					  */
+					CliResult GetFailureErrorString(const std::exception& e);
+
+					/** \brief Generates the failure error string for Result with tool code
+					  * \param result	Result for which error string to be created
+					  * \return CliResult
+					  */
+					CliResult GetFailureErrorString(const Result& result);
 
 					/** Index of the current language */
 					std::uint32_t languageIndex;
