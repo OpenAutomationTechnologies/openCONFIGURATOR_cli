@@ -39,23 +39,22 @@ ParserElement::ParserElement() :
 	domDocument(NULL),
 	domElement(NULL),
 	domParser(NULL),
-	filePath("")
+	filePath(""),
+	schemaFilePath("")
 {
 }
 
-ParserElement::ParserElement(std::string file) :
+ParserElement::ParserElement(std::string file, std::string schemaFile) :
 	domDocument(NULL),
 	domElement(NULL),
 	domParser(NULL),
-	filePath(file)
+	filePath(file),
+	schemaFilePath(schemaFile)
 {
 	/** Initialize the Xerces usage */
 	xercesc::XMLPlatformUtils::Initialize();
 
 	domParser = new xercesc::XercesDOMParser();
-
-	/** Input project XML file to DOM parse() function */
-	domParser->parse(filePath.data());
 }
 
 ParserElement::~ParserElement()
@@ -77,6 +76,13 @@ CliResult ParserElement::CreateElement()
 					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 
+		/** Create parse element by validating against the schema file */
+		CliResult res = parseFile();
+		if (!res.IsSuccessful())
+		{
+			return res;
+		}
+
 		/** Store the entire project XML file in DOMDocument */
 		domDocument = domParser->getDocument();
 		if (domDocument == NULL)
@@ -94,6 +100,51 @@ CliResult ParserElement::CreateElement()
 		}
 	}
 	catch (const std::exception& e)
+	{
+		return CliLogger::GetInstance().GetFailureErrorString(e);
+	}
+
+	return CliResult();
+}
+
+CliResult ParserElement::parseFile()
+{
+	try
+	{
+		/** Validate for the schema file existance */
+		if (!boost::filesystem::exists(schemaFilePath))
+		{
+			boost::format formatter(kMsgSchemaFileNotExists[CliLogger::GetInstance().languageIndex]);
+			formatter % schemaFilePath;
+
+			return CliResult(CliErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
+		}
+
+		/** Load schema file constraints */
+		if (domParser->loadGrammar(schemaFilePath.data(),
+									xercesc::Grammar::SchemaGrammarType) == NULL)
+		{
+			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER,
+					kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
+		}
+
+		/** Set validation checks required for the file */
+		domParser->setValidationScheme(xercesc::XercesDOMParser::Val_Auto);
+		domParser->setDoNamespaces(true);
+		domParser->setDoXInclude(true);
+		domParser->setDoSchema(true);
+		domParser->setValidationConstraintFatal(true);
+		domParser->setValidationSchemaFullChecking(true);
+
+		/** Input file to DOM parse function */
+		domParser->parse(filePath.data());
+		if (domParser->getErrorCount() != 0)
+		{
+			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID,
+					kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
+		}
+	}
+	catch(const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}

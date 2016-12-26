@@ -44,6 +44,11 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			/** Schema file names for validation */ 
+			const std::string kXmlSchemaDefinitionFileName = "./resources/OC_ProjectFile/openCONFIGURATOR.xsd";
+			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
+			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
+
 			class ParserElement
 			{
 				public:
@@ -52,9 +57,10 @@ namespace IndustrialNetwork
 					ParserElement();
 
 					/** \brief Constructor of the class with file
-					  * \param file		Name of XML ot XDC file to parse
+					  * \param file			Name of XML ot XDC file to parse
+					  * \param schemaFile	Name of the schema file for validation
 					  */
-					ParserElement(std::string file);
+					ParserElement(std::string file, std::string schemaFile);
 
 					/** \brief Destructor of the class 
 					  */
@@ -75,8 +81,16 @@ namespace IndustrialNetwork
 					xercesc::XercesDOMParser* domParser;
 
 				private:
+					/** \brief Validates against schema file and parses
+					  * \return CliResult
+					  */
+					CliResult parseFile();
+
 					/** file that has to be parsed */
 					std::string filePath;
+
+					/** schema file for validation */
+					std::string schemaFilePath;
 
 			}; // end of class ParserElement
 		} // end of namespace Application

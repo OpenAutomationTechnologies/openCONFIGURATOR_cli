@@ -60,7 +60,6 @@ OpenConfiguratorCli& OpenConfiguratorCli::GetInstance()
 
 CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std::string>& paramsList)
 {
-	const std::uint8_t kMinimumNumberOfParameters = 3;
 	std::ifstream boosLogInifile;
 	std::string outStream;
 	std::ostringstream logConfString;
@@ -119,15 +118,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		}
 	}
 
-	/** Validate the input arguments */
-	if (paramsList.size() < kMinimumNumberOfParameters)
-	{
-		ShowUsage();
-
-		return CliResult(CliErrorCode::LESS_NO_OF_PARAMS,
-							kMsgLessNoOfParams[CliLogger::GetInstance().languageIndex]);
-	}
-
 	if (GetXmlFileName(paramsList))
 	{
 		if (GetOutputPath(paramsList))
@@ -182,12 +172,16 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		}
 		else
 		{
+			ShowUsage();
+
 			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND,
 								kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	else
 	{
+		ShowUsage();
+
 		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND,
 							kMsgXmlFileNotFound[CliLogger::GetInstance().languageIndex]);
 	}

@@ -54,7 +54,6 @@ namespace IndustrialNetwork
 					SUCCESS = 0,				/** Operation completed successfully */
 					USAGE = 1,					/** Usage of the application */
 					EXCEPTION_CAUGHT,			/** Exception caught */
-					LESS_NO_OF_PARAMS,			/** Project XML file name and output path are mandatory */
 					OUTPUT_PATH_NOT_FOUND,		/** Project output path not found from command line parameters */
 					XML_FILE_NOT_FOUND,			/** Project XML file name is not found from command line parameters */
 					FILE_NOT_EXISTS,			/** File does not exists */

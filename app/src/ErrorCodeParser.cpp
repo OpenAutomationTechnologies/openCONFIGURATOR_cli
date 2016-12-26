@@ -65,15 +65,7 @@ CliResult ErrorCodeParser::LoadErrorCodeFile()
 		return ceres;
 	}
 
-	ParserElement xmlElement(kErrorCodeXmlFile);
-
-	/* Validate the XML file schema */
-	ceres = ParameterValidator::GetInstance().IsErrCodeXmlSchemaValid(xmlElement.domParser);
-	if (!ceres.IsSuccessful())
-	{
-		/** XML file schema is not valid */
-		return ceres;
-	}
+	ParserElement xmlElement(kErrorCodeXmlFile, kErrCodeXmlSchemaDefinitionFileName);
 
 	ceres = xmlElement.CreateElement();
 	if (!ceres.IsSuccessful())

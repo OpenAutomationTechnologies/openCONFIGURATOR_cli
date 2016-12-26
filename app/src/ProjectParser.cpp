@@ -70,15 +70,7 @@ CliResult ProjectParser::ParseXmlFile(const std::string& xmlPath)
 	/** Create results for MN, RMN abd CN nodes */
 	CliResult clires;
 	CliResult ceres;
-	ParserElement xmlParserElement(xmlPath);
-
-	/* Validate the XML file schema */
-	ceres = ParameterValidator::GetInstance().IsXmlSchemaValid(xmlParserElement.domParser);
-	if (!ceres.IsSuccessful())
-	{
-		/** XML file schema is not valid */
-		return ceres;
-	}
+	ParserElement xmlParserElement(xmlPath, kXmlSchemaDefinitionFileName);
 
 	ceres = xmlParserElement.CreateElement();
 	if (!ceres.IsSuccessful())
@@ -1996,16 +1988,8 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 		return res;
 	}
 
-	ParserElement element(xdcPath);
+	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
 	CliResult ceres;
-
-	/* Validate the XDC file schema */
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
-	if (!res.IsSuccessful())
-	{
-		/** XDC file schema is not valid */
-		return res;
-	}
 
 	ceres = element.CreateElement();
 	if (!ceres.IsSuccessful())
@@ -2166,16 +2150,8 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 		return res;
 	}
 
-	ParserElement element(xdcPath);
+	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
 	CliResult ceres;
-
-	/* Validate the XDC file schema */
-	res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
-	if (!res.IsSuccessful())
-	{
-		/** XDC file schema is not valid */
-		return res;
-	}
 
 	ceres = element.CreateElement();
 	if (!ceres.IsSuccessful())
@@ -2411,16 +2387,8 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 			return res;
 		}
 
-		ParserElement element(xdcPath);
+		ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
 		CliResult ceres;
-
-		/* Validate the XDC file schema */
-		res = ParameterValidator::GetInstance().IsXdcSchemaValid(element.domParser);
-		if (!res.IsSuccessful())
-		{
-			/** XDC file schema is not valid */
-			return res;
-		}
 
 		ceres = element.CreateElement();
 		if (!ceres.IsSuccessful())

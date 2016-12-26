@@ -72,8 +72,10 @@ int main(int parameterCount, char* parameter[])
 	}
 	else
 	{
-		CliResult res(CliErrorCode::CONF_GENERATION_SUCCESS,
-						kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex]);
+		boost::format formatter(kMsgConfGenerationSuccess[CliLogger::GetInstance().languageIndex]);
+		formatter % OpenConfiguratorCli::GetInstance().outputPath;
+
+		CliResult res(CliErrorCode::CONF_GENERATION_SUCCESS, formatter.str());
 		LOG_INFO() << CliLogger::GetInstance().GetErrorString(res);
 
 		std::cout << kApplicationName << ": INFO " << CliLogger::GetInstance().GetErrorString(res);
