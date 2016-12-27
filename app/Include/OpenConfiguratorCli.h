@@ -75,7 +75,11 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
+			/** Boost init file for file and console log settings */
 			const std::string kLogConfigurationFileName = "boost_log_settings.ini";
+
+			/** Maximum number of paramater allowed */
+			const std::uint8_t maxNumberOfParameters = 6;
 
 			class OpenConfiguratorCli
 			{
@@ -148,6 +152,13 @@ namespace IndustrialNetwork
 					  * \return true if option is found; false otherwise
 					  */
 					bool GetHelpOption(const std::vector<std::string>& paramsList);
+
+					/** \brief Checks the numebr of parameters and format
+					  *        from command line parameters list
+					  * \param paramsList		List of command line parameters
+					  * \return true if format is correct; false otherwise
+					  */
+					bool IsParametersValid(const std::vector<std::string>& paramsList);
 
 			}; // end of class OpenConfiguratorCli
 		} // end of namespace Application

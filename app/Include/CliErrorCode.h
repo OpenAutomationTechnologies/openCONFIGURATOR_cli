@@ -53,6 +53,7 @@ namespace IndustrialNetwork
 					FAILURE = 0xFF,				/** Operation failed */
 					SUCCESS = 0,				/** Operation completed successfully */
 					USAGE = 1,					/** Usage of the application */
+					INVALID_PARAMETERS,			/** Invalid parameters */
 					EXCEPTION_CAUGHT,			/** Exception caught */
 					OUTPUT_PATH_NOT_FOUND,		/** Project output path not found from command line parameters */
 					XML_FILE_NOT_FOUND,			/** Project XML file name is not found from command line parameters */
@@ -65,9 +66,9 @@ namespace IndustrialNetwork
 					NULL_POINTER_FOUND,			/** NULL pointer found */
 					NO_RESULT_FOR_XPATH,		/** There is no result for the Managing Node XPath */
 					UNABLE_TO_OPEN_LOG,			/** Unable to open the log file */
-					CONF_GENERATION_SUCCESS,	/** POWERLINK configuration files generated successfully */
 					ERROR_TABLE_NOT_LOADED,		/** Error Table Not Loaded */
-					ERROR_INFO_NOT_FOUND		/** Error information not found */
+					ERROR_INFO_NOT_FOUND,		/** Error information not found */
+					CONF_GENERATION_SUCCESS		/** POWERLINK configuration files generated successfully */
 				};
 
 			} // end of namespace ErrorHandling

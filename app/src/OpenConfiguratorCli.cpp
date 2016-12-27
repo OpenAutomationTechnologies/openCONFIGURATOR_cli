@@ -84,38 +84,57 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 
 	/** Initialize logging configurations from ini file */
 	isFileLoggingEnabled = IsLogDebug(paramsList);
-	boosLogInifile.open(kLogConfigurationFileName);
-	if (boosLogInifile.is_open())
-	{
-		while (boosLogInifile)
-		{
-			std::getline(boosLogInifile, outStream);
-			logConfString << outStream << std::endl;
-			if (isFileLoggingEnabled)
-			{
-				/** Filter Console target */
-				if (outStream.compare("[Sinks.Console]") == 0)
-				{
-					logConfString << "Filter=\"%Target% contains \\\"Console\\\"\"" << std::endl;
-				}
-			}
-			else
-			{
-				/** Filter File target */
-				if (outStream.compare("[Sinks.File]") == 0)
-				{
-					logConfString << "Filter=\"%Target% contains \\\"File\\\"\"" << std::endl;
-				}
-			}
-		}
-		
-		boosLogInifile.close();
 
-		Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(logConfString.str());
-		if (!confRes.IsSuccessful())
+	res = ParameterValidator::GetInstance().IsFileExists(kLogConfigurationFileName);
+	if (!res.IsSuccessful())
+	{
+		/** Boost ini file not exists */
+		LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+	}
+	else
+	{
+		boosLogInifile.open(kLogConfigurationFileName);
+		if (boosLogInifile.is_open())
 		{
-			LOG_WARN() << CliLogger::GetInstance().GetErrorString(confRes);
+			while (boosLogInifile)
+			{
+				std::getline(boosLogInifile, outStream);
+				logConfString << outStream << std::endl;
+				if (isFileLoggingEnabled)
+				{
+					/** Filter Console target */
+					if (outStream.compare("[Sinks.Console]") == 0)
+					{
+						logConfString << "Filter=\"%Target% contains \\\"Console\\\"\"" << std::endl;
+					}
+				}
+				else
+				{
+					/** Filter File target */
+					if (outStream.compare("[Sinks.File]") == 0)
+					{
+						logConfString << "Filter=\"%Target% contains \\\"File\\\"\"" << std::endl;
+					}
+				}
+			}
+		
+			boosLogInifile.close();
+
+			Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(logConfString.str());
+			if (!confRes.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(confRes);
+			}
 		}
+	}
+
+	/** Check the parameter option given */
+	if (IsParametersValid(paramsList) == false)
+	{
+		ShowUsage();
+
+		return CliResult(CliErrorCode::INVALID_PARAMETERS,
+				kMsgInvalidParameters[CliLogger::GetInstance().languageIndex]);
 	}
 
 	if (GetXmlFileName(paramsList))
@@ -218,7 +237,7 @@ bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsL
 		/** Search for project file option */
 		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0))
 		{
-			/* CHeck whether next element exists against number of parameters */
+			/* Check whether next element exists against number of parameters */
 			std::uint8_t increment = 1;
 			if ((index + increment) < paramsList.size())
 			{
@@ -258,7 +277,7 @@ bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsLi
 		/** Search for output path option */
 		if ((paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
 		{
-			/* CHeck whether next element exists against number of parameters */
+			/* Check whether next element exists against number of parameters */
 			std::uint8_t increment = 1;
 			if ((index + increment) < paramsList.size())
 			{
@@ -316,4 +335,66 @@ bool OpenConfiguratorCli::GetHelpOption(const std::vector<std::string>& paramsLi
 	}
 
 	return false;
+}
+
+bool OpenConfiguratorCli::IsParametersValid(const std::vector<std::string>& paramsList)
+{
+	bool validParams[maxNumberOfParameters] = {};
+	std::uint8_t index;
+
+	if (paramsList.size() > maxNumberOfParameters)
+	{
+		/** Number of paramaters can not exceed the limit */
+		return false;
+	}
+
+	/** Initialize the validation flag list */
+	for (index = 0; index < maxNumberOfParameters; index++)
+	{
+		validParams[index] = false;
+	}
+
+	for (index = 0; index < paramsList.size(); index++)
+	{
+		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0) ||
+			(paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
+		{
+			validParams[index] = true;
+
+			std::uint8_t increment = 1;
+			if ((index + increment) < paramsList.size())
+			{
+				if (paramsList.at(index + increment).compare(0, 1, "-") == 0)
+				{
+					/** No project file or output path provided */
+					return false;
+				}
+				else
+				{
+					validParams[index + increment] = true;
+				}
+			}
+			else
+			{
+				/** No project file or output path provided */
+				return false;
+			}
+		}
+		else if ((paramsList.at(index).compare("-d") == 0)  || (paramsList.at(index).compare("--debug") == 0) ||
+				(paramsList.at(index).compare("-de") == 0)  || (paramsList.at(index).compare("--german") == 0))
+		{
+			validParams[index] = true;
+		}
+	}
+
+	/** Check the validation flag list */
+	for (index = 0; index < paramsList.size(); index++)
+	{
+		if (validParams[index] == false)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

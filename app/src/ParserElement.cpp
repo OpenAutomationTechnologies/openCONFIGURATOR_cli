@@ -140,8 +140,10 @@ CliResult ParserElement::parseFile()
 		domParser->parse(filePath.data());
 		if (domParser->getErrorCount() != 0)
 		{
-			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID,
-					kMsgFileSchemeNotValid[CliLogger::GetInstance().languageIndex]);
+			boost::format formatter(kMsgFileSchemaNotValid[CliLogger::GetInstance().languageIndex]);
+			formatter % filePath;
+
+			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID, formatter.str());
 		}
 	}
 	catch(const std::exception& e)

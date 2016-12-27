@@ -1974,7 +1974,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 {
 	std::string indexString = kPathSeparator + cnXdc;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
-	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
+	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of(kPathSeparator));
 	std::string xdcPath = nextInitialPath.append(indexString);
 	CliResult res;
 
@@ -2138,7 +2138,7 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 {
 	std::string indexString = kPathSeparator + cnXdc;
 	std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
-	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
+	std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of(kPathSeparator));
 	std::string xdcPath = nextInitialPath.append(indexString);
 	CliResult res;
 
@@ -2375,7 +2375,7 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 	{
 		std::string indexString = kPathSeparator + modulePathToXDC;
 		std::string initialPath = OpenConfiguratorCli::GetInstance().xmlFilePath;
-		std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of("\\/"));
+		std::string nextInitialPath = initialPath.substr(0, initialPath.find_last_of(kPathSeparator));
 		std::string xdcPath = nextInitialPath.append(indexString);
 		CliResult res;
 

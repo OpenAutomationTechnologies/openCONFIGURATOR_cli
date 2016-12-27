@@ -393,7 +393,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		</ErrorCode>
 	</ErrorCodes>
 	<ErrorCodes component="cli" componentVersion="2.0.0">
-		<ErrorCode value="FAILURE" originalCode="-1" toolCode="5522">
+		<ErrorCode value="FAILURE" originalCode="255" toolCode="5522">
 			<Description xml:lang="en" value="Failure"/>
 		</ErrorCode>
 		<ErrorCode value="SUCCESS" originalCode="0" toolCode="5523">
@@ -402,11 +402,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		<ErrorCode value="USAGE" originalCode="1" toolCode="5524">
 			<Description xml:lang="en" value="Usage of the application"/>
 		</ErrorCode>
-		<ErrorCode value="EXCEPTION_CAUGHT" originalCode="2" toolCode="5525">
-			<Description xml:lang="en" value="Exception caught"/>
+		<ErrorCode value="INVALID_PARAMETERS" originalCode="2" toolCode="5525">
+			<Description xml:lang="en" value="Invalid parameters"/>
 		</ErrorCode>
-		<ErrorCode value="LESS_NO_OF_PARAMS" originalCode="3" toolCode="5526">
-			<Description xml:lang="en" value="Project XML file name and output path are mandatory"/>
+		<ErrorCode value="EXCEPTION_CAUGHT" originalCode="3" toolCode="5526">
+			<Description xml:lang="en" value="Exception caught"/>
 		</ErrorCode>
 		<ErrorCode value="OUTPUT_PATH_NOT_FOUND" originalCode="4" toolCode="5527">
 			<Description xml:lang="en" value="Project output path not found from command line parameters"/>
@@ -441,14 +441,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="14" toolCode="5537">
 			<Description xml:lang="en" value="Unable to open the log file"/>
 		</ErrorCode>
-		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="15" toolCode="5538">
-			<Description xml:lang="en" value="POWERLINK configuration files generated successfully"/>
-		</ErrorCode>
-		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="16" toolCode="5539">
+		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="15" toolCode="5538">
 			<Description xml:lang="en" value="Error Table Not Loaded"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="17" toolCode="5540">
+		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="16" toolCode="5539">
 			<Description xml:lang="en" value="Error information not found"/>
+		</ErrorCode>
+		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="17" toolCode="5540">
+			<Description xml:lang="en" value="POWERLINK configuration files generated successfully"/>
 		</ErrorCode>
 	</ErrorCodes>
 </openCONFIGURATORErrorCodes>

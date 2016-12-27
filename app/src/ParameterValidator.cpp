@@ -50,6 +50,26 @@ ParameterValidator& ParameterValidator::GetInstance()
 	return instance;
 }
 
+CliResult ParameterValidator::IsFileExists(const std::string& fileName)
+{
+	try
+	{
+		if (!boost::filesystem::exists(fileName))
+		{
+			boost::format formatter(kMsgFileNotExists[CliLogger::GetInstance().languageIndex]);
+			formatter % fileName;
+
+			return CliResult(CliErrorCode::FILE_NOT_EXISTS, formatter.str());
+		}
+	}
+	catch(const std::exception& e)
+	{
+		return CliLogger::GetInstance().GetFailureErrorString(e);
+	}
+
+	return CliResult();
+}
+
 CliResult ParameterValidator::IsFileValid(const std::string& fileName,
 											const std::string& fileExtn)
 {

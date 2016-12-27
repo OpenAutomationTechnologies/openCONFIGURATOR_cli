@@ -77,6 +77,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult IsPathValid(const std::string& path);
+
+					/** \brief Validates file existence
+					  * \param fileName			File name to be validated
+					  * \return CliResult
+					  */
+					CliResult IsFileExists(const std::string& fileName);
 				private:
 					/** \brief Validates file existence and extension
 					  * \param fileName			File name to be validated

@@ -51,6 +51,7 @@ namespace IndustrialNetwork
 			namespace ErrorHandling
 			{
 				const std::string kMsgAppDescription[] = {"OpenCONFIGURATOR CLI Application", ""};
+				const std::string kMsgInvalidParameters[] = {"Invalid parameters", ""};
 				const std::string kMsgExceptionCaught[] = {"Exception caught", ""};
 				const std::string kMsgOutputPathNotFound[] = {"Project output path not found from command line parameters", ""};
 				const std::string kMsgXmlFileNotFound[] = {"Project XML file name is not found from command line parameters", ""};
@@ -59,13 +60,13 @@ namespace IndustrialNetwork
 				const std::string kMsgSchemaFileNotExists[] = {"Schema file \"%s\" does not exists", "\"%s\""};
 				const std::string kMsgOutputPathNotExiists[] = {"Output path \"%s\" does not exists", "\"%s\""};
 				const std::string kMsgErrorLoadingGrammer[] = {"Error on loading grammer for parser", ""};
-				const std::string kMsgFileSchemeNotValid[] = {"Schema of file is not valid", ""};
+				const std::string kMsgFileSchemaNotValid[] = {"Schema of file \"%s\" is not valid", "\"%s\""};
 				const std::string kMsgNullPtrFound[] = {"NULL pointer found while parsing", ""};
 				const std::string kMsgNoResultForXPath[] = {"No result for XPath \"%s\"", "\"%s\""};
 				const std::string kMsgUnableToOpenLogFile[] = {"Unable to open the log file \"%s\"", "\"%s\""};
-				const std::string kMsgConfGenerationSuccess[] = {"POWERLINK configuration files generated successfully under \"%s\"", "\"%s\""};
 				const std::string kMsgErrorTableNotLoaded[] = {"Error table not loaded", ""};
 				const std::string kMsgErrorInfoNotFound[] = {"Error information not found", ""};
+				const std::string kMsgConfGenerationSuccess[] = {"POWERLINK configuration files generated successfully under \"%s\"", "\"%s\""};
 
 				/** \brief Functionalities to handle the error messages
 				  */
