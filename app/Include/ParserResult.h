@@ -89,6 +89,12 @@ namespace IndustrialNetwork
 					std::vector<xercesc::DOMNode*> node;
 
 				private:
+					/** \brief private copy constructor, no definition (declaration-only) */
+					ParserResult(const ParserResult&);
+
+					/** \brief private copy assign, no definition (declaration-only) */
+					ParserResult& operator=(const ParserResult&);
+
 					/** \brief Gets the value of attribute available
 					  * \param domNode 			Instance of DOMNode
 					  * \param attributeName 	Name of the attribute

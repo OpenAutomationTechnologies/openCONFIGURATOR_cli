@@ -81,6 +81,12 @@ namespace IndustrialNetwork
 					xercesc::XercesDOMParser* domParser;
 
 				private:
+					/** \brief private copy constructor, no definition (declaration-only) */
+					ParserElement(const ParserElement&);
+
+					/** \brief private copy assign, no definition (declaration-only) */
+					ParserElement& operator=(const ParserElement&);
+
 					/** \brief Validates against schema file and parses
 					  * \return CliResult
 					  */
