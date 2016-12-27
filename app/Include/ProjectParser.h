@@ -505,12 +505,14 @@ namespace IndustrialNetwork
 					  * \param xPathExpression 	Xpath expression of forced objects in XML
 					  * \param forcedObject 	Forced objects vector output of node
 					  * \param forcedSubObject 	Forced sub-objects vector output of node
+					  * \param parentNode		Parent node ID value 
 					  * \return CliResult
 					  */
 					CliResult CreateForcedObjects(const ParserElement& pElement,
 									const std::string& xPathExpression,
 									std::vector<std::string>& forcedObject,
-									std::vector<std::string>& forcedSubObject);
+									std::vector<std::string>& forcedSubObject,
+									const xercesc::DOMNode* parentNode);
 					
 					/** \brief Updates the forced object list of node into core library
 					  * \param forcedObject 		Forced objects vector of node

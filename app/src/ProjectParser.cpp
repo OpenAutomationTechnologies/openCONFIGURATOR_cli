@@ -134,7 +134,8 @@ CliResult ProjectParser::CreateProjectConfiguration(const ParserElement& element
 				ParserResult settingResult;
 
 				crres = settingResult.CreateResult(element, kAutoSettingXpathExpression,
-													kFormatStrAutoSetXpathExpression);
+													kFormatStrAutoSetXpathExpression,
+													configResult.node.at(row));
 				if (!crres.IsSuccessful())
 				{
 					LOG_WARN() << CliLogger::GetInstance().GetErrorString(crres);
@@ -239,9 +240,10 @@ CliResult ProjectParser::CreateMnNodeResults(const ParserElement& element)
 
 			/** Update the forced objects of node */
 			CliResult clires = CreateForcedObjects(element,
-											kForcedObjectMnNodeXpathExpression,
+											kForcedObjectNodeXpathExpression,
 											forcedModularNodeObj,
-											forcedModularNodeSubObj);
+											forcedModularNodeSubObj,
+											mnResult.node.at(row));
 			if (!clires.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(clires);
@@ -315,9 +317,10 @@ CliResult ProjectParser::CreateRmnNodeResults(const ParserElement& element)
 
 				/** Update the forced objects of node */
 				clires = CreateForcedObjects(element,
-												kForcedObjectRmnNodeXpathExpression,
+												kForcedObjectNodeXpathExpression,
 												forcedModularNodeObj,
-												forcedModularNodeSubObj);
+												forcedModularNodeSubObj,
+												rmnResult.node.at(row));
 				if (!clires.IsSuccessful())
 				{
 					LOG_WARN() << CliLogger::GetInstance().GetErrorString(clires);
@@ -382,7 +385,8 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 
 			clires = subCnResult.CreateResult(element,
 												kIntrfcXpathExpression,
-												kFormatStrIntrfcXpathExpression);
+												kFormatStrIntrfcXpathExpression,
+												cnResult.node.at(row));
 			if (!clires.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(clires);
@@ -420,8 +424,9 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 				std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 					
 				/** Update the forced objects of modular head node */
-				subclires = CreateForcedObjects(element, kForcedObjectCnNodeXpathExpression,
-												forcedModularNodeObj, forcedModularNodeSubObj);
+				subclires = CreateForcedObjects(element, kForcedObjectNodeXpathExpression,
+												forcedModularNodeObj, forcedModularNodeSubObj,
+												cnResult.node.at(row));
 				if (!subclires.IsSuccessful())
 				{
 					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subclires);
@@ -460,8 +465,9 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 				std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
 				/** Update the forced objects of modular head node */
-				subclires = CreateForcedObjects(element, kForcedObjectCnNodeXpathExpression, 
-													forcedModularNodeObj, forcedModularNodeSubObj);
+				subclires = CreateForcedObjects(element, kForcedObjectNodeXpathExpression, 
+													forcedModularNodeObj, forcedModularNodeSubObj,
+													cnResult.node.at(row));
 				if (!subclires.IsSuccessful())
 				{
 					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subclires);
@@ -501,7 +507,8 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 					{
 						clicrres = moduleResult.CreateResult(element,
 																kModuleXpathExpression,
-																kFormatStrModuleXpathExpression);
+																kFormatStrModuleXpathExpression,
+																subCnResult.node.at(subRow));
 						if (!clicrres.IsSuccessful())
 						{
 							LOG_WARN() << CliLogger::GetInstance().GetErrorString(clicrres);
@@ -516,8 +523,9 @@ CliResult ProjectParser::CreateCnNodeResults(const ParserElement& element)
 								std::vector<std::string> forcedModularNodeSubObj;	/** Group of forced sub objects in Node */
 
 								/** Update the forced objects of modular node */
-								foRes = CreateForcedObjects(element, kForcedObjectModuleXpathExpression,
-															forcedModularNodeObj, forcedModularNodeSubObj);
+								foRes = CreateForcedObjects(element, kForcedObjectXpathExpression,
+															forcedModularNodeObj, forcedModularNodeSubObj,
+															subCnResult.node.at(subRow));
 								if (!foRes.IsSuccessful())
 								{
 									LOG_WARN() << CliLogger::GetInstance().GetErrorString(foRes);
@@ -2068,7 +2076,8 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 					ParserResult subRangeResult;
 
 					CliResult rescli = subRangeResult.CreateResult(element, kInterfaceRangeXpathExpression,
-																		kFormatStrInterfaceRangeXpathExpression);
+																		kFormatStrInterfaceRangeXpathExpression,
+																		subPresult.node.at(row));
 					if (!rescli.IsSuccessful())
 					{
 						LOG_WARN() << CliLogger::GetInstance().GetErrorString(rescli);
@@ -2910,13 +2919,15 @@ CliResult ProjectParser::GetNewParameterId(const std::uint8_t nodeId,
 CliResult ProjectParser::CreateForcedObjects(const ParserElement& pElement,
 												const std::string& xPathExpression,
 												std::vector<std::string>& forcedObj,
-												std::vector<std::string>& forcedSubObj)
+												std::vector<std::string>& forcedSubObj,
+												const xercesc::DOMNode* parentNode)
 {
 	ParserResult pResult;
 	CliResult cliRes;
 
 	cliRes = pResult.CreateResult(pElement, xPathExpression,
-									kFormatStrxPathExpressionObject);
+									kFormatStrxPathExpressionObject,
+									parentNode);
 	if (!cliRes.IsSuccessful())
 	{
 		return CliResult();
