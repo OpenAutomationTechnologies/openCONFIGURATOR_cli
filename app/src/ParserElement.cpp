@@ -87,7 +87,7 @@ CliResult ParserElement::CreateElement()
 		domDocument = domParser->getDocument();
 		if (domDocument == NULL)
 		{
-			return CliResult(CliErrorCode::NULL_POINTER_FOUND, 
+			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
 					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 

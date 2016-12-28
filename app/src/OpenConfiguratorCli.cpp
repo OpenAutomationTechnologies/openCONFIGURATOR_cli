@@ -117,7 +117,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 					}
 				}
 			}
-		
+
 			boosLogInifile.close();
 
 			Result confRes = OpenConfiguratorCore::GetInstance().InitLoggingConfiguration(logConfString.str());

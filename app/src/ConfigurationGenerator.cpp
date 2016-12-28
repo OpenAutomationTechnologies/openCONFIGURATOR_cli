@@ -232,7 +232,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 		for (std::uint32_t cnt = 0; cnt < buffer.str().size(); ++cnt)
 		{
 			std::ostringstream hexVal;
-			
+
 			hexVal << std::setw(2) << std::setfill('0') << std::hex << std::uppercase << std::int16_t(buffer.str().at(cnt));
 			toStream << "0x";
 			if (hexVal.str().size() > 2)
@@ -255,7 +255,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 			{
 				toStream << "\n";
 				lineBreakCount = 0;
-			} 
+			}
 			else
 			{
 				toStream << " ";

@@ -97,7 +97,7 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 	try
 	{
 		errorCodeObject.clear();
-	
+
 		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParserResult pSubResult;

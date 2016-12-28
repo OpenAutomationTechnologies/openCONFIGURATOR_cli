@@ -65,11 +65,11 @@ namespace IndustrialNetwork
 			class ErrorCodeParser
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
 					ErrorCodeParser();
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ErrorCodeParser();
 

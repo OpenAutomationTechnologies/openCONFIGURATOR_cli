@@ -58,7 +58,7 @@ namespace IndustrialNetwork
 					  */
 					CliLogger();
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~CliLogger();
 

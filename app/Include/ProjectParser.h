@@ -7,7 +7,7 @@
  *
  * \version 1.0
  *
- */ 
+ */
 /*------------------------------------------------------------------------------
 Copyright (c) 2016, Kalycito Infotech Private Limited, INDIA.
 All rights reserved.
@@ -49,11 +49,11 @@ namespace IndustrialNetwork
 			class ProjectParser
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
 					ProjectParser();
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ProjectParser();
 
@@ -111,7 +111,7 @@ namespace IndustrialNetwork
 									const std::string& modId,
 									const std::uint32_t modPosition);
 
-					/** \brief Updates the modular node interface information of 
+					/** \brief Updates the modular node interface information of
 					  *        XDC into core library
 					  * \param nodeId 			Node ID value of modular head node
 					  * \param pathXdc 			The XDC path of modular head node
@@ -122,7 +122,7 @@ namespace IndustrialNetwork
 									const std::string& pathXdc,
 									std::uint8_t& maxModulePosition);
 
-					/** \brief Updates the Device POWERLINK profile body of 
+					/** \brief Updates the Device POWERLINK profile body of
 					  *        XDD/XDC into core library
 					  * \param element 		Element that contains handle of XDC
 					  * \param nodeId 		ID value of node
@@ -137,7 +137,7 @@ namespace IndustrialNetwork
 									const std::string& modId,
 									const std::uint32_t modPosition);
 
-					/** \brief Updates the Communication POWERLINK profile body 
+					/** \brief Updates the Communication POWERLINK profile body
 					  *        of XDD/XDC into core library
 					  * \param element 			Element that contains handle of XDC
 					  * \param nodeId 			ID value of node
@@ -303,7 +303,7 @@ namespace IndustrialNetwork
 					/** \brief Creates child parameter group related parse results
 					  * \param element 				Element that contains handle of XDC
 					  * \param nodeId 				ID value of node
-					  * \param parameterGroupNode	Parent parameter group node 
+					  * \param parameterGroupNode	Parent parameter group node
 					  * \param paramGroupUId 		Parent parameter group node ID
 					  * \param interfaceId 			Inteface ID of module node
 					  * \param modId 				ID value of module
@@ -483,7 +483,7 @@ namespace IndustrialNetwork
 									const std::uint32_t modPosition,
 									const std::uint8_t subObjId,
 									std::uint32_t& subIndex);
-					
+
 					/** \brief Gets unique ID of parameter from the library
 					  * \param nodeId 			ID value of node
 					  * \param interfaceId 		Inteface ID  of modular node
@@ -499,13 +499,13 @@ namespace IndustrialNetwork
 									const std::uint32_t modPosition,
 									const std::string& uniqueID,
 									std::string& paramId);
-					
+
 					/** \brief Updates the forced object list of node
 					  * \param element 			Element that contains handle of XDC
 					  * \param xPathExpression 	Xpath expression of forced objects in XML
 					  * \param forcedObject 	Forced objects vector output of node
 					  * \param forcedSubObject 	Forced sub-objects vector output of node
-					  * \param parentNode		Parent node ID value 
+					  * \param parentNode		Parent node ID value
 					  * \return CliResult
 					  */
 					CliResult CreateForcedObjects(const ParserElement& pElement,
@@ -513,7 +513,7 @@ namespace IndustrialNetwork
 									std::vector<std::string>& forcedObject,
 									std::vector<std::string>& forcedSubObject,
 									const xercesc::DOMNode* parentNode);
-					
+
 					/** \brief Updates the forced object list of node into core library
 					  * \param forcedObject 		Forced objects vector of node
 					  * \param forcedSubObject 		Forced sub-objects vector of node
@@ -580,7 +580,7 @@ namespace IndustrialNetwork
 					  */
 					PDOMapping GetPdoMapping(const std::string& pdoMapp);
 
-					/** \brief Gets the IEC_Datatype of object or sub-object 
+					/** \brief Gets the IEC_Datatype of object or sub-object
 					  *        based on element in XDC
 					  * \param node 		Instance of DOMNode
 					  * \return IEC_Datatype

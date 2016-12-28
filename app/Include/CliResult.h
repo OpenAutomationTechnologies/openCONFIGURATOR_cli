@@ -74,15 +74,15 @@ namespace IndustrialNetwork
 				{
 
 					public:
-						/** \brief Default constructor of the class 
+						/** \brief Default constructor of the class
 						  */
 						CliResult();
 
-						/** \brief Destructor of the class 
+						/** \brief Destructor of the class
 						  */
 						virtual ~CliResult();
 
-						/** \brief Constructor of the class with error code 
+						/** \brief Constructor of the class with error code
 						  */
 						explicit CliResult(const CliErrorCode& errorCode);
 

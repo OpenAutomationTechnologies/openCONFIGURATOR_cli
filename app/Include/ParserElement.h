@@ -44,7 +44,7 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			/** Schema file names for validation */ 
+			/** Schema file names for validation */
 			const std::string kXmlSchemaDefinitionFileName = "./resources/OC_ProjectFile/openCONFIGURATOR.xsd";
 			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
 			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
@@ -52,7 +52,7 @@ namespace IndustrialNetwork
 			class ParserElement
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
 					ParserElement();
 
@@ -62,7 +62,7 @@ namespace IndustrialNetwork
 					  */
 					ParserElement(std::string file, std::string schemaFile);
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ParserElement();
 

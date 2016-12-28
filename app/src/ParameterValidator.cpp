@@ -46,7 +46,7 @@ ParameterValidator::~ParameterValidator()
 ParameterValidator& ParameterValidator::GetInstance()
 {
 	static ParameterValidator instance;
-	
+
 	return instance;
 }
 

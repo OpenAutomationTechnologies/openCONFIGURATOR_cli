@@ -48,7 +48,7 @@ namespace IndustrialNetwork
 			class ErrorCodeCompType
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
 					ErrorCodeCompType() :
 						component(""),
@@ -57,7 +57,7 @@ namespace IndustrialNetwork
 					{
 					}
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ErrorCodeCompType()
 					{

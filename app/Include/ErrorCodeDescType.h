@@ -51,15 +51,15 @@ namespace IndustrialNetwork
 			class ErrorCodeDescType
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
-					ErrorCodeDescType() : 
+					ErrorCodeDescType() :
 						lang(Language::EN),
 						value("")
 					{
 					}
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ErrorCodeDescType()
 					{

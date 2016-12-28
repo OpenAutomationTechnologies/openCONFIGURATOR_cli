@@ -48,11 +48,11 @@ namespace IndustrialNetwork
 			class ParserResult
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
 					ParserResult();
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ParserResult();
 
@@ -80,7 +80,7 @@ namespace IndustrialNetwork
 									const xercesc::DOMNode* parentNode);
 
 					/** Parsed parameters */
-					std::vector<std::vector<std::string> > parameters;		
+					std::vector<std::vector<std::string> > parameters;
 
 					/** Parent node */
 					xercesc::DOMNode* resultNodeValue;
@@ -101,7 +101,7 @@ namespace IndustrialNetwork
 					  * \return Attribute value
 					  */
 					std::string GetAttributeValue(const xercesc::DOMNode* domNode,
-									const std::string& attributeName); 
+									const std::string& attributeName);
 
 			}; // end of class ParserResult
 		} // end of namespace Application

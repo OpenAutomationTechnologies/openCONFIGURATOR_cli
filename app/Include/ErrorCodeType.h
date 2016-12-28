@@ -50,9 +50,9 @@ namespace IndustrialNetwork
 			class ErrorCodeType
 			{
 				public:
-					/** \brief Default constructor of the class 
+					/** \brief Default constructor of the class
 					  */
-					ErrorCodeType() : 
+					ErrorCodeType() :
 						value(""),
 						originalCode(kUnknownCodeValue),
 						toolCode(kUnknownCodeValue),
@@ -60,7 +60,7 @@ namespace IndustrialNetwork
 					{
 					}
 
-					/** \brief Destructor of the class 
+					/** \brief Destructor of the class
 					  */
 					~ErrorCodeType()
 					{
