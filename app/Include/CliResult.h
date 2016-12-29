@@ -50,23 +50,23 @@ namespace IndustrialNetwork
 		{
 			namespace ErrorHandling
 			{
-				const std::string kMsgAppDescription[] = {"OpenCONFIGURATOR CLI Application", ""};
-				const std::string kMsgInvalidParameters[] = {"Invalid parameters", ""};
-				const std::string kMsgExceptionCaught[] = {"Exception caught", ""};
-				const std::string kMsgOutputPathNotFound[] = {"Project output path not found from command line parameters", ""};
-				const std::string kMsgXmlFileNotFound[] = {"Project XML file name is not found from command line parameters", ""};
-				const std::string kMsgFileNotExists[] = {"File \"%s\" does not exists", "\"%s\""};
-				const std::string kMsgFileExtnIncorrect[] = {"Extension of file \"%s\" is incorrect", "\"%s\""};
-				const std::string kMsgSchemaFileNotExists[] = {"Schema file \"%s\" does not exists", "\"%s\""};
-				const std::string kMsgOutputPathNotExiists[] = {"Output path \"%s\" does not exists", "\"%s\""};
-				const std::string kMsgErrorLoadingGrammer[] = {"Error on loading grammer for parser", ""};
-				const std::string kMsgFileSchemaNotValid[] = {"Schema of file \"%s\" is not valid", "\"%s\""};
-				const std::string kMsgNullPtrFound[] = {"NULL pointer found while parsing", ""};
-				const std::string kMsgNoResultForXPath[] = {"No result for XPath \"%s\"", "\"%s\""};
-				const std::string kMsgUnableToOpenLogFile[] = {"Unable to open the log file \"%s\"", "\"%s\""};
-				const std::string kMsgErrorTableNotLoaded[] = {"Error table not loaded", ""};
-				const std::string kMsgErrorInfoNotFound[] = {"Error information not found", ""};
-				const std::string kMsgConfGenerationSuccess[] = {"POWERLINK configuration files generated successfully under \"%s\"", "\"%s\""};
+				const std::string kMsgAppDescription[] = { "openCONFIGURATOR CLI application", "openCONFIGURATOR CLI application" };
+				const std::string kMsgInvalidParameters[] = { "Invalid parameters.", "Ungueltige Parameter." };
+				const std::string kMsgExceptionCaught[] = { "Exception thrown at function \"%s\".", "Exception wurde in der Funktion \"%s\" ausgeloest." };
+				const std::string kMsgOutputPathNotFound[] = { "Project output path not found with the command line parameters.", "Projektausgabepfad wurde in den Aufrufparametern nicht gefunden." };
+				const std::string kMsgXmlFileNotFound[] = { "Project XML file name is not found from command line parameters.", "Projekt XML Datei wurde in den Aufrufparametern nicht gefunden." };
+				const std::string kMsgFileNotExists[] = { "File \"%s\" does not exists.", "Die Datei \"%s\" existiert nicht." };
+				const std::string kMsgFileExtnIncorrect[] = { "Fileextension \"%s\" is incorrect.", "Dateierweiterung \"%s\" ist ungueltig." };
+				const std::string kMsgSchemaFileNotExists[] = { "XML schema file \"%s\" does not exists.", "XML Schemadatei \"%s\" existiert ist." };
+				const std::string kMsgOutputPathNotExiists[] = { "Output path \"%s\" not exists.", "Projektausgabepfad \"%s\" existiert nicht." };
+				const std::string kMsgErrorLoadingGrammer[] = { "Failed to load grammer to DOM Parser.", "Initialisierung des DOM Parsers ist fehlgeschlagen." };
+				const std::string kMsgFileSchemaNotValid[] = { "XML Schema of file is not valid.", "Die XML Schemadatei ist nicht gueltig." };
+				const std::string kMsgNullPtrFound[] = { "NULL pointer execption raised at \"%s\".", "NULL Zeigerfehler wurde in der Funktion \"%s\" ausgeloest." };
+				const std::string kMsgNoResultForXPath[] = { "No result for the XPath \"%s\".", "Kein Resultat fuer den folgenden XPath \"%s\"." };
+				const std::string kMsgUnableToOpenLogFile[] = { "Unable to open the log file \"%s\".", "Die Logdatei \"%s\" konnte nicht geoeffnet werden." };
+				const std::string kMsgErrorTableNotLoaded[] = { "Failed to load error code table.", "Die Fehlercodetabelle konnte nicht geladen werden." };
+				const std::string kMsgErrorInfoNotFound[] = { "Failed to find error information.", "Die Fehlerinformation konnte nicht gefunden werden." };
+				const std::string kMsgConfGenerationSuccess[] = { "POWERLINK configuration files generated successfully under \"%s\".", "POWERLINK Konfigurationsdateien wurden unter \"%s\" erfolgreich erstellt." };
 
 				/** \brief Functionalities to handle the error messages
 				  */

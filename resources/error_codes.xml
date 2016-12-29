@@ -25,426 +25,427 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <openCONFIGURATORErrorCodes version="1.0.0" createdOn="2001-12-17T09:30:47Z" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sourceforge.net/projects/openconf/configuration/errorcodes file:///C:/Users/rueckerc/Desktop/ocErrorCodes.xsd" xmlns="http://sourceforge.net/projects/openconf/configuration/errorcodes">
 	<ErrorCodes component="library" componentVersion="2.1.1">
-		<ErrorCode value="SUCCESS" originalCode="0" toolCode="5400">
+		<ErrorCode value="SUCCESS" originalCode="0" toolCode="0">
 			<Description xml:lang="en" value="Operation completed successfully."/>
+			<Description xml:lang="de" value="Operation completed successfully."/>
 		</ErrorCode>
-		<ErrorCode value="FILE_WRITE_FAILED" originalCode="1" toolCode="5401">
+		<ErrorCode value="FILE_WRITE_FAILED" originalCode="1" toolCode="1">
 			<Description xml:lang="en" value="Cannot write to file."/>
 		</ErrorCode>
-		<ErrorCode value="FILE_READ_FAILED" originalCode="2" toolCode="5402">
+		<ErrorCode value="FILE_READ_FAILED" originalCode="2" toolCode="2">
 			<Description xml:lang="en" value="Cannot read from file"/>
 		</ErrorCode>
-		<ErrorCode value="SUBOBJECT_INVALID" originalCode="3" toolCode="5403">
+		<ErrorCode value="SUBOBJECT_INVALID" originalCode="3" toolCode="3">
 			<Description xml:lang="en" value="Invalid subindex encountered during operation."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_INVALID" originalCode="4" toolCode="5404">
+		<ErrorCode value="OBJECT_INVALID" originalCode="4" toolCode="4">
 			<Description xml:lang="en" value="Invalid index encountered during operation."/>
 		</ErrorCode>
-		<ErrorCode value="NODEID_INVALID" originalCode="5" toolCode="5405">
+		<ErrorCode value="NODEID_INVALID" originalCode="5" toolCode="5">
 			<Description xml:lang="en" value="Invalid node id encountered during operation."/>
 		</ErrorCode>
-		<ErrorCode value="ATTRIBUTEVALUE_INVALID" originalCode="6" toolCode="5406">
+		<ErrorCode value="ATTRIBUTEVALUE_INVALID" originalCode="6" toolCode="6">
 			<Description xml:lang="en" value="Invalid attribute value encountered during operation."/>
 		</ErrorCode>
-		<ErrorCode value="ATTRIBUTEVALUE_NOT_IN_RANGE" originalCode="7" toolCode="5407">
+		<ErrorCode value="ATTRIBUTEVALUE_NOT_IN_RANGE" originalCode="7" toolCode="7">
 			<Description xml:lang="en" value="Attribute value not in valid range."/>
 		</ErrorCode>
-		<ErrorCode value="UNSUPPORTED_ATTRIBUTETYPE" originalCode="8" toolCode="5408">
+		<ErrorCode value="UNSUPPORTED_ATTRIBUTETYPE" originalCode="8" toolCode="8">
 			<Description xml:lang="en" value="Attribute type not supported by operation."/>
 		</ErrorCode>
-		<ErrorCode value="NO_NODES_CONFIGURED" originalCode="9" toolCode="5409">
+		<ErrorCode value="NO_NODES_CONFIGURED" originalCode="9" toolCode="9">
 			<Description xml:lang="en" value="Network does not contain any nodes."/>
 		</ErrorCode>
-		<ErrorCode value="NO_CONTROLLED_NODES_CONFIGURED" originalCode="10" toolCode="5410">
+		<ErrorCode value="NO_CONTROLLED_NODES_CONFIGURED" originalCode="10" toolCode="10">
 			<Description xml:lang="en" value="Network does not contain any controlled nodes."/>
 		</ErrorCode>
-		<ErrorCode value="NO_MANAGING_NODE_CONFIGURED" originalCode="11" toolCode="5411">
+		<ErrorCode value="NO_MANAGING_NODE_CONFIGURED" originalCode="11" toolCode="11">
 			<Description xml:lang="en" value="Network does not contain a managing node."/>
 		</ErrorCode>
-		<ErrorCode value="OD_EMPTY" originalCode="12" toolCode="5412">
+		<ErrorCode value="OD_EMPTY" originalCode="12" toolCode="12">
 			<Description xml:lang="en" value="Object dictionary is empty."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_CONTAINS_NO_SUBOBJECTS" originalCode="13" toolCode="5413">
+		<ErrorCode value="OBJECT_CONTAINS_NO_SUBOBJECTS" originalCode="13" toolCode="13">
 			<Description xml:lang="en" value="%Index does not contain subindices."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_DOES_NOT_EXIST" originalCode="14" toolCode="5414">
+		<ErrorCode value="NODE_DOES_NOT_EXIST" originalCode="14" toolCode="14">
 			<Description xml:lang="en" value="%Node does not exist in the network."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_DOES_NOT_EXIST" originalCode="15" toolCode="5415">
+		<ErrorCode value="OBJECT_DOES_NOT_EXIST" originalCode="15" toolCode="15">
 			<Description xml:lang="en" value="%Index does not exist on %Node."/>
 		</ErrorCode>
-		<ErrorCode value="SUBOBJECT_DOES_NOT_EXIST" originalCode="16" toolCode="5416">
+		<ErrorCode value="SUBOBJECT_DOES_NOT_EXIST" originalCode="16" toolCode="16">
 			<Description xml:lang="en" value="%SubIndex does not exist in %Index."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_EXISTS" originalCode="17" toolCode="5417">
+		<ErrorCode value="NODE_EXISTS" originalCode="17" toolCode="17">
 			<Description xml:lang="en" value="%Node already exists in the network."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_EXISTS" originalCode="18" toolCode="5418">
+		<ErrorCode value="OBJECT_EXISTS" originalCode="18" toolCode="18">
 			<Description xml:lang="en" value="%Index already exists on a %Node."/>
 		</ErrorCode>
-		<ErrorCode value="SUBOBJECT_EXISTS" originalCode="19" toolCode="5419">
+		<ErrorCode value="SUBOBJECT_EXISTS" originalCode="19" toolCode="19">
 			<Description xml:lang="en" value="%SubIndex already exists for an %Index."/>
 		</ErrorCode>
-		<ErrorCode value="TPDO_CHANNEL_COUNT_EXCEEDED" originalCode="20" toolCode="5420">
+		<ErrorCode value="TPDO_CHANNEL_COUNT_EXCEEDED" originalCode="20" toolCode="20">
 			<Description xml:lang="en" value="Max. no. of TPDO-Channels exceeded."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_CONFIGURATION_ERROR" originalCode="21" toolCode="5421">
+		<ErrorCode value="NODE_CONFIGURATION_ERROR" originalCode="21" toolCode="21">
 			<Description xml:lang="en" value="%Node configuration error occured."/>
 		</ErrorCode>
-		<ErrorCode value="MAPPED_OBJECT_DOES_NOT_EXIST" originalCode="22" toolCode="5422">
+		<ErrorCode value="MAPPED_OBJECT_DOES_NOT_EXIST" originalCode="22" toolCode="22">
 			<Description xml:lang="en" value="A mapped %Index does not exist on %Node."/>
 		</ErrorCode>
-		<ErrorCode value="MAPPED_SUBOBJECT_DOES_NOT_EXIST" originalCode="23" toolCode="5423">
+		<ErrorCode value="MAPPED_SUBOBJECT_DOES_NOT_EXIST" originalCode="23" toolCode="23">
 			<Description xml:lang="en" value="A mapped %SubIndex does not exist on %Node."/>
 		</ErrorCode>
-		<ErrorCode value="INSUFFICIENT_MAPPING_OBJECTS" originalCode="24" toolCode="5424">
+		<ErrorCode value="INSUFFICIENT_MAPPING_OBJECTS" originalCode="24" toolCode="24">
 			<Description xml:lang="en" value="Insufficient mapping objects on the %Node."/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_NOT_FOUND" originalCode="25" toolCode="5425">
+		<ErrorCode value="PARAMETER_NOT_FOUND" originalCode="25" toolCode="25">
 			<Description xml:lang="en" value="%Parameter not found on a %Node."/>
 		</ErrorCode>
-		<ErrorCode value="STRUCT_DATATYPE_NOT_FOUND" originalCode="26" toolCode="5426">
+		<ErrorCode value="STRUCT_DATATYPE_NOT_FOUND" originalCode="26" toolCode="26">
 			<Description xml:lang="en" value="Struct datatype not found on a %Node."/>
 		</ErrorCode>
-		<ErrorCode value="SIMPLE_DATATYPE_NOT_FOUND" originalCode="27" toolCode="5427">
+		<ErrorCode value="SIMPLE_DATATYPE_NOT_FOUND" originalCode="27" toolCode="27">
 			<Description xml:lang="en" value="Simple datatype not found on the %Node."/>
 		</ErrorCode>
-		<ErrorCode value="VALUE_NOT_WITHIN_RANGE" originalCode="28" toolCode="5428">
+		<ErrorCode value="VALUE_NOT_WITHIN_RANGE" originalCode="28" toolCode="28">
 			<Description xml:lang="en" value="Value not within a valid range."/>
 		</ErrorCode>
-		<ErrorCode value="CHANNEL_PAYLOAD_LIMIT_EXCEEDED" originalCode="29" toolCode="5429">
+		<ErrorCode value="CHANNEL_PAYLOAD_LIMIT_EXCEEDED" originalCode="29" toolCode="29">
 			<Description xml:lang="en" value="Max. Channel-Payload exceeded."/>
 		</ErrorCode>
-		<ErrorCode value="CHANNEL_OBJECT_LIMIT_EXCEEDED" originalCode="30" toolCode="5430">
+		<ErrorCode value="CHANNEL_OBJECT_LIMIT_EXCEEDED" originalCode="30" toolCode="30">
 			<Description xml:lang="en" value="Max. no. of Channel-Objects exceeded."/>
 		</ErrorCode>
-		<ErrorCode value="PDO_DATATYPE_INVALID" originalCode="31" toolCode="5431">
+		<ErrorCode value="PDO_DATATYPE_INVALID" originalCode="31" toolCode="31">
 			<Description xml:lang="en" value="PDO datatype invalid."/>
 		</ErrorCode>
-		<ErrorCode value="UNSUPPORTED_PI_GEN_LANGUAGE" originalCode="32" toolCode="5432">
+		<ErrorCode value="UNSUPPORTED_PI_GEN_LANGUAGE" originalCode="32" toolCode="32">
 			<Description xml:lang="en" value="Process image generation not supported for given programming language."/>
 		</ErrorCode>
-		<ErrorCode value="MAX_PI_SIZE_EXCEEDED" originalCode="33" toolCode="5433">
+		<ErrorCode value="MAX_PI_SIZE_EXCEEDED" originalCode="33" toolCode="33">
 			<Description xml:lang="en" value="Maximum size of process image exceeded."/>
 		</ErrorCode>
-		<ErrorCode value="MULTIPLEXING_NOT_SUPPORTED" originalCode="34" toolCode="5434">
+		<ErrorCode value="MULTIPLEXING_NOT_SUPPORTED" originalCode="34" toolCode="34">
 			<Description xml:lang="en" value="Multiplexing not supported."/>
 		</ErrorCode>
-		<ErrorCode value="MULTIPLEX_CYCLE_ASSIGN_INVALID" originalCode="35" toolCode="5435">
+		<ErrorCode value="MULTIPLEX_CYCLE_ASSIGN_INVALID" originalCode="35" toolCode="35">
 			<Description xml:lang="en" value="Invalid multiplexed cycle assigned to %Node."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_LIMITS_INVALID" originalCode="36" toolCode="5436">
+		<ErrorCode value="OBJECT_LIMITS_INVALID" originalCode="36" toolCode="36">
 			<Description xml:lang="en" value="High-/Lowlimit of the object are invalid."/>
 		</ErrorCode>
-		<ErrorCode value="LOW_CN_PRES_TIMEOUT" originalCode="37" toolCode="5437">
+		<ErrorCode value="LOW_CN_PRES_TIMEOUT" originalCode="37" toolCode="37">
 			<Description xml:lang="en" value="CNPResTimeout (0x1F92) is too low."/>
 		</ErrorCode>
-		<ErrorCode value="CROSS_TRAFFIC_STATION_LIMIT_EXCEEDED" originalCode="38" toolCode="5438">
+		<ErrorCode value="CROSS_TRAFFIC_STATION_LIMIT_EXCEEDED" originalCode="38" toolCode="38">
 			<Description xml:lang="en" value="CN exceeds the no. of allowed cross-traffic stations (device description entry D_PDO_RPDOChannels_U16)."/>
 		</ErrorCode>
-		<ErrorCode value="ARGUMENT_INVALID_NULL" originalCode="39" toolCode="5439">
+		<ErrorCode value="ARGUMENT_INVALID_NULL" originalCode="39" toolCode="39">
 			<Description xml:lang="en" value="Invalid function-argument (NULL)."/>
 		</ErrorCode>
-		<ErrorCode value="ARGUMENT_INVALID_EMPTY" originalCode="40" toolCode="5440">
+		<ErrorCode value="ARGUMENT_INVALID_EMPTY" originalCode="40" toolCode="40">
 			<Description xml:lang="en" value="Invalid function-argument (empty)."/>
 		</ErrorCode>
-		<ErrorCode value="UNHANDLED_EXCEPTION" originalCode="41" toolCode="5441">
+		<ErrorCode value="UNHANDLED_EXCEPTION" originalCode="41" toolCode="41">
 			<Description xml:lang="en" value="Unhandled exception occurred during operation."/>
 		</ErrorCode>
-		<ErrorCode value="NO_DEFAULT_OR_ACTUAL_VALUE" originalCode="42" toolCode="5442">
+		<ErrorCode value="NO_DEFAULT_OR_ACTUAL_VALUE" originalCode="42" toolCode="42">
 			<Description xml:lang="en" value="No default or actual value defined for object."/>
 		</ErrorCode>
-		<ErrorCode value="FEATURE_VALUE_NOT_FOUND" originalCode="43" toolCode="5443">
+		<ErrorCode value="FEATURE_VALUE_NOT_FOUND" originalCode="43" toolCode="43">
 			<Description xml:lang="en" value="CN-/MN- or GeneralFeature not found in a node&apos;s XDD."/>
 		</ErrorCode>
-		<ErrorCode value="PLKDATATYPE_SIZE_UNDEFINED" originalCode="44" toolCode="5444">
+		<ErrorCode value="PLKDATATYPE_SIZE_UNDEFINED" originalCode="44" toolCode="44">
 			<Description xml:lang="en" value="The given POWERLINK data type has no defined size."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_SIZE_MAPPED_INVALID" originalCode="45" toolCode="5445">
+		<ErrorCode value="OBJECT_SIZE_MAPPED_INVALID" originalCode="45" toolCode="45">
 			<Description xml:lang="en" value="Mapped object size invalid."/>
 		</ErrorCode>
-		<ErrorCode value="MAPPING_TYPE_FOR_PDO_INVALID" originalCode="46" toolCode="5446">
+		<ErrorCode value="MAPPING_TYPE_FOR_PDO_INVALID" originalCode="46" toolCode="46">
 			<Description xml:lang="en" value="Mapped object has an invalid/incompatible PDOmapping."/>
 		</ErrorCode>
-		<ErrorCode value="ACCESS_TYPE_FOR_PARAMETER_INVALID" originalCode="47" toolCode="5447">
+		<ErrorCode value="ACCESS_TYPE_FOR_PARAMETER_INVALID" originalCode="47" toolCode="47">
 			<Description xml:lang="en" value="A mapped object&apos;s referenced %Parameter has an invalid/incompatible accessType."/>
 		</ErrorCode>
-		<ErrorCode value="ACCESS_TYPE_FOR_PDO_INVALID" originalCode="48" toolCode="5448">
+		<ErrorCode value="ACCESS_TYPE_FOR_PDO_INVALID" originalCode="48" toolCode="48">
 			<Description xml:lang="en" value="A mapped object has an invalid/incompatible accessType."/>
 		</ErrorCode>
-		<ErrorCode value="PDO_OFFSET_INVALID" originalCode="49" toolCode="5449">
+		<ErrorCode value="PDO_OFFSET_INVALID" originalCode="49" toolCode="49">
 			<Description xml:lang="en" value="A mapped object has an invalid offset (non-contigous)."/>
 		</ErrorCode>
-		<ErrorCode value="NO_PROJECT_LOADED" originalCode="50" toolCode="5450">
+		<ErrorCode value="NO_PROJECT_LOADED" originalCode="50" toolCode="50">
 			<Description xml:lang="en" value="No project loaded."/>
 		</ErrorCode>
-		<ErrorCode value="MAPPING_INVALID" originalCode="51" toolCode="5451">
+		<ErrorCode value="MAPPING_INVALID" originalCode="51" toolCode="51">
 			<Description xml:lang="en" value="An enabled mapping entry is empty."/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_VALUE_NOT_SET" originalCode="52" toolCode="5452">
+		<ErrorCode value="PARAMETER_VALUE_NOT_SET" originalCode="52" toolCode="52">
 			<Description xml:lang="en" value="A specific parameter value is not set."/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_VALUE_INVALID" originalCode="53" toolCode="5453">
+		<ErrorCode value="PARAMETER_VALUE_INVALID" originalCode="53" toolCode="53">
 			<Description xml:lang="en" value="A value is invalid for a specific parameter."/>
 		</ErrorCode>
-		<ErrorCode value="PATH_EXISTS" originalCode="54" toolCode="5454">
+		<ErrorCode value="PATH_EXISTS" originalCode="" toolCode="">
 			<Description xml:lang="en" value="A path already exists in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="PATH_DOES_NOT_EXIST" originalCode="55" toolCode="5455">
+		<ErrorCode value="PATH_DOES_NOT_EXIST" originalCode="1" toolCode="1">
 			<Description xml:lang="en" value="A path does not exists in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="VIEW_SETTING_EXISTS" originalCode="56" toolCode="5456">
+		<ErrorCode value="VIEW_SETTING_EXISTS" originalCode="56" toolCode="56">
 			<Description xml:lang="en" value="A view setting exists in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="VIEW_SETTING_DOES_NOT_EXIST" originalCode="57" toolCode="5457">
+		<ErrorCode value="VIEW_SETTING_DOES_NOT_EXIST" originalCode="57" toolCode="57">
 			<Description xml:lang="en" value="A view setting does not exist in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="VIEW_SETTINGS_DOES_NOT_EXIST" originalCode="58" toolCode="5458">
+		<ErrorCode value="VIEW_SETTINGS_DOES_NOT_EXIST" originalCode="58" toolCode="58">
 			<Description xml:lang="en" value="A view settings group does not exist in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="BUILD_SETTING_EXISTS" originalCode="59" toolCode="5459">
+		<ErrorCode value="BUILD_SETTING_EXISTS" originalCode="59" toolCode="59">
 			<Description xml:lang="en" value="An auto generation setting already exists in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="BUILD_SETTING_DOES_NOT_EXIST" originalCode="60" toolCode="5460">
+		<ErrorCode value="BUILD_SETTING_DOES_NOT_EXIST" originalCode="60" toolCode="60">
 			<Description xml:lang="en" value="An auto generation setting does not exist in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="BUILD_CONFIGURATION_EXISTS" originalCode="61" toolCode="5461">
+		<ErrorCode value="BUILD_CONFIGURATION_EXISTS" originalCode="61" toolCode="61">
 			<Description xml:lang="en" value="An auto generation settings group does already exist in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="BUILD_CONFIGURATION_DOES_NOT_EXIST" originalCode="62" toolCode="5462">
+		<ErrorCode value="BUILD_CONFIGURATION_DOES_NOT_EXIST" originalCode="62" toolCode="62">
 			<Description xml:lang="en" value="An auto generation settings group does not exist in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="BUILD_CONFIGURATION_IS_ACTIVE" originalCode="63" toolCode="5463">
+		<ErrorCode value="BUILD_CONFIGURATION_IS_ACTIVE" originalCode="63" toolCode="63">
 			<Description xml:lang="en" value="The build configuration group is set active in the project configuration."/>
 		</ErrorCode>
-		<ErrorCode value="NETWORK_EXISTS" originalCode="64" toolCode="5464">
+		<ErrorCode value="NETWORK_EXISTS" originalCode="64" toolCode="64">
 			<Description xml:lang="en" value="The network configuration already exists in the library."/>
 		</ErrorCode>
-		<ErrorCode value="NETWORK_DOES_NOT_EXIST" originalCode="65" toolCode="5465">
+		<ErrorCode value="NETWORK_DOES_NOT_EXIST" originalCode="65" toolCode="65">
 			<Description xml:lang="en" value="The network configuration already not exist in the library."/>
 		</ErrorCode>
-		<ErrorCode value="DATATYPE_MISMATCH" originalCode="66" toolCode="5466">
+		<ErrorCode value="DATATYPE_MISMATCH" originalCode="66" toolCode="66">
 			<Description xml:lang="en" value="The conversion of a requested value into the destined datatype is not possible."/>
 		</ErrorCode>
-		<ErrorCode value="COMPLEX_DATATYPE_NOT_FOUND" originalCode="67" toolCode="5467">
+		<ErrorCode value="COMPLEX_DATATYPE_NOT_FOUND" originalCode="67" toolCode="67">
 			<Description xml:lang="en" value="A complex datatype does not exist for a node."/>
 		</ErrorCode>
-		<ErrorCode value="VAR_DECLARATION_EXISTS" originalCode="68" toolCode="5468">
+		<ErrorCode value="VAR_DECLARATION_EXISTS" originalCode="68" toolCode="68">
 			<Description xml:lang="en" value="A VarDeclaration with the same uniqueId already exists."/>
 		</ErrorCode>
-		<ErrorCode value="ENUM_VALUE_EXISTS" originalCode="69" toolCode="5469">
+		<ErrorCode value="ENUM_VALUE_EXISTS" originalCode="69" toolCode="69">
 			<Description xml:lang="en" value="An Enum Value with the same name already exists."/>
 		</ErrorCode>
-		<ErrorCode value="FORCED_VALUE_OVERWRITE" originalCode="70" toolCode="5470">
+		<ErrorCode value="FORCED_VALUE_OVERWRITE" originalCode="70" toolCode="70">
 			<Description xml:lang="en" value="A forced value must not be overwritten by the library."/>
 		</ErrorCode>
-		<ErrorCode value="CYCLE_TIME_NOT_SET" originalCode="71" toolCode="5471">
+		<ErrorCode value="CYCLE_TIME_NOT_SET" originalCode="71" toolCode="71">
 			<Description xml:lang="en" value="An actual value for cycle time must be configured."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_ACTUAL_VALUE_EXCEEDS_HIGHLIMIT" originalCode="72" toolCode="5472">
+		<ErrorCode value="OBJECT_ACTUAL_VALUE_EXCEEDS_HIGHLIMIT" originalCode="72" toolCode="72">
 			<Description xml:lang="en" value="An actual value exceeds its high limit."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_ACTUAL_VALUE_DECEEDS_LOWLIMIT" originalCode="73" toolCode="5473">
+		<ErrorCode value="OBJECT_ACTUAL_VALUE_DECEEDS_LOWLIMIT" originalCode="73" toolCode="73">
 			<Description xml:lang="en" value="An actual value deceeds its low limit."/>
 		</ErrorCode>
-		<ErrorCode value="CHAINING_NOT_SUPPORTED" originalCode="74" toolCode="5474">
+		<ErrorCode value="CHAINING_NOT_SUPPORTED" originalCode="74" toolCode="74">
 			<Description xml:lang="en" value="Chaining not supported."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_HAS_NO_ACTUAL_VALUE" originalCode="75" toolCode="5475">
+		<ErrorCode value="OBJECT_HAS_NO_ACTUAL_VALUE" originalCode="75" toolCode="75">
 			<Description xml:lang="en" value="The object does not have a defined actual value."/>
 		</ErrorCode>
-		<ErrorCode value="SUB_OBJECT_HAS_NO_ACTUAL_VALUE" originalCode="76" toolCode="5476">
+		<ErrorCode value="SUB_OBJECT_HAS_NO_ACTUAL_VALUE" originalCode="76" toolCode="76">
 			<Description xml:lang="en" value="The sub object does not have a defined actual value."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_HAS_NO_DEFAULT_VALUE" originalCode="77" toolCode="5477">
+		<ErrorCode value="OBJECT_HAS_NO_DEFAULT_VALUE" originalCode="77" toolCode="77">
 			<Description xml:lang="en" value="The object does not have a defined default value."/>
 		</ErrorCode>
-		<ErrorCode value="SUB_OBJECT_HAS_NO_DEFAULT_VALUE" originalCode="78" toolCode="5478">
+		<ErrorCode value="SUB_OBJECT_HAS_NO_DEFAULT_VALUE" originalCode="78" toolCode="78">
 			<Description xml:lang="en" value="The sub object does not have a defined default value."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_HAS_NO_DATATYPE" originalCode="79" toolCode="5479">
+		<ErrorCode value="OBJECT_HAS_NO_DATATYPE" originalCode="79" toolCode="79">
 			<Description xml:lang="en" value="An object has no defined data type."/>
 		</ErrorCode>
-		<ErrorCode value="DATATYPE_DOES_NOT_SUPPORT_LIMITS" originalCode="80" toolCode="5480">
+		<ErrorCode value="DATATYPE_DOES_NOT_SUPPORT_LIMITS" originalCode="80" toolCode="80">
 			<Description xml:lang="en" value="A data type that does not support the definition of high and low limit."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_TYPE_DOES_NOT_SUPPORT_VALUES" originalCode="81" toolCode="5481">
+		<ErrorCode value="OBJECT_TYPE_DOES_NOT_SUPPORT_VALUES" originalCode="81" toolCode="81">
 			<Description xml:lang="en" value="Only objects with object type VAR may have values."/>
 		</ErrorCode>
-		<ErrorCode value="ACTUAL_VALUE_INVALID" originalCode="82" toolCode="5482">
+		<ErrorCode value="ACTUAL_VALUE_INVALID" originalCode="82" toolCode="82">
 			<Description xml:lang="en" value="Actual value exceeds datatype limits."/>
 		</ErrorCode>
-		<ErrorCode value="DEFAULT_VALUE_INVALID" originalCode="83" toolCode="5483">
+		<ErrorCode value="DEFAULT_VALUE_INVALID" originalCode="83" toolCode="83">
 			<Description xml:lang="en" value="Default value exceeds datatype limits."/>
 		</ErrorCode>
-		<ErrorCode value="HIGH_LIMIT_INVALID" originalCode="84" toolCode="5484">
+		<ErrorCode value="HIGH_LIMIT_INVALID" originalCode="84" toolCode="84">
 			<Description xml:lang="en" value="High limit exceeds datatype limits."/>
 		</ErrorCode>
-		<ErrorCode value="LOW_LIMIT_INVALID" originalCode="85" toolCode="5485">
+		<ErrorCode value="LOW_LIMIT_INVALID" originalCode="85" toolCode="85">
 			<Description xml:lang="en" value="Low limit exceeds datatype limits."/>
 		</ErrorCode>
-		<ErrorCode value="GENERAL_FEATURE_VALUE_INVALID" originalCode="86" toolCode="5486">
+		<ErrorCode value="GENERAL_FEATURE_VALUE_INVALID" originalCode="86" toolCode="86">
 			<Description xml:lang="en" value="General feature value invalid for datatype."/>
 		</ErrorCode>
-		<ErrorCode value="CN_FEATURE_VALUE_INVALID" originalCode="87" toolCode="5487">
+		<ErrorCode value="CN_FEATURE_VALUE_INVALID" originalCode="87" toolCode="87">
 			<Description xml:lang="en" value="CN Feature value invalid for datatype."/>
 		</ErrorCode>
-		<ErrorCode value="MN_FEATURE_VALUE_INVALID" originalCode="88" toolCode="5488">
+		<ErrorCode value="MN_FEATURE_VALUE_INVALID" originalCode="88" toolCode="88">
 			<Description xml:lang="en" value="MN Feature value invalid for datatype."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_ASSIGNMENT_NOT_SUPPORTED" originalCode="89" toolCode="5489">
+		<ErrorCode value="NODE_ASSIGNMENT_NOT_SUPPORTED" originalCode="89" toolCode="89">
 			<Description xml:lang="en" value="Node assignment not supported by node."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_ASSIGNMENT_EXISTS" originalCode="90" toolCode="5490">
+		<ErrorCode value="NODE_ASSIGNMENT_EXISTS" originalCode="90" toolCode="90">
 			<Description xml:lang="en" value="Node assignment is already set."/>
 		</ErrorCode>
-		<ErrorCode value="MANAGING_NODE_DISABLE_INVALID" originalCode="91" toolCode="5491">
+		<ErrorCode value="MANAGING_NODE_DISABLE_INVALID" originalCode="91" toolCode="91">
 			<Description xml:lang="en" value="The managing node cannot be disabled."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_IS_NOT_MANAGING_NODE" originalCode="92" toolCode="5492">
+		<ErrorCode value="NODE_IS_NOT_MANAGING_NODE" originalCode="92" toolCode="92">
 			<Description xml:lang="en" value="The node is not a managing node."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_IS_NOT_CONTROLLED_NODE" originalCode="93" toolCode="5493">
+		<ErrorCode value="NODE_IS_NOT_CONTROLLED_NODE" originalCode="93" toolCode="93">
 			<Description xml:lang="en" value="The node is not a controlled node."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_IS_NOT_REDUNDANT_MANAGING_NODE" originalCode="94" toolCode="5494">
+		<ErrorCode value="NODE_IS_NOT_REDUNDANT_MANAGING_NODE" originalCode="94" toolCode="94">
 			<Description xml:lang="en" value="The node is not a redundant managing node."/>
 		</ErrorCode>
-		<ErrorCode value="DYNAMIC_CHANNEL_NOT_FOUND" originalCode="95" toolCode="5495">
+		<ErrorCode value="DYNAMIC_CHANNEL_NOT_FOUND" originalCode="95" toolCode="95">
 			<Description xml:lang="en" value="Dynamic Channel not found."/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_ACCESS_INVALID" originalCode="96" toolCode="5496">
+		<ErrorCode value="PARAMETER_ACCESS_INVALID" originalCode="96" toolCode="96">
 			<Description xml:lang="en" value="Parameter access invalid."/>
 		</ErrorCode>
-		<ErrorCode value="OBJECT_ACCESS_DOES_NOT_SUPPORT_VALUES" originalCode="97" toolCode="5497">
+		<ErrorCode value="OBJECT_ACCESS_DOES_NOT_SUPPORT_VALUES" originalCode="97" toolCode="97">
 			<Description xml:lang="en" value="Object access does not allow values"/>
 		</ErrorCode>
-		<ErrorCode value="CYCLE_TIME_ERROR" originalCode="98" toolCode="5498">
+		<ErrorCode value="CYCLE_TIME_ERROR" originalCode="98" toolCode="98">
 			<Description xml:lang="en" value="Cycle time does not meet criteria of the network"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_HAS_NO_DATATYPE" originalCode="99" toolCode="5499">
+		<ErrorCode value="PARAMETER_HAS_NO_DATATYPE" originalCode="99" toolCode="99">
 			<Description xml:lang="en" value="Parameter has no IEC datatype"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_HAS_NO_ACTUAL_VALUE" originalCode="100" toolCode="5500">
+		<ErrorCode value="PARAMETER_HAS_NO_ACTUAL_VALUE" originalCode="100" toolCode="100">
 			<Description xml:lang="en" value="Parameter does not have an actual value"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_HAS_NO_DEFAULT_VALUE" originalCode="101" toolCode="5501">
+		<ErrorCode value="PARAMETER_HAS_NO_DEFAULT_VALUE" originalCode="101" toolCode="101">
 			<Description xml:lang="en" value="Parameter has no default value"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_EXISTS" originalCode="102" toolCode="5502">
+		<ErrorCode value="PARAMETER_EXISTS" originalCode="102" toolCode="102">
 			<Description xml:lang="en" value="Parameter already exists"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_GROUP_EXISTS" originalCode="103" toolCode="5503">
+		<ErrorCode value="PARAMETER_GROUP_EXISTS" originalCode="103" toolCode="103">
 			<Description xml:lang="en" value="Parameter group already exists"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_GROUP_EMPTY" originalCode="104" toolCode="5504">
+		<ErrorCode value="PARAMETER_GROUP_EMPTY" originalCode="104" toolCode="104">
 			<Description xml:lang="en" value="Parameter group is empty"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_TEMPLATE_EXISTS" originalCode="105" toolCode="5505">
+		<ErrorCode value="PARAMETER_TEMPLATE_EXISTS" originalCode="105" toolCode="105">
 			<Description xml:lang="en" value="Parameter template already exists"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_GROUP_DOES_NOT_EXIST" originalCode="106" toolCode="5506">
+		<ErrorCode value="PARAMETER_GROUP_DOES_NOT_EXIST" originalCode="106" toolCode="106">
 			<Description xml:lang="en" value="Parameter group does not exist"/>
 		</ErrorCode>
-		<ErrorCode value="PARAMETER_TEMPLATE_DOES_NOT_EXIST" originalCode="107" toolCode="5507">
+		<ErrorCode value="PARAMETER_TEMPLATE_DOES_NOT_EXIST" originalCode="107" toolCode="107">
 			<Description xml:lang="en" value="Parameter template does not exist"/>
 		</ErrorCode>
-		<ErrorCode value="COMPLEX_DATATYPE_ALREADY_EXIST" originalCode="108" toolCode="5508">
+		<ErrorCode value="COMPLEX_DATATYPE_ALREADY_EXIST" originalCode="108" toolCode="108">
 			<Description xml:lang="en" value="A complex datatype already exists on a node."/>
 		</ErrorCode>
-		<ErrorCode value="NODE_IS_NOT_MODULAR_CONTROLLED_NODE" originalCode="109" toolCode="5509">
+		<ErrorCode value="NODE_IS_NOT_MODULAR_CONTROLLED_NODE" originalCode="109" toolCode="109">
 			<Description xml:lang="en" value="Node is not a modular head node"/>
 		</ErrorCode>
-		<ErrorCode value="INTERFACE_ALREADY_EXISTS" originalCode="110" toolCode="5510">
+		<ErrorCode value="INTERFACE_ALREADY_EXISTS" originalCode="110" toolCode="110">
 			<Description xml:lang="en" value="Interface already exists on modular head node"/>
 		</ErrorCode>
-		<ErrorCode value="INTERFACE_DOES_NOT_EXIST" originalCode="111" toolCode="5511">
+		<ErrorCode value="INTERFACE_DOES_NOT_EXIST" originalCode="111" toolCode="111">
 			<Description xml:lang="en" value="Inteface does not exist on modular head node"/>
 		</ErrorCode>
-		<ErrorCode value="MODULE_ALREADY_EXISTS" originalCode="112" toolCode="5512">
+		<ErrorCode value="MODULE_ALREADY_EXISTS" originalCode="112" toolCode="112">
 			<Description xml:lang="en" value="Module already exists on interface position"/>
 		</ErrorCode>
-		<ErrorCode value="MODULE_DOES_NOT_EXIST" originalCode="113" toolCode="5513">
+		<ErrorCode value="MODULE_DOES_NOT_EXIST" originalCode="113" toolCode="113">
 			<Description xml:lang="en" value="Module does not exist on interface position"/>
 		</ErrorCode>
-		<ErrorCode value="MODULE_ID_DOES_NOT_MATCH" originalCode="114" toolCode="5514">
+		<ErrorCode value="MODULE_ID_DOES_NOT_MATCH" originalCode="114" toolCode="114">
 			<Description xml:lang="en" value="Module Id does not match id of existing module"/>
 		</ErrorCode>
-		<ErrorCode value="RANGE_ALREADY_EXISTS" originalCode="115" toolCode="5515">
+		<ErrorCode value="RANGE_ALREADY_EXISTS" originalCode="115" toolCode="115">
 			<Description xml:lang="en" value="Range already exists on interface"/>
 		</ErrorCode>
-		<ErrorCode value="RANGE_DOES_NOT_EXIST" originalCode="116" toolCode="5516">
+		<ErrorCode value="RANGE_DOES_NOT_EXIST" originalCode="116" toolCode="116">
 			<Description xml:lang="en" value="Range does not exist on interface"/>
 		</ErrorCode>
-		<ErrorCode value="RANGE_HAS_NO_FREE_OBJECTS" originalCode="117" toolCode="5517">
+		<ErrorCode value="RANGE_HAS_NO_FREE_OBJECTS" originalCode="117" toolCode="117">
 			<Description xml:lang="en" value="A range has no free objects for any module indices or subindices"/>
 		</ErrorCode>
-		<ErrorCode value="RANGE_INVALID" originalCode="118" toolCode="5518">
+		<ErrorCode value="RANGE_INVALID" originalCode="118" toolCode="118">
 			<Description xml:lang="en" value="Range is invalid"/>
 		</ErrorCode>
-		<ErrorCode value="RANGE_INDEX_ALREADY_TAKEN" originalCode="119" toolCode="5519">
+		<ErrorCode value="RANGE_INDEX_ALREADY_TAKEN" originalCode="119" toolCode="119">
 			<Description xml:lang="en" value="The range index is already taken."/>
 		</ErrorCode>
-		<ErrorCode value="POSITION_OCCUPIED" originalCode="120" toolCode="5520">
+		<ErrorCode value="POSITION_OCCUPIED" originalCode="120" toolCode="120">
 			<Description xml:lang="en" value="Position on the interface is already occupied"/>
 		</ErrorCode>
-		<ErrorCode value="ADDRESS_OCCUPIED" originalCode="121" toolCode="5521">
+		<ErrorCode value="ADDRESS_OCCUPIED" originalCode="121" toolCode="121">
 			<Description xml:lang="en" value="Address on the interface is already occupied"/>
 		</ErrorCode>
 	</ErrorCodes>
 	<ErrorCodes component="cli" componentVersion="2.0.0">
-		<ErrorCode value="FAILURE" originalCode="255" toolCode="5522">
+		<ErrorCode value="FAILURE" originalCode="255" toolCode="255">
 			<Description xml:lang="en" value="Failure"/>
 		</ErrorCode>
-		<ErrorCode value="SUCCESS" originalCode="0" toolCode="5523">
+		<ErrorCode value="SUCCESS" originalCode="0" toolCode="0">
 			<Description xml:lang="en" value="Success"/>
 		</ErrorCode>
-		<ErrorCode value="USAGE" originalCode="1" toolCode="5524">
+		<ErrorCode value="USAGE" originalCode="1" toolCode="1">
 			<Description xml:lang="en" value="Usage of the application"/>
 		</ErrorCode>
-		<ErrorCode value="INVALID_PARAMETERS" originalCode="2" toolCode="5525">
+		<ErrorCode value="INVALID_PARAMETERS" originalCode="2" toolCode="2">
 			<Description xml:lang="en" value="Invalid parameters"/>
 		</ErrorCode>
-		<ErrorCode value="EXCEPTION_CAUGHT" originalCode="3" toolCode="5526">
+		<ErrorCode value="EXCEPTION_CAUGHT" originalCode="3" toolCode="3">
 			<Description xml:lang="en" value="Exception caught"/>
 		</ErrorCode>
-		<ErrorCode value="OUTPUT_PATH_NOT_FOUND" originalCode="4" toolCode="5527">
+		<ErrorCode value="OUTPUT_PATH_NOT_FOUND" originalCode="4" toolCode="4">
 			<Description xml:lang="en" value="Project output path not found from command line parameters"/>
 		</ErrorCode>
-		<ErrorCode value="XML_FILE_NOT_FOUND" originalCode="5" toolCode="5528">
+		<ErrorCode value="XML_FILE_NOT_FOUND" originalCode="5" toolCode="5">
 			<Description xml:lang="en" value="Project XML file name is not found from command line parameters"/>
 		</ErrorCode>
-		<ErrorCode value="FILE_NOT_EXISTS" originalCode="6" toolCode="5529">
+		<ErrorCode value="FILE_NOT_EXISTS" originalCode="6" toolCode="6">
 			<Description xml:lang="en" value="File does not exists"/>
 		</ErrorCode>
-		<ErrorCode value="FILE_EXTN_INCORRECT" originalCode="7" toolCode="5530">
+		<ErrorCode value="FILE_EXTN_INCORRECT" originalCode="7" toolCode="7">
 			<Description xml:lang="en" value="Extension of file is incorrect"/>
 		</ErrorCode>
-		<ErrorCode value="OUTPUT_PATH_NOT_EXISTS" originalCode="8" toolCode="5531">
+		<ErrorCode value="OUTPUT_PATH_NOT_EXISTS" originalCode="8" toolCode="8">
 			<Description xml:lang="en" value="Output path not exists"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_LOADING_GRAMMER" originalCode="9" toolCode="5532">
+		<ErrorCode value="ERROR_LOADING_GRAMMER" originalCode="9" toolCode="9">
 			<Description xml:lang="en" value="Error loading grammer to DOM Parser"/>
 		</ErrorCode>
-		<ErrorCode value="FILE_SCHEMA_NOT_VALID" originalCode="10" toolCode="5533">
+		<ErrorCode value="FILE_SCHEMA_NOT_VALID" originalCode="10" toolCode="10">
 			<Description xml:lang="en" value="Schema of file is not valid"/>
 		</ErrorCode>
-		<ErrorCode value="NULL_POINTER_FOUND" originalCode="11" toolCode="5534">
+		<ErrorCode value="NULL_POINTER_FOUND" originalCode="11" toolCode="11">
 			<Description xml:lang="en" value="NULL pointer found"/>
 		</ErrorCode>
-		<ErrorCode value="NO_RESULT_FOR_XPATH" originalCode="12" toolCode="5535">
+		<ErrorCode value="NO_RESULT_FOR_XPATH" originalCode="12" toolCode="12">
 			<Description xml:lang="en" value="There is no result for the Managing Node XPath"/>
 		</ErrorCode>
-		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="13" toolCode="5536">
+		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="13" toolCode="13">
 			<Description xml:lang="en" value="Unable to open the log file"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="14" toolCode="5537">
+		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="14" toolCode="14">
 			<Description xml:lang="en" value="Error Table Not Loaded"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="15" toolCode="5538">
+		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="15" toolCode="15">
 			<Description xml:lang="en" value="Error information not found"/>
 		</ErrorCode>
-		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="16" toolCode="5539">
+		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="16" toolCode="16">
 			<Description xml:lang="en" value="POWERLINK configuration files generated successfully"/>
 		</ErrorCode>
 	</ErrorCodes>
