@@ -70,16 +70,16 @@ IF(MSVC)
 		SET(INSTALL_DIR_VS "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/$(Configuration)")
 	ENDIF()
 ELSEIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Weffc++ -std=c++11 -pthread")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Weffc++ -std=c++11 -pthread")
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 	IF(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
 		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/linux/x86_64")
-		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources" 
-                DESTINATION "${CMAKE_SOURCE_DIR}/bin/linux/x86_64") 
-    ELSE() 
-        SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/linux/x86")
-        INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources" 
-                DESTINATION "${CMAKE_SOURCE_DIR}/bin/linux/x86")
+		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
+				DESTINATION "${CMAKE_SOURCE_DIR}/bin/linux/x86_64")
+	ELSE()
+		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/linux/x86")
+		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
+				DESTINATION "${CMAKE_SOURCE_DIR}/bin/linux/x86")
 	ENDIF()
 	IF(MINGW OR CYGWIN)
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -U__STRICT_ANSI__ -D__NO_INLINE__ -Wl,--kill-at")
@@ -116,19 +116,19 @@ IF (MSVC)
 		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/win32/x86/\${BUILD_TYPE}")
 		SET(INSTALL_DIR_VS "${CMAKE_SOURCE_DIR}/bin/win32/x86/$(Configuration)")
 		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
-                DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86/\${BUILD_TYPE}")
+				DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86/\${BUILD_TYPE}")
 	ELSE()
 		SET(INSTALL_DIR "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/\${BUILD_TYPE}")
 		SET(INSTALL_DIR_VS "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/$(Configuration)")
 		INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/resources"
-                DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/\${BUILD_TYPE}")
+				DESTINATION "${CMAKE_SOURCE_DIR}/bin/win32/x86_64/\${BUILD_TYPE}")
 	ENDIF()
 ENDIF()
 
 ###############################################################################
 # Set options
 ###############################################################################
-SET (OPEN_CONFIGURATOR_CLI_NAME "openCONFIGURATOR" CACHE STRING "openCONFIGURATOR CLI application name." )
+SET (OPEN_CONFIGURATOR_CLI_NAME "openCONFIGURATOR" CACHE STRING "openCONFIGURATOR CLI application name.")
 ###############################################################################
 # Add the openCONFIGURATOR library as submodule
 ###############################################################################
