@@ -36,8 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ErrorCodeParser.h"
 
 ErrorCodeParser::ErrorCodeParser() :
-	errorCodeObject(),
-	isErrorTableLoaded(false)
+	errorCodeObject()
 {
 }
 
@@ -52,20 +51,26 @@ ErrorCodeParser& ErrorCodeParser::GetInstance()
 	return instance;
 }
 
-CliResult ErrorCodeParser::LoadErrorCodeFile()
+CliResult ErrorCodeParser::InitErrorCodeTable(const std::string& xmlFilePath)
 {
 	/** Create results for error codes */
 	CliResult clires;
 	CliResult ceres;
 
-	/** Validate the parameters */
-	ceres = ParameterValidator::GetInstance().IsXmlFileValid(kErrorCodeXmlFile);
+	/** Clean the error table if already loaded */
+	if (errorCodeObject.size() > 0)
+	{
+		CloseErrorCodeTable();
+	}
+
+	/** Validate the error code file path */
+	ceres = ParameterValidator::GetInstance().IsXmlFileValid(xmlFilePath);
 	if (!ceres.IsSuccessful())
 	{
 		return ceres;
 	}
 
-	ParserElement xmlElement(kErrorCodeXmlFile, kErrCodeXmlSchemaDefinitionFileName);
+	ParserElement xmlElement(xmlFilePath, kErrCodeXmlSchemaDefinitionFileName);
 
 	ceres = xmlElement.CreateElement();
 	if (!ceres.IsSuccessful())
@@ -82,6 +87,21 @@ CliResult ErrorCodeParser::LoadErrorCodeFile()
 	return CliResult();
 }
 
+void ErrorCodeParser::CloseErrorCodeTable()
+{
+	for (std::uint32_t compIndex = 0; compIndex < errorCodeObject.size(); compIndex++)
+	{
+		for (std::uint32_t ecIndex = 0; ecIndex < errorCodeObject[compIndex].errorCodes.size(); ecIndex++)
+		{
+			errorCodeObject[compIndex].errorCodes[ecIndex].descriptions.clear();
+		}
+
+		errorCodeObject[compIndex].errorCodes.clear();
+	}
+
+	errorCodeObject.clear();
+}
+
 CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 {
 	ParserResult pResult;
@@ -96,8 +116,6 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 
 	try
 	{
-		errorCodeObject.clear();
-
 		for (std::uint32_t row = 0; row < pResult.parameters.size(); row++)
 		{
 			ParserResult pSubResult;
@@ -166,8 +184,6 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
 
-	isErrorTableLoaded = true;
-
 	return CliResult();
 }
 
@@ -175,7 +191,7 @@ CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
 									   const std::uint32_t& originalCode,
 									   std::uint32_t& toolCode)
 {
-	if (!isErrorTableLoaded)
+	if (errorCodeObject.size() == 0)
 	{
 		return CliResult(CliErrorCode::ERROR_TABLE_NOT_LOADED,
 				kMsgErrorTableNotLoaded[CliLogger::GetInstance().languageIndex]);

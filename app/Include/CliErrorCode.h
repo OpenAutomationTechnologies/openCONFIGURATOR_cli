@@ -59,7 +59,6 @@ namespace IndustrialNetwork
 					XML_FILE_NOT_FOUND,			/** Project XML file name is not found from command line parameters */
 					FILE_NOT_EXISTS,			/** File does not exists */
 					FILE_EXTN_INCORRECT,		/** Extension of file is incorrect */
-					SCHEMA_FILE_NOT_EXISTS,		/** Schema file does not exists */
 					OUTPUT_PATH_NOT_EXISTS,		/** Output path not exists */
 					ERROR_LOADING_GRAMMER,		/** Error loading grammer to DOM Parser */
 					FILE_SCHEMA_NOT_VALID,		/** Schema of file is not valid */

@@ -49,6 +49,9 @@ namespace IndustrialNetwork
 			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
 			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
 
+			/** Error code XML file from where the error table gets populate */
+			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
+
 			class ParserElement
 			{
 				public:

@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
 #include "ParserElement.h"
+#include "ParameterValidator.h"
 
 ParserElement::ParserElement() :
 	domDocument(NULL),
@@ -112,12 +113,10 @@ CliResult ParserElement::parseFile()
 	try
 	{
 		/** Validate for the schema file existance */
-		if (!boost::filesystem::exists(schemaFilePath))
+		CliResult res = ParameterValidator::GetInstance().IsFileExists(schemaFilePath);
+		if (!res.IsSuccessful())
 		{
-			boost::format formatter(kMsgSchemaFileNotExists[CliLogger::GetInstance().languageIndex]);
-			formatter % schemaFilePath;
-
-			return CliResult(CliErrorCode::SCHEMA_FILE_NOT_EXISTS, formatter.str());
+			return res;
 		}
 
 		/** Load schema file constraints */

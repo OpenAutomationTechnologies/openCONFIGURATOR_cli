@@ -51,9 +51,6 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			/** Error code XML file from where the error table gets populate */
-			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
-
 			/** \brief Component type of the error code
 			  */
 			namespace ComponentType
@@ -79,9 +76,10 @@ namespace IndustrialNetwork
 					static ErrorCodeParser& GetInstance();
 
 					/** \brief Loads the error code XML file
+					  * \param xmlFilePath		Error code XML file path
 					  * \return CliResult
 					  */
-					CliResult LoadErrorCodeFile();
+					CliResult InitErrorCodeTable(const std::string& xmlFilePath);
 
 					/** \brief Gets the tool code for the original error code
 					  * \param compType			Components type
@@ -99,11 +97,13 @@ namespace IndustrialNetwork
 					  */
 					CliResult CreateErrorTable(const ParserElement& element);
 
+					/** \brief Unloads the error code XML file
+					  * \return Nothing
+					  */
+					void CloseErrorCodeTable();
+
 					/** Instance where all the loaded error code gets store */
 					std::vector<ErrorCodeCompType> errorCodeObject;
-
-					/** true if the error table loaded successful; false otherwise */
-					bool isErrorTableLoaded;
 
 			}; // end of class ErrorCodeParser
 		} // end of namespace Application

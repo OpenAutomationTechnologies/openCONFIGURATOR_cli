@@ -420,34 +420,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		<ErrorCode value="FILE_EXTN_INCORRECT" originalCode="7" toolCode="5530">
 			<Description xml:lang="en" value="Extension of file is incorrect"/>
 		</ErrorCode>
-		<ErrorCode value="SCHEMA_FILE_NOT_EXISTS" originalCode="8" toolCode="5531">
-			<Description xml:lang="en" value="Schema file does not exists"/>
-		</ErrorCode>
-		<ErrorCode value="OUTPUT_PATH_NOT_EXISTS" originalCode="9" toolCode="5532">
+		<ErrorCode value="OUTPUT_PATH_NOT_EXISTS" originalCode="8" toolCode="5531">
 			<Description xml:lang="en" value="Output path not exists"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_LOADING_GRAMMER" originalCode="10" toolCode="5533">
+		<ErrorCode value="ERROR_LOADING_GRAMMER" originalCode="9" toolCode="5532">
 			<Description xml:lang="en" value="Error loading grammer to DOM Parser"/>
 		</ErrorCode>
-		<ErrorCode value="FILE_SCHEMA_NOT_VALID" originalCode="11" toolCode="5534">
+		<ErrorCode value="FILE_SCHEMA_NOT_VALID" originalCode="10" toolCode="5533">
 			<Description xml:lang="en" value="Schema of file is not valid"/>
 		</ErrorCode>
-		<ErrorCode value="NULL_POINTER_FOUND" originalCode="12" toolCode="5535">
+		<ErrorCode value="NULL_POINTER_FOUND" originalCode="11" toolCode="5534">
 			<Description xml:lang="en" value="NULL pointer found"/>
 		</ErrorCode>
-		<ErrorCode value="NO_RESULT_FOR_XPATH" originalCode="13" toolCode="5536">
+		<ErrorCode value="NO_RESULT_FOR_XPATH" originalCode="12" toolCode="5535">
 			<Description xml:lang="en" value="There is no result for the Managing Node XPath"/>
 		</ErrorCode>
-		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="14" toolCode="5537">
+		<ErrorCode value="UNABLE_TO_OPEN_LOG" originalCode="13" toolCode="5536">
 			<Description xml:lang="en" value="Unable to open the log file"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="15" toolCode="5538">
+		<ErrorCode value="ERROR_TABLE_NOT_LOADED" originalCode="14" toolCode="5537">
 			<Description xml:lang="en" value="Error Table Not Loaded"/>
 		</ErrorCode>
-		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="16" toolCode="5539">
+		<ErrorCode value="ERROR_INFO_NOT_FOUND" originalCode="15" toolCode="5538">
 			<Description xml:lang="en" value="Error information not found"/>
 		</ErrorCode>
-		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="17" toolCode="5540">
+		<ErrorCode value="CONF_GENERATION_SUCCESS" originalCode="16" toolCode="5539">
 			<Description xml:lang="en" value="POWERLINK configuration files generated successfully"/>
 		</ErrorCode>
 	</ErrorCodes>

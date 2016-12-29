@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
 #include "ConfigurationGenerator.h"
+#include "ParameterValidator.h"
 #include "ProjectParser.h"
 
 ConfigurationGenerator::ConfigurationGenerator()
@@ -52,9 +53,37 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 }
 
 CliResult ConfigurationGenerator::GenerateOutputFiles(const std::string& xmlPath,
-															 const std::string& outputPath)
+														const std::string& outputPath)
 {
 	CliResult cliRes;
+
+	/** Validate the parameters */
+	cliRes = ParameterValidator::GetInstance().IsXmlFileValid(xmlPath);
+	if (!cliRes.IsSuccessful())
+	{
+		return cliRes;
+	}
+
+	cliRes = ParameterValidator::GetInstance().IsPathValid(outputPath);
+	if (!cliRes.IsSuccessful())
+	{
+		LOG_WARN() << cliRes.GetErrorMessage();
+
+		try
+		{
+			/** Create the output path as it doesnt exists */
+			boost::filesystem::path dir(outputPath);
+			if (!boost::filesystem::create_directory(dir))
+			{
+				/** Failed to create the output path */
+				return cliRes;
+			}
+		}
+		catch(const std::exception& e)
+		{
+			return CliLogger::GetInstance().GetFailureErrorString(e);
+		}
+	}
 
 	/** Parse the XML file */
 	cliRes = ProjectParser::GetInstance().ParseXmlFile(xmlPath);

@@ -76,7 +76,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	}
 
 	/** Load the error code table */
-	res = ErrorCodeParser::GetInstance().LoadErrorCodeFile();
+	res = ErrorCodeParser::GetInstance().InitErrorCodeTable(kErrorCodeXmlFile);
 	if (!res.IsSuccessful())
 	{
 		LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
@@ -151,34 +151,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 				}
 			}
 
-			/** Validate the parameters */
-			res = ParameterValidator::GetInstance().IsXmlFileValid(xmlFilePath);
-			if (!res.IsSuccessful())
-			{
-				return res;
-			}
-
-			res = ParameterValidator::GetInstance().IsPathValid(outputPath);
-			if (!res.IsSuccessful())
-			{
-				LOG_WARN() << res.GetErrorMessage();
-
-				try
-				{
-					/** Create the output path as it doesnt exists */
-					boost::filesystem::path dir(outputPath);
-					if (!boost::filesystem::create_directory(dir))
-					{
-						/** Failed to create the output path */
-						return res;
-					}
-				}
-				catch(const std::exception& e)
-				{
-					return CliLogger::GetInstance().GetFailureErrorString(e);
-				}
-			}
-
 			/** Parse and Generate configuration output */
 			res = ConfigurationGenerator::GetInstance().GenerateOutputFiles(xmlFilePath, outputPath);
 			if (!res.IsSuccessful())
@@ -210,12 +182,16 @@ void OpenConfiguratorCli::ShowUsage()
 {
 	const std::string kMsgToolGenerator     = "Kalycito Infotech Private Limited ";
 	const std::string kMsgToolVendor        = "B&R Internal" ;
+#ifdef _WIN32
 	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR.exe [options]";
+#else
+	const std::string kMsgToolUsage         = "Usage: ./openCONFIGURATOR [options]";
+#endif
 	const std::string kMsgOptions           = "Options: ";
 	const std::string kMsgProjectParameter  = " -p,--project <ProjectFile> \t Project XML file. ";
 	const std::string kMsgOutputParameter   = " -o,--output <OutputPath> \t Output path for generated files. ";
 	const std::string kMsgLanguageParameter = " -de,--german \t\t\t German log messages. Default is English.";
-	const std::string kMsgLogMessage        = " -d,--debug \t\t\t Log on file. Default logging is on console";
+	const std::string kMsgLogMessage        = " -d,--debug \t\t\t Log on file. Default logging is on console.";
 	const std::string kMsgHelpParameter     = " -h,--help \t\t\t Help. ";
 
 	std::cout << kMsgToolGenerator << std::endl;
