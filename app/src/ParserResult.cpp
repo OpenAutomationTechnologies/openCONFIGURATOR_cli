@@ -72,15 +72,16 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 	try
 	{
 		/** Get result of Managing Node */
+		XMLCh* expression = xercesc::XMLString::transcode(transcodeString.data());
 		xercesc::DOMXPathResult* nResult = pElement.domDocument->evaluate(
-											xercesc::XMLString::transcode(transcodeString.data()),
+											expression,
 											parentNode,
 											NULL,
 											xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
 											NULL);
+		xercesc::XMLString::release(&expression);
 
 		resultNodeValue = nResult->getNodeValue();
-
 		if (resultNodeValue == NULL)
 		{
 			boost::format formatter(kMsgNoResultForXPath[CliLogger::GetInstance().languageIndex]);
@@ -147,23 +148,24 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 					if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
 					{
 						char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
+						XMLCh* name = xercesc::XMLString::transcode(attributeName.data());
 
 						if (attributeName.compare(attribute) == 0)
 						{
 							char* val = xercesc::XMLString::transcode(
-											domNode->getAttributes()->getNamedItem(
-													xercesc::XMLString::transcode(attributeName.data())
-											)->getNodeValue()
+											domNode->getAttributes()->getNamedItem(name)->getNodeValue()
 										);
 
 							std::string value(val);
 							xercesc::XMLString::release(&val);
+							xercesc::XMLString::release(&name);
 							xercesc::XMLString::release(&attribute);
 
 							return value;
 						}
 						else
 						{
+							xercesc::XMLString::release(&name);
 							xercesc::XMLString::release(&attribute);
 						}
 					}

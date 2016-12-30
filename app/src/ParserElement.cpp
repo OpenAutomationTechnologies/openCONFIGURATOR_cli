@@ -45,7 +45,7 @@ ParserElement::ParserElement() :
 {
 }
 
-ParserElement::ParserElement(std::string file, std::string schemaFile) :
+ParserElement::ParserElement(const std::string& file, const std::string& schemaFile) :
 	domDocument(NULL),
 	domElement(NULL),
 	domParser(NULL),

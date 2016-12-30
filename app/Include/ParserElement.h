@@ -55,7 +55,7 @@ namespace IndustrialNetwork
 					  * \param file			Name of XML ot XDC file to parse
 					  * \param schemaFile	Name of the schema file for validation
 					  */
-					ParserElement(std::string file, std::string schemaFile);
+					ParserElement(const std::string& file, const std::string& schemaFile);
 
 					/** \brief Destructor of the class
 					  */
