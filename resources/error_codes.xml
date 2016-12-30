@@ -27,7 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	<ErrorCodes component="library" componentVersion="2.1.1">
 		<ErrorCode value="SUCCESS" originalCode="0" toolCode="0">
 			<Description xml:lang="en" value="Operation completed successfully."/>
-			<Description xml:lang="de" value="Operation completed successfully."/>
 		</ErrorCode>
 		<ErrorCode value="FILE_WRITE_FAILED" originalCode="1" toolCode="1">
 			<Description xml:lang="en" value="Cannot write to file."/>

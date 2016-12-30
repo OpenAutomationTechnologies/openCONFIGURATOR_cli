@@ -44,13 +44,6 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			const std::string kMnobdTxtFileName = "mnobd.txt";
-			const std::string kMnobdCdcFileName = "mnobd.cdc";
-			const std::string kMnobdHexTxtFileName = "mnobd_char.txt";
-			const std::string kXapHFileName = "xap.h";
-			const std::string kXapXmlFileName = "xap.xml";
-			const std::string kProcessImageFileName = "ProcessImage.cs";
-
 			class ConfigurationGenerator
 			{
 				public:

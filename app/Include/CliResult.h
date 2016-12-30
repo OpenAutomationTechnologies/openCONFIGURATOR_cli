@@ -57,7 +57,6 @@ namespace IndustrialNetwork
 				const std::string kMsgXmlFileNotFound[] = { "Project XML file name is not found from command line parameters.", "Projekt XML Datei wurde in den Aufrufparametern nicht gefunden." };
 				const std::string kMsgFileNotExists[] = { "File \"%s\" does not exists.", "Die Datei \"%s\" existiert nicht." };
 				const std::string kMsgFileExtnIncorrect[] = { "Fileextension \"%s\" is incorrect.", "Dateierweiterung \"%s\" ist ungueltig." };
-				const std::string kMsgSchemaFileNotExists[] = { "XML schema file \"%s\" does not exists.", "XML Schemadatei \"%s\" existiert ist." };
 				const std::string kMsgOutputPathNotExiists[] = { "Output path \"%s\" not exists.", "Projektausgabepfad \"%s\" existiert nicht." };
 				const std::string kMsgErrorLoadingGrammer[] = { "Failed to load grammer to DOM Parser.", "Initialisierung des DOM Parsers ist fehlgeschlagen." };
 				const std::string kMsgFileSchemaNotValid[] = { "XML Schema of file is not valid.", "Die XML Schemadatei ist nicht gueltig." };

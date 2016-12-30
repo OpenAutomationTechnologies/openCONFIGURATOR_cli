@@ -78,8 +78,24 @@ namespace IndustrialNetwork
 			/** Boost init file for file and console log settings */
 			const std::string kLogConfigurationFileName = "boost_log_settings.ini";
 
+			/* Ouput configuration and process image file names */
+			const std::string kMnobdTxtFileName = "mnobd.txt";
+			const std::string kMnobdCdcFileName = "mnobd.cdc";
+			const std::string kMnobdHexTxtFileName = "mnobd_char.txt";
+			const std::string kXapHFileName = "xap.h";
+			const std::string kXapXmlFileName = "xap.xml";
+			const std::string kProcessImageFileName = "ProcessImage.cs";
+
+			/** Schema file names for validation */
+			const std::string kXmlSchemaDefinitionFileName = "./resources/OC_ProjectFile/openCONFIGURATOR.xsd";
+			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
+			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
+
+			/** Error code XML file from where the error code table gets populate */
+			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
+
 			/** Maximum number of paramater allowed */
-			const std::uint8_t maxNumberOfParameters = 6;
+			const std::uint8_t kMaxNumberOfParameters = 6;
 
 			class OpenConfiguratorCli
 			{

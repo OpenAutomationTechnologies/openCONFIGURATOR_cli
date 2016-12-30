@@ -51,7 +51,7 @@ ErrorCodeParser& ErrorCodeParser::GetInstance()
 	return instance;
 }
 
-CliResult ErrorCodeParser::InitErrorCodeTable(const std::string& xmlFilePath)
+CliResult ErrorCodeParser::ParseErrorCodeTable(const std::string& xmlFilePath)
 {
 	/** Create results for error codes */
 	CliResult clires;
@@ -197,32 +197,29 @@ CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
 				kMsgErrorTableNotLoaded[CliLogger::GetInstance().languageIndex]);
 	}
 
-	for (std::uint32_t index = 0; index < errorCodeObject.size(); index++)
+	std::uint32_t ecComponentIndex = 0;
+
+	if (compType.compare(ComponentType::kComponentLibrary) == 0)
 	{
-		std::uint32_t ecComponentIndex = 0;
+		ecComponentIndex = 0;
+	}
+	else if (compType.compare(ComponentType::kComponentCli) == 0)
+	{
+		ecComponentIndex = 1;
+	}
+	else
+	{
+		return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
+				kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
+	}
 
-		if (compType.compare(ComponentType::kComponentLibrary) == 0)
+	for (ErrorCodeType errCode : errorCodeObject.at(ecComponentIndex).errorCodes)
+	{
+		if (errCode.originalCode == originalCode)
 		{
-			ecComponentIndex = 0;
-		}
-		else if (compType.compare(ComponentType::kComponentCli) == 0)
-		{
-			ecComponentIndex = 1;
-		}
-		else
-		{
-			return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
-					kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
-		}
+			toolCode = errCode.toolCode;
 
-		for (ErrorCodeType errCode : errorCodeObject.at(ecComponentIndex).errorCodes)
-		{
-			if (errCode.originalCode == originalCode)
-			{
-				toolCode = errCode.toolCode;
-
-				return CliResult();
-			}
+			return CliResult();
 		}
 	}
 

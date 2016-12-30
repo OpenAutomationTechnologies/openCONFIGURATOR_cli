@@ -76,7 +76,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 	}
 
 	/** Load the error code table */
-	res = ErrorCodeParser::GetInstance().InitErrorCodeTable(kErrorCodeXmlFile);
+	res = ErrorCodeParser::GetInstance().ParseErrorCodeTable(kErrorCodeXmlFile);
 	if (!res.IsSuccessful())
 	{
 		LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
@@ -315,17 +315,17 @@ bool OpenConfiguratorCli::GetHelpOption(const std::vector<std::string>& paramsLi
 
 bool OpenConfiguratorCli::IsParametersValid(const std::vector<std::string>& paramsList)
 {
-	bool validParams[maxNumberOfParameters] = {};
+	bool validParams[kMaxNumberOfParameters] = {};
 	std::uint8_t index;
 
-	if (paramsList.size() > maxNumberOfParameters)
+	if (paramsList.size() > kMaxNumberOfParameters)
 	{
 		/** Number of paramaters can not exceed the limit */
 		return false;
 	}
 
 	/** Initialize the validation flag list */
-	for (index = 0; index < maxNumberOfParameters; index++)
+	for (index = 0; index < kMaxNumberOfParameters; index++)
 	{
 		validParams[index] = false;
 	}

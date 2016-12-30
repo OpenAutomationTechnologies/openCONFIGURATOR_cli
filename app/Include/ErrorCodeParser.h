@@ -79,7 +79,7 @@ namespace IndustrialNetwork
 					  * \param xmlFilePath		Error code XML file path
 					  * \return CliResult
 					  */
-					CliResult InitErrorCodeTable(const std::string& xmlFilePath);
+					CliResult ParseErrorCodeTable(const std::string& xmlFilePath);
 
 					/** \brief Gets the tool code for the original error code
 					  * \param compType			Components type

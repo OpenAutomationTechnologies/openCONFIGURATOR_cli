@@ -44,14 +44,6 @@ namespace IndustrialNetwork
 	{
 		namespace Application
 		{
-			/** Schema file names for validation */
-			const std::string kXmlSchemaDefinitionFileName = "./resources/OC_ProjectFile/openCONFIGURATOR.xsd";
-			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
-			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
-
-			/** Error code XML file from where the error table gets populate */
-			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
-
 			class ParserElement
 			{
 				public:
