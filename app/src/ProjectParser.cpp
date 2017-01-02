@@ -1392,7 +1392,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 				ParserResult subpResult;
 
 				CliResult subcrres = subpResult.CreateResult(element, kParameterDataTypeIdRefXpathExpression,
-											kFormatStrParameterDataTypeIdRefXpathExpression,
+											kFormatStrAppLayerInterfaceXpathExpression,
 											pResult.node.at(row));
 				if (!subcrres.IsSuccessful())
 				{
@@ -1413,7 +1413,7 @@ CliResult ProjectParser::CreateParameterList(const ParserElement& element,
 				{
 					for (std::uint32_t subrow = 0; subrow < subpResult.parameters.size(); subrow++)
 					{
-						ParameterAccess paramAccess = GetParameterAccess(subpResult.parameters[subrow].at(1));
+						ParameterAccess paramAccess = GetParameterAccess(pResult.parameters[row].at(1));
 
 						Result res = OpenConfiguratorCore::GetInstance().CreateParameter(
 								OpenConfiguratorCli::GetInstance().networkName,
@@ -2229,11 +2229,30 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 		return crres;
 	}
 
+	std::uint32_t row = 0;
+	for (row = 0; row < pResult.parameters.size(); row++)
+	{
+		if (pResult.parameters[row].at(10) == std::to_string(nodeId))
+			break;
+	}
+
 	if (nodeId == MN_DEFAULT_NODE_ID)
 	{
 		CliResult res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_MN_PRES,
 											nodeId,
 											pResult.parameters[0].at(0));	/** TaransmitPres value */
+		if (!res.IsSuccessful())
+		{
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+		}
+
+		res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_EXISTS, nodeId, "true");
+		if (!res.IsSuccessful())
+		{
+			LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+		}
+
+		res = SetNodeAssignment(NodeAssignment::MNT_NODEASSIGN_VALID, nodeId, "true");
 		if (!res.IsSuccessful())
 		{
 			LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
@@ -2244,6 +2263,12 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 		if (nodeId > MN_DEFAULT_NODE_ID)
 		{
 			CliResult res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_IS_CN, nodeId, "true");
+			if (!res.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+			}
+
+			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_NODE_EXISTS, nodeId, "true");
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
@@ -2260,42 +2285,42 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_MANDATORY_CN,
-									nodeId, pResult.parameters[0].at(1));			/** isMandatory value */
+									nodeId, pResult.parameters[row].at(1));			/** isMandatory value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_START_CN,
-									nodeId, pResult.parameters[0].at(2));			/** autostartNode value */
+									nodeId, pResult.parameters[row].at(2));			/** autostartNode value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_KEEPALIVE,
-									nodeId, pResult.parameters[0].at(3));			/** resetInOperational value */
+									nodeId, pResult.parameters[row].at(3));			/** resetInOperational value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_SWVERSIONCHECK,
-									nodeId, pResult.parameters[0].at(4));			/** verifyAppSwVersion value */
+									nodeId, pResult.parameters[row].at(4));			/** verifyAppSwVersion value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_SWUPDATE,
-									nodeId, pResult.parameters[0].at(5));			/** autoAppSwUpdateAllowed value */
+									nodeId, pResult.parameters[row].at(5));			/** autoAppSwUpdateAllowed value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_ASYNCONLY_NODE,
-									nodeId, pResult.parameters[0].at(7));			/** isAsyncOnly value */
+									nodeId, pResult.parameters[row].at(7));			/** isAsyncOnly value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
@@ -2314,20 +2339,20 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_RT1,
-									nodeId, pResult.parameters[0].at(8));			/** isType1Router value */
+									nodeId, pResult.parameters[row].at(8));			/** isType1Router value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
 			res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_RT2,
-									nodeId, pResult.parameters[0].at(9));			/** isType2Router value */
+									nodeId, pResult.parameters[row].at(9));			/** isType2Router value */
 			if (!res.IsSuccessful())
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
 
-			if (pResult.parameters[0].at(6).compare("true") == 0)					/** isChained value */
+			if (pResult.parameters[row].at(6).compare("true") == 0)					/** isChained value */
 			{
 				Result res = OpenConfiguratorCore::GetInstance().SetOperationModeChained(
 									OpenConfiguratorCli::GetInstance().networkName, nodeId);

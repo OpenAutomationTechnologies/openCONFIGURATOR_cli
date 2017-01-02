@@ -128,15 +128,6 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		}
 	}
 
-	/** Check the parameter option given */
-	if (IsParametersValid(paramsList) == false)
-	{
-		ShowUsage();
-
-		return CliResult(CliErrorCode::INVALID_PARAMETERS,
-				kMsgInvalidParameters[CliLogger::GetInstance().languageIndex]);
-	}
-
 	if (GetXmlFileName(paramsList))
 	{
 		if (GetOutputPath(paramsList))
@@ -180,8 +171,8 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 
 void OpenConfiguratorCli::ShowUsage()
 {
-	const std::string kMsgToolGenerator     = "Kalycito Infotech Private Limited ";
-	const std::string kMsgToolVendor        = "B&R Internal" ;
+	const std::string kMsgToolGenerator     = "Copyright (C) 2016 Kalycito Infotech Private Limited &\nBernecker + Rainer Industrie Elektronik GmbH";
+	const std::string kMsgVersion			= "2.0.0";
 #ifdef _WIN32
 	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR.exe [options]";
 #else
@@ -194,8 +185,8 @@ void OpenConfiguratorCli::ShowUsage()
 	const std::string kMsgLogMessage        = " -d,--debug \t\t\t Log on file. Default logging is on console.";
 	const std::string kMsgHelpParameter     = " -h,--help \t\t\t Help. ";
 
+	std::cout << "openCONFIGURATOR " << kMsgVersion << std::endl;
 	std::cout << kMsgToolGenerator << std::endl;
-	std::cout << kMsgToolVendor << std::endl;
 	std::cout << kMsgToolUsage << std::endl;
 	std::cout << std::endl;
 	std::cout << kMsgOptions << std::endl;
@@ -313,64 +304,3 @@ bool OpenConfiguratorCli::GetHelpOption(const std::vector<std::string>& paramsLi
 	return false;
 }
 
-bool OpenConfiguratorCli::IsParametersValid(const std::vector<std::string>& paramsList)
-{
-	bool validParams[kMaxNumberOfParameters] = {};
-	std::uint8_t index;
-
-	if (paramsList.size() > kMaxNumberOfParameters)
-	{
-		/** Number of paramaters can not exceed the limit */
-		return false;
-	}
-
-	/** Initialize the validation flag list */
-	for (index = 0; index < kMaxNumberOfParameters; index++)
-	{
-		validParams[index] = false;
-	}
-
-	for (index = 0; index < paramsList.size(); index++)
-	{
-		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0) ||
-			(paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
-		{
-			validParams[index] = true;
-
-			std::uint8_t increment = 1;
-			if ((index + increment) < paramsList.size())
-			{
-				if (paramsList.at(index + increment).compare(0, 1, "-") == 0)
-				{
-					/** No project file or output path provided */
-					return false;
-				}
-				else
-				{
-					validParams[index + increment] = true;
-				}
-			}
-			else
-			{
-				/** No project file or output path provided */
-				return false;
-			}
-		}
-		else if ((paramsList.at(index).compare("-d") == 0)  || (paramsList.at(index).compare("--debug") == 0) ||
-				(paramsList.at(index).compare("-de") == 0)  || (paramsList.at(index).compare("--german") == 0))
-		{
-			validParams[index] = true;
-		}
-	}
-
-	/** Check the validation flag list */
-	for (index = 0; index < paramsList.size(); index++)
-	{
-		if (validParams[index] == false)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}

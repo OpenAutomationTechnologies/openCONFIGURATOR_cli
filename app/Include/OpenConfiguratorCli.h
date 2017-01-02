@@ -169,13 +169,6 @@ namespace IndustrialNetwork
 					  */
 					bool GetHelpOption(const std::vector<std::string>& paramsList);
 
-					/** \brief Checks the numebr of parameters and format
-					  *        from command line parameters list
-					  * \param paramsList		List of command line parameters
-					  * \return true if format is correct; false otherwise
-					  */
-					bool IsParametersValid(const std::vector<std::string>& paramsList);
-
 			}; // end of class OpenConfiguratorCli
 		} // end of namespace Application
 	} // end of namespace POWERLINK
