@@ -41,8 +41,61 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "AccessType.h"
 #include "PDOMapping.h"
 
-ProjectParser::ProjectParser()
+ProjectParser::ProjectParser() :
+	iecdataTypeMap(std::map<std::string, IEC_Datatype>()),
+	parameterAccessMap(std::map<std::string, ParameterAccess>()),
+	accessTypeMap(std::map<std::string, AccessType>()),
+	pdoMappingMap(std::map<std::string, PDOMapping>())
 {
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("", IEC_Datatype::UNDEFINED));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("UNDEFINED", IEC_Datatype::UNDEFINED));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("BITSTRING", IEC_Datatype::BITSTRING));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("BOOL", IEC_Datatype::BOOL));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("BYTE", IEC_Datatype::BYTE));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("CHAR", IEC_Datatype::_CHAR));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("WORD", IEC_Datatype::WORD));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("DWORD", IEC_Datatype::DWORD));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("LWORD", IEC_Datatype::LWORD));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("SINT", IEC_Datatype::SINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("INT", IEC_Datatype::INT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("DINT", IEC_Datatype::DINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("LINT", IEC_Datatype::LINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("USINT", IEC_Datatype::USINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("UINT", IEC_Datatype::UINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("UDINT", IEC_Datatype::UDINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("ULINT", IEC_Datatype::ULINT));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("REAL", IEC_Datatype::REAL));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("LREAL", IEC_Datatype::LREAL));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("STRING", IEC_Datatype::STRING));
+	iecdataTypeMap.insert(std::pair<std::string, IEC_Datatype>("WSTRING", IEC_Datatype::WSTRING));
+
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("constant", ParameterAccess::constant));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("read", ParameterAccess::read));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("write", ParameterAccess::write));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("readWrite", ParameterAccess::readWrite));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("readWriteInput", ParameterAccess::readWriteInput));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("readWriteOutput", ParameterAccess::readWriteOutput));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("noAccess", ParameterAccess::noAccess));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("undefined", ParameterAccess::undefined));
+	parameterAccessMap.insert(std::pair<std::string, ParameterAccess>("", ParameterAccess::undefined));
+
+	accessTypeMap.insert(std::pair<std::string, AccessType>("", AccessType::UNDEFINED));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("undefined", AccessType::UNDEFINED));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("rw", AccessType::RW));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("rws", AccessType::RWS));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("wo", AccessType::WO));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("wos", AccessType::WOS));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("ro", AccessType::RO));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("const", AccessType::CONST));
+	accessTypeMap.insert(std::pair<std::string, AccessType>("cond", AccessType::COND));
+
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("", PDOMapping::UNDEFINED));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("undefined", PDOMapping::UNDEFINED));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("no", PDOMapping::NO));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("default", PDOMapping::DEFAULT));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("optional", PDOMapping::OPTIONAL));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("TPDO", PDOMapping::TPDO));
+	pdoMappingMap.insert(std::pair<std::string, PDOMapping>("RPDO", PDOMapping::RPDO));
 }
 
 ProjectParser::~ProjectParser()
@@ -3109,225 +3162,40 @@ CliResult ProjectParser::UpdateForcedObjects(const std::vector<std::string>& for
 
 IEC_Datatype ProjectParser::GetDataType(const std::string& dataType)
 {
-	if (dataType.compare("UNDEFINED") == 0)
-	{
-		return IEC_Datatype::UNDEFINED;
-	}
-	else if (dataType.compare("BITSTRING") == 0)
-	{
-		return IEC_Datatype::BITSTRING;
-	}
-	else if (dataType.compare("BOOL") == 0)
-	{
-		return IEC_Datatype::BOOL;
-	}
-	else if (dataType.compare("BYTE") == 0)
-	{
-		return IEC_Datatype::BYTE;
-	}
-	else if (dataType.compare("_CHAR") == 0)
-	{
-		return IEC_Datatype::_CHAR;
-	}
-	else if (dataType.compare("WORD") == 0)
-	{
-		return IEC_Datatype::WORD;
-	}
-	else if (dataType.compare("DWORD") == 0)
-	{
-		return IEC_Datatype::DWORD;
-	}
-	else if (dataType.compare("LWORD") == 0)
-	{
-		return IEC_Datatype::LWORD;
-	}
-	else if (dataType.compare("SINT") == 0)
-	{
-		return IEC_Datatype::SINT;
-	}
-	else if (dataType.compare("INT") == 0)
-	{
-		return IEC_Datatype::INT;
-	}
-	else if (dataType.compare("DINT") == 0)
-	{
-		return IEC_Datatype::DINT;
-	}
-	else if (dataType.compare("LINT") == 0)
-	{
-		return IEC_Datatype::LINT;
-	}
-	else if (dataType.compare("USINT") == 0)
-	{
-		return IEC_Datatype::USINT;
-	}
-	else if (dataType.compare("UINT") == 0)
-	{
-		return IEC_Datatype::UINT;
-	}
-	else if (dataType.compare("UDINT") == 0)
-	{
-		return IEC_Datatype::UDINT;
-	}
-	else if (dataType.compare("ULINT") == 0)
-	{
-		return IEC_Datatype::ULINT;
-	}
-	else if (dataType.compare("REAL") == 0)
-	{
-		return IEC_Datatype::REAL;
-	}
-	else if (dataType.compare("LREAL") == 0)
-	{
-		return IEC_Datatype::LREAL;
-	}
-	else if (dataType.compare("STRING") == 0)
-	{
-		return IEC_Datatype::STRING;
-	}
-	else if (dataType.compare("WSTRING") == 0)
-	{
-		return IEC_Datatype::WSTRING;
-	}
-
+	if (iecdataTypeMap.find(dataType) != iecdataTypeMap.end())
+		return iecdataTypeMap.at(dataType);
 	return IEC_Datatype::UNDEFINED;
 }
 
 ParameterAccess ProjectParser::GetParameterAccess(const std::string& access)
 {
-	if (access.compare("constant") == 0)
-	{
-		return ParameterAccess::constant;
-	}
-	else if (access.compare("read") == 0)
-	{
-		return ParameterAccess::read;
-	}
-	else if (access.compare("write") == 0)
-	{
-		return ParameterAccess::write;
-	}
-	else if (access.compare("readWrite") == 0)
-	{
-		return ParameterAccess::readWrite;
-	}
-	else if (access.compare("readWriteInput") == 0)
-	{
-		return ParameterAccess::readWriteInput;
-	}
-	else if (access.compare("readWriteOutput") == 0)
-	{
-		return ParameterAccess::readWriteOutput;
-	}
-	else if (access.compare("noAccess") == 0)
-	{
-		return ParameterAccess::noAccess;
-	}
-	else if (access.compare("undefined") == 0)
-	{
-		return ParameterAccess::undefined;
-	}
-
+	if (parameterAccessMap.find(access) != parameterAccessMap.end())
+		return parameterAccessMap.at(access);
 	return ParameterAccess::undefined;
 }
 
 ObjectType ProjectParser::GetObjectType(const std::uint8_t objType)
 {
-	switch (objType)
-	{
-		case 0:
-			return ObjectType::INVALID;
-		case 5:
-			return ObjectType::DEFTYPE;
-		case 6:
-			return ObjectType::DEFSTRUCT;
-		case 7:
-			return ObjectType::VAR;
-		case 8:
-			return ObjectType::ARRAY;
-		case 9:
-			return ObjectType::RECORD;
-		default:
-			return ObjectType::INVALID;
-	}
+	return ObjectType(objType);
 }
 
 PlkDataType ProjectParser::GetPlkDataType(const std::string& plkDataType)
 {
-	if (!plkDataType.empty())
-	{
-		return (PlkDataType)std::stoi(plkDataType, NULL, 16);
-	}
-
-	return PlkDataType::UNDEFINED;
+	if (plkDataType.empty())
+		return PlkDataType::UNDEFINED;
+	return (PlkDataType)std::stoi(plkDataType, NULL, 16);
 }
 
 AccessType ProjectParser::GetObjAccessType(const std::string& accessType)
 {
-	if (accessType.compare("undefined") == 0)
-	{
-		return AccessType::UNDEFINED;
-	}
-	else if (accessType.compare("rw") == 0)
-	{
-		return AccessType::RW;
-	}
-	else if (accessType.compare("rws") == 0)
-	{
-		return AccessType::RWS;
-	}
-	else if (accessType.compare("wo") == 0)
-	{
-		return AccessType::WO;
-	}
-	else if (accessType.compare("wos") == 0)
-	{
-		return AccessType::WOS;
-	}
-	else if (accessType.compare("ro") == 0)
-	{
-		return AccessType::RO;
-	}
-	else if (accessType.compare("const") == 0)
-	{
-		return AccessType::CONST;
-	}
-	else if (accessType.compare("cond") == 0)
-	{
-		return AccessType::COND;
-	}
-
+	if (accessTypeMap.find(accessType) != accessTypeMap.end())
+		return accessTypeMap.at(accessType);
 	return AccessType::UNDEFINED;
 }
 
 PDOMapping ProjectParser::GetPdoMapping(const std::string& pdoMapp)
 {
-	if (pdoMapp.compare("undefined") == 0)
-	{
-		return PDOMapping::UNDEFINED;
-	}
-	else  if (pdoMapp.compare("no") == 0)
-	{
-		return PDOMapping::NO;
-	}
-	else if (pdoMapp.compare("default") == 0)
-	{
-		return PDOMapping::DEFAULT;
-	}
-	else if (pdoMapp.compare("optional") == 0)
-	{
-		return PDOMapping::OPTIONAL;
-	}
-	else if (pdoMapp.compare("TPDO") == 0)
-	{
-		return PDOMapping::TPDO;
-	}
-	else if (pdoMapp.compare("RPDO") == 0)
-	{
-		return PDOMapping::RPDO;
-	}
-
-	return PDOMapping::UNDEFINED;
+	return pdoMappingMap.at(pdoMapp);
 }
 
 DynamicChannelAccessType ProjectParser::GetDynamicChannelAccessType(const std::string& accessType)

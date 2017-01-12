@@ -59,7 +59,7 @@ namespace IndustrialNetwork
 				const std::string kMsgFileExtnIncorrect[] = { "Fileextension \"%s\" is incorrect.", "Dateierweiterung \"%s\" ist ungueltig." };
 				const std::string kMsgOutputPathNotExiists[] = { "Output path \"%s\" not exists.", "Projektausgabepfad \"%s\" existiert nicht." };
 				const std::string kMsgErrorLoadingGrammer[] = { "Failed to load grammer to DOM Parser.", "Initialisierung des DOM Parsers ist fehlgeschlagen." };
-				const std::string kMsgFileSchemaNotValid[] = { "XML Schema of file is not valid.", "Die XML Schemadatei ist nicht gueltig." };
+				const std::string kMsgFileSchemaNotValid[] = { "XML Schema of file \"%s\" is not valid.", "Die XML Schemadatei \"%s\" ist nicht gueltig." };
 				const std::string kMsgNullPtrFound[] = { "NULL pointer execption raised at \"%s\".", "NULL Zeigerfehler wurde in der Funktion \"%s\" ausgeloest." };
 				const std::string kMsgNoResultForXPath[] = { "No result for the XPath \"%s\".", "Kein Resultat fuer den folgenden XPath \"%s\"." };
 				const std::string kMsgUnableToOpenLogFile[] = { "Unable to open the log file \"%s\".", "Die Logdatei \"%s\" konnte nicht geoeffnet werden." };

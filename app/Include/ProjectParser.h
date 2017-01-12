@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OpenConfiguratorCli.h"
 #include "ParserElement.h"
 #include "ParserResult.h"
+#include <map>
 
 namespace IndustrialNetwork
 {
@@ -543,6 +544,12 @@ namespace IndustrialNetwork
 									const std::string& interfaceId,
 									const std::string& modId,
 									const std::uint32_t modPosition);
+
+
+					std::map<std::string, IEC_Datatype> iecdataTypeMap;
+					std::map<std::string, ParameterAccess> parameterAccessMap;
+					std::map<std::string, AccessType> accessTypeMap;
+					std::map<std::string, PDOMapping> pdoMappingMap;
 
 					/** \brief Gets the IEC_Datatype based on the string retrieved from XDC
 					  * \param dataType Specifies the dataType value of object or parameter

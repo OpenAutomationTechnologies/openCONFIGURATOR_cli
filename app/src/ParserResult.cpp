@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OpenConfiguratorCore.h"
 #include "OpenConfiguratorCli.h"
 #include "ParserResult.h"
+#include <map>
+#include <boost/algorithm/string.hpp>
 
 ParserResult::ParserResult() :
 	parameters(),
@@ -49,24 +51,24 @@ ParserResult::~ParserResult()
 }
 
 CliResult ParserResult::CreateResult(const ParserElement& pElement,
-										const std::string& transcodeString,
-										const std::string& formatString)
+                                     const std::string& transcodeString,
+                                     const std::string& formatString)
 {
 	return CreateResult(pElement,
-						transcodeString,
-						formatString,
-						pElement.domElement);
+	                    transcodeString,
+	                    formatString,
+	                    pElement.domElement);
 }
 
 CliResult ParserResult::CreateResult(const ParserElement& pElement,
-										const std::string& transcodeString,
-										const std::string& formatString,
-										const xercesc::DOMNode* parentNode)
+                                     const std::string& transcodeString,
+                                     const std::string& formatString,
+                                     const xercesc::DOMNode* parentNode)
 {
 	if (parentNode == NULL)
 	{
 		return CliResult(CliErrorCode::NULL_POINTER_FOUND,
-				kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+		                 kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 	}
 
 	try
@@ -74,11 +76,11 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 		/** Get result of Managing Node */
 		XMLCh* expression = xercesc::XMLString::transcode(transcodeString.data());
 		xercesc::DOMXPathResult* nResult = pElement.domDocument->evaluate(
-											expression,
-											parentNode,
-											NULL,
-											xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
-											NULL);
+		                                       expression,
+		                                       parentNode,
+		                                       NULL,
+		                                       xercesc::DOMXPathResult::ORDERED_NODE_SNAPSHOT_TYPE,
+		                                       NULL);
 		xercesc::XMLString::release(&expression);
 
 		resultNodeValue = nResult->getNodeValue();
@@ -91,50 +93,31 @@ CliResult ParserResult::CreateResult(const ParserElement& pElement,
 		}
 
 		std::vector<std::string> attributeNames;
-		std::string subString;
-
-		/**  Convert the string into string stream */
-		std::stringstream splitString(formatString);
-
-		/**  Interpret the formatString and split in to attribute names */
-		while(std::getline(splitString, subString, ','))
-		{
-			attributeNames.push_back(subString);
-		}
-
-		XMLSize_t count = nResult->getSnapshotLength();
+		boost::split(attributeNames, formatString, boost::is_any_of(","));
 
 		/**  Parse the parameters */
-		for (XMLSize_t nIndex = 0; nIndex < count; nIndex++)
+		for (XMLSize_t nIndex = 0; nIndex < nResult->getSnapshotLength(); nIndex++)
 		{
 			nResult->snapshotItem(nIndex);
 			node.push_back(nResult->getNodeValue());
-
-			std::vector<std::string> row;
-			for (std::uint32_t attrIndex = 0; attrIndex < attributeNames.size(); attrIndex++)
-			{
-				row.push_back(GetAttributeValue(node.at(nIndex),
-								attributeNames.at(attrIndex)));
-			}
-
-			parameters.push_back(row);
+			ParseAttributeValues(nResult->getNodeValue(), attributeNames);
 		}
-
 		nResult->release();
 	}
 	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
-
 	return CliResult();
 }
 
-std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
-											const std::string& attributeName)
+void ParserResult::ParseAttributeValues(const xercesc::DOMNode* domNode,
+                                        const std::vector<std::string>& attributeName)
 {
 	try
 	{
+		std::map<std::string, std::string> attributeValues;
+		std::vector<std::string> node;
 		if (domNode != NULL)
 		{
 			if (domNode->hasAttributes())
@@ -148,28 +131,25 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 					if (currentNode->getNodeType() == xercesc::DOMNode::ATTRIBUTE_NODE)
 					{
 						char* attribute = xercesc::XMLString::transcode(currentNode->getNodeName());
-						XMLCh* name = xercesc::XMLString::transcode(attributeName.data());
+						char* val = xercesc::XMLString::transcode(currentNode->getNodeValue());
 
-						if (attributeName.compare(attribute) == 0)
-						{
-							char* val = xercesc::XMLString::transcode(
-											domNode->getAttributes()->getNamedItem(name)->getNodeValue()
-										);
+						std::pair<std::string, std::string> item;
+						item = std::make_pair(std::string(attribute), std::string(val));
+						attributeValues.insert(item);
 
-							std::string value(val);
-							xercesc::XMLString::release(&val);
-							xercesc::XMLString::release(&name);
-							xercesc::XMLString::release(&attribute);
-
-							return value;
-						}
-						else
-						{
-							xercesc::XMLString::release(&name);
-							xercesc::XMLString::release(&attribute);
-						}
+						xercesc::XMLString::release(&attribute);
+						xercesc::XMLString::release(&val);
 					}
 				}
+
+				for (auto& attrName : attributeName)
+				{
+					if (attributeValues.find(attrName) != attributeValues.end())
+						node.push_back(attributeValues.at(attrName));
+					else
+						node.push_back("");
+				}
+				this->parameters.push_back(node);
 			}
 		}
 	}
@@ -177,6 +157,4 @@ std::string ParserResult::GetAttributeValue(const xercesc::DOMNode* domNode,
 	{
 		LOG_ERROR() << CliLogger::GetInstance().GetFailureErrorString(e).GetErrorMessage();
 	}
-
-	return kDefaultAttributeValue;
 }

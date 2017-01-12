@@ -100,8 +100,8 @@ namespace IndustrialNetwork
 					  * \param attributeName 	Name of the attribute
 					  * \return Attribute value
 					  */
-					std::string GetAttributeValue(const xercesc::DOMNode* domNode,
-									const std::string& attributeName);
+					void ParseAttributeValues(const xercesc::DOMNode* domNode,
+						const std::vector<std::string>& attributeName);
 
 			}; // end of class ParserResult
 		} // end of namespace Application
