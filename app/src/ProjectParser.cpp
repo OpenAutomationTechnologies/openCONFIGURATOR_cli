@@ -123,7 +123,7 @@ CliResult ProjectParser::ParseXmlFile(const std::string& xmlPath)
 	/** Create results for MN, RMN abd CN nodes */
 	CliResult clires;
 	CliResult ceres;
-	ParserElement xmlParserElement(xmlPath, kXmlSchemaDefinitionFileName);
+	ParserElement xmlParserElement(xmlPath, kXmlSchemaDefinitionFileName, kProjectNamespace);
 
 	ceres = xmlParserElement.CreateElement();
 	if (!ceres.IsSuccessful())
@@ -2049,7 +2049,7 @@ CliResult ProjectParser::CreateInterface(const std::uint8_t nodeId,
 		return res;
 	}
 
-	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
+	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName, kXDDNamespace);
 	CliResult ceres;
 
 	ceres = element.CreateElement();
@@ -2212,7 +2212,7 @@ CliResult ProjectParser::UpdateNodeIdCollection(const std::uint8_t nodeId,
 		return res;
 	}
 
-	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
+	ParserElement element(xdcPath, kXdcSchemaDefinitionFileName, kXDDNamespace);
 	CliResult ceres;
 
 	ceres = element.CreateElement();
@@ -2474,7 +2474,7 @@ CliResult ProjectParser::CreateModule(const std::uint8_t nodeId,
 			return res;
 		}
 
-		ParserElement element(xdcPath, kXdcSchemaDefinitionFileName);
+		ParserElement element(xdcPath, kXdcSchemaDefinitionFileName, kXDDNamespace);
 		CliResult ceres;
 
 		ceres = element.CreateElement();

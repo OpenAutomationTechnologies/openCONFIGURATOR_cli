@@ -91,6 +91,10 @@ namespace IndustrialNetwork
 			const std::string kXdcSchemaDefinitionFileName = "./resources/xddschema/Powerlink_Main.xsd";
 			const std::string kErrCodeXmlSchemaDefinitionFileName = "./resources/ErrorCodesXMLSchema/ocErrorCodes.xsd";
 
+			const std::string kProjectNamespace = "http://sourceforge.net/projects/openconf/configuration";
+			const std::string kXDDNamespace = "http://www.ethernet-powerlink.org";
+			const std::string kErrCodeNamespace = "http://sourceforge.net/projects/openconf/configuration/errorcodes";
+
 			/** Error code XML file from where the error code table gets populate */
 			const std::string kErrorCodeXmlFile = "./resources/error_codes.xml";
 

@@ -70,7 +70,7 @@ CliResult ErrorCodeParser::ParseErrorCodeTable(const std::string& xmlFilePath)
 		return ceres;
 	}
 
-	ParserElement xmlElement(xmlFilePath, kErrCodeXmlSchemaDefinitionFileName);
+	ParserElement xmlElement(xmlFilePath, kErrCodeXmlSchemaDefinitionFileName, kErrCodeNamespace);
 
 	ceres = xmlElement.CreateElement();
 	if (!ceres.IsSuccessful())

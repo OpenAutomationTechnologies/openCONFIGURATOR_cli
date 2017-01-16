@@ -37,6 +37,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _PARSER_ELEMENT_H_
 
 #include "OpenConfiguratorCli.h"
+#include <xercesc/sax/ErrorHandler.hpp>
+#include <xercesc/sax/SAXParseException.hpp>
 
 namespace IndustrialNetwork
 {
@@ -47,15 +49,12 @@ namespace IndustrialNetwork
 			class ParserElement
 			{
 				public:
-					/** \brief Default constructor of the class
-					  */
-					ParserElement();
 
 					/** \brief Constructor of the class with file
 					  * \param file			Name of XML ot XDC file to parse
 					  * \param schemaFile	Name of the schema file for validation
 					  */
-					ParserElement(const std::string& file, const std::string& schemaFile);
+					ParserElement(const std::string& file, const std::string& schemaFile, const std::string& xmlNamespace);
 
 					/** \brief Destructor of the class
 					  */
@@ -93,6 +92,43 @@ namespace IndustrialNetwork
 					/** schema file for validation */
 					std::string schemaFilePath;
 
+					/** namespace for validation */
+					std::string xmlNamespace;
+
+					class ParserErrorHandler : public xercesc::ErrorHandler
+					{
+						private:
+							std::string reportParseException(const xercesc::SAXParseException& ex)
+							{
+								char* msg = xercesc::XMLString::transcode(ex.getMessage());
+								boost::format formatter(kMsgXmlValidationError[CliLogger::GetInstance().languageIndex]);
+								formatter % ex.getColumnNumber()
+								% ex.getLineNumber()
+								% msg;
+								xercesc::XMLString::release(&msg);
+								return formatter.str();
+							}
+
+						public:
+							void warning(const xercesc::SAXParseException& ex)
+							{
+								LOG_WARN() << reportParseException(ex);
+							}
+
+							void error(const xercesc::SAXParseException& ex)
+							{
+								LOG_ERROR() << reportParseException(ex);
+							}
+
+							void fatalError(const xercesc::SAXParseException& ex)
+							{
+								LOG_FATAL() << reportParseException(ex);
+							}
+
+							void resetErrors()
+							{
+							}
+					};
 			}; // end of class ParserElement
 		} // end of namespace Application
 	} // end of namespace POWERLINK

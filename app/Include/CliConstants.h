@@ -128,9 +128,7 @@ namespace IndustrialNetwork
 				const std::string kFormatStrIntrfcXpathExpression = "id";
 				const std::string kFormatStrErrorCodeComponent = "component,componentVersion";
 				const std::string kFormatStrErrorCode = "value,originalCode,toolCode";
-				const std::string kFormatStrErrorDescription = "xml:lang,value";
-
-				const std::string kDefaultAttributeValue = "";
+				const std::string kFormatStrErrorDescription = "lang,value";
 
 				const std::string kApplicationName = "openCONFIGURATOR";
 

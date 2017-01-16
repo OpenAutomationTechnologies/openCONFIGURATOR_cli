@@ -59,13 +59,14 @@ namespace IndustrialNetwork
 				const std::string kMsgFileExtnIncorrect[] = { "Fileextension \"%s\" is incorrect.", "Dateierweiterung \"%s\" ist ungueltig." };
 				const std::string kMsgOutputPathNotExiists[] = { "Output path \"%s\" not exists.", "Projektausgabepfad \"%s\" existiert nicht." };
 				const std::string kMsgErrorLoadingGrammer[] = { "Failed to load grammer to DOM Parser.", "Initialisierung des DOM Parsers ist fehlgeschlagen." };
-				const std::string kMsgFileSchemaNotValid[] = { "XML Schema of file \"%s\" is not valid.", "Die XML Schemadatei \"%s\" ist nicht gueltig." };
+				const std::string kMsgFileSchemaNotValid[] = { "XML schema validation of file \"%s\" failed.", "Die XML Schemavaliddierung der Datei \"%s\" ist fehlgeschlagen." };
 				const std::string kMsgNullPtrFound[] = { "NULL pointer execption raised at \"%s\".", "NULL Zeigerfehler wurde in der Funktion \"%s\" ausgeloest." };
 				const std::string kMsgNoResultForXPath[] = { "No result for the XPath \"%s\".", "Kein Resultat fuer den folgenden XPath \"%s\"." };
 				const std::string kMsgUnableToOpenLogFile[] = { "Unable to open the log file \"%s\".", "Die Logdatei \"%s\" konnte nicht geoeffnet werden." };
 				const std::string kMsgErrorTableNotLoaded[] = { "Failed to load error code table.", "Die Fehlercodetabelle konnte nicht geladen werden." };
 				const std::string kMsgErrorInfoNotFound[] = { "Failed to find error information.", "Die Fehlerinformation konnte nicht gefunden werden." };
 				const std::string kMsgConfGenerationSuccess[] = { "POWERLINK configuration files generated successfully under \"%s\".", "POWERLINK Konfigurationsdateien wurden unter \"%s\" erfolgreich erstellt." };
+				const std::string kMsgXmlValidationError[] = { "XML validation error at at line %llu column %llu: %s.", "XML Validierungsfehler in Zeile %llu Spalte %llu: %s." };
 
 				/** \brief Functionalities to handle the error messages
 				  */

@@ -36,21 +36,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ParserElement.h"
 #include "ParameterValidator.h"
 
-ParserElement::ParserElement() :
-	domDocument(NULL),
-	domElement(NULL),
-	domParser(NULL),
-	filePath(""),
-	schemaFilePath("")
-{
-}
-
-ParserElement::ParserElement(const std::string& file, const std::string& schemaFile) :
+ParserElement::ParserElement(const std::string& file, const std::string& schemaFile, const std::string& xmlNamespace) :
 	domDocument(NULL),
 	domElement(NULL),
 	domParser(NULL),
 	filePath(file),
-	schemaFilePath(schemaFile)
+	schemaFilePath(schemaFile),
+	xmlNamespace(xmlNamespace)
 {
 	/** Initialize the Xerces usage */
 	xercesc::XMLPlatformUtils::Initialize();
@@ -74,7 +66,7 @@ CliResult ParserElement::CreateElement()
 		if (!domParser)
 		{
 			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
-					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			                 kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Create parse element by validating against the schema file */
@@ -89,7 +81,7 @@ CliResult ParserElement::CreateElement()
 		if (domDocument == NULL)
 		{
 			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
-					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			                 kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Store the Top node element of the document in root */
@@ -97,7 +89,7 @@ CliResult ParserElement::CreateElement()
 		if (domElement == NULL)
 		{
 			return CliResult(CliErrorCode::NULL_POINTER_FOUND,
-					kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
+			                 kMsgNullPtrFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	catch (const std::exception& e)
@@ -112,6 +104,7 @@ CliResult ParserElement::parseFile()
 {
 	try
 	{
+		xercesc::XMLPlatformUtils::Initialize();
 		/** Validate for the schema file existance */
 		CliResult res = ParameterValidator::GetInstance().IsFileExists(schemaFilePath);
 		if (!res.IsSuccessful())
@@ -121,19 +114,28 @@ CliResult ParserElement::parseFile()
 
 		/** Load schema file constraints */
 		if (domParser->loadGrammar(schemaFilePath.data(),
-									xercesc::Grammar::SchemaGrammarType) == NULL)
+		                           xercesc::Grammar::SchemaGrammarType) == NULL)
 		{
 			return CliResult(CliErrorCode::ERROR_LOADING_GRAMMER,
-					kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
+			                 kMsgErrorLoadingGrammer[CliLogger::GetInstance().languageIndex]);
 		}
 
 		/** Set validation checks required for the file */
-		domParser->setValidationScheme(xercesc::XercesDOMParser::Val_Auto);
+		domParser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
 		domParser->setDoNamespaces(true);
 		domParser->setDoXInclude(true);
 		domParser->setDoSchema(true);
 		domParser->setValidationConstraintFatal(true);
 		domParser->setValidationSchemaFullChecking(true);
+
+		ParserErrorHandler parserErrorHandler;
+		domParser->setErrorHandler(&parserErrorHandler);
+
+		boost::filesystem::path schemaPath = boost::filesystem::absolute(schemaFilePath);
+		std::string externalSchemaLocation = this->xmlNamespace;
+		externalSchemaLocation.append(" ");
+		externalSchemaLocation.append(schemaPath.string());
+		domParser->setExternalSchemaLocation(externalSchemaLocation.c_str());
 
 		/** Input file to DOM parse function */
 		domParser->parse(filePath.data());
@@ -145,7 +147,7 @@ CliResult ParserElement::parseFile()
 			return CliResult(CliErrorCode::FILE_SCHEMA_NOT_VALID, formatter.str());
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
