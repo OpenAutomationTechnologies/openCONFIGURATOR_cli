@@ -63,8 +63,8 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateResult(const ParserElement& pElement,
-									const std::string& transcodeString,
-									const std::string& formatString);
+					                       const std::string& transcodeString,
+					                       const std::string& formatString);
 
 					/** \brief Parses and produces attributes by considering
 					  *        an sub node element as parent
@@ -75,9 +75,9 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateResult(const ParserElement& pElement,
-									const std::string& transcodeString,
-									const std::string& formatString,
-									const xercesc::DOMNode* parentNode);
+					                       const std::string& transcodeString,
+					                       const std::string& formatString,
+					                       const xercesc::DOMNode* parentNode);
 
 					/** Parsed parameters */
 					std::vector<std::vector<std::string> > parameters;
@@ -101,7 +101,7 @@ namespace IndustrialNetwork
 					  * \return Attribute value
 					  */
 					void ParseAttributeValues(const xercesc::DOMNode* domNode,
-						const std::vector<std::string>& attributeName);
+					                          const std::vector<std::string>& attributeName);
 
 			}; // end of class ParserResult
 		} // end of namespace Application

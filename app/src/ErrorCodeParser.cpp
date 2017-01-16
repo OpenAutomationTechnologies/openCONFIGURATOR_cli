@@ -108,7 +108,7 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 	CliResult crres;
 
 	crres = pResult.CreateResult(element, kErrorCodeComponent,
-									kFormatStrErrorCodeComponent);
+	                             kFormatStrErrorCodeComponent);
 	if (!crres.IsSuccessful())
 	{
 		return crres;
@@ -126,8 +126,8 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 			ecComponent.componentVersion = pResult.parameters[row].at(1);
 
 			subres = pSubResult.CreateResult(element, kErrorCode,
-												kFormatStrErrorCode,
-												pResult.node.at(row));
+			                                 kFormatStrErrorCode,
+			                                 pResult.node.at(row));
 			if (!subres.IsSuccessful())
 			{
 				return subres;
@@ -152,8 +152,8 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 				}
 
 				descres = pDescResult.CreateResult(element, kErrorDescription,
-													kFormatStrErrorDescription,
-													pSubResult.node.at(subrow));
+				                                   kFormatStrErrorDescription,
+				                                   pSubResult.node.at(subrow));
 				if (!descres.IsSuccessful())
 				{
 					return descres;
@@ -188,13 +188,13 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 }
 
 CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
-									   const std::uint32_t& originalCode,
-									   std::uint32_t& toolCode)
+                                       const std::uint32_t& originalCode,
+                                       std::uint32_t& toolCode)
 {
 	if (errorCodeObject.size() == 0)
 	{
 		return CliResult(CliErrorCode::ERROR_TABLE_NOT_LOADED,
-				kMsgErrorTableNotLoaded[CliLogger::GetInstance().languageIndex]);
+		                 kMsgErrorTableNotLoaded[CliLogger::GetInstance().languageIndex]);
 	}
 
 	std::uint32_t ecComponentIndex = 0;
@@ -210,7 +210,7 @@ CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
 	else
 	{
 		return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
-				kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
+		                 kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
 	}
 
 	for (ErrorCodeType errCode : errorCodeObject.at(ecComponentIndex).errorCodes)
@@ -224,5 +224,5 @@ CliResult ErrorCodeParser::GetToolCode(const std::string& compType,
 	}
 
 	return CliResult(CliErrorCode::ERROR_INFO_NOT_FOUND,
-			kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
+	                 kMsgErrorInfoNotFound[CliLogger::GetInstance().languageIndex]);
 }

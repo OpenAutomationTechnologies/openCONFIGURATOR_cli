@@ -88,8 +88,8 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult GetToolCode(const std::string& compType,
-											const std::uint32_t& originalCode,
-											std::uint32_t& toolCode);
+					                      const std::uint32_t& originalCode,
+					                      std::uint32_t& toolCode);
 				private:
 					/** \brief Gets the tool code for the original error code
 					  * \param element 		Element that contains handle of XML

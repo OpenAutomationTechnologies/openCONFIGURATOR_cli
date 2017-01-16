@@ -105,12 +105,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult UpdateNodeIdCollection(const std::uint8_t nodeId,
-									const std::string& pathXdc,
-									const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject,
-									const std::string& interfceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                                 const std::string& pathXdc,
+					                                 const std::vector<std::string>& forcedObject,
+					                                 const std::vector<std::string>& forcedSubObject,
+					                                 const std::string& interfceId,
+					                                 const std::string& modId,
+					                                 const std::uint32_t modPosition);
 
 					/** \brief Updates the modular node interface information of
 					  *        XDC into core library
@@ -120,8 +120,8 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateInterface(const std::uint8_t nodeId,
-									const std::string& pathXdc,
-									std::uint8_t& maxModulePosition);
+					                          const std::string& pathXdc,
+					                          std::uint8_t& maxModulePosition);
 
 					/** \brief Updates the Device POWERLINK profile body of
 					  *        XDD/XDC into core library
@@ -133,10 +133,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult ImportProfileBodyDevice(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                                  const std::uint8_t nodeId,
+					                                  const std::string& interfaceId,
+					                                  const std::string& modId,
+					                                  const std::uint32_t modPosition);
 
 					/** \brief Updates the Communication POWERLINK profile body
 					  *        of XDD/XDC into core library
@@ -150,12 +150,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult ImportProfileBodyCommn(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                                 const std::uint8_t nodeId,
+					                                 const std::vector<std::string>& forcedObject,
+					                                 const std::vector<std::string>& forcedSubObject,
+					                                 const std::string& interfaceId,
+					                                 const std::string& modId,
+					                                 const std::uint32_t modPosition);
 
 					/**
 					  * \brief Updates the Dynamic channels of XDD/XDC into core library
@@ -164,7 +164,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateDynamicChannels(const ParserElement& element,
-									const std::uint8_t nodeId);
+					                                const std::uint8_t nodeId);
 
 					/**
 					  * \brief Gets the access type of dynamic channel
@@ -179,7 +179,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateNwMgtGeneralFeatures(const ParserElement& element,
-									const std::uint8_t nodeId);
+					                                     const std::uint8_t nodeId);
 
 					/** \brief Creates network management MN features
 					  * \param element 		Element that contains handle of XDC
@@ -187,7 +187,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateNwMgtMnFeatures(const ParserElement& element,
-									const std::uint8_t nodeId);
+					                                const std::uint8_t nodeId);
 
 					/** \brief Creates network management CN features
 					  * \param element 		Element that contains handle of XDC
@@ -195,7 +195,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateNwMgtCnFeatures(const ParserElement& element,
-									const std::uint8_t nodeId);
+					                                const std::uint8_t nodeId);
 
 					/** \brief Creates node assignment values of node
 					  * \param element 			Element that contains handle of XDC
@@ -204,8 +204,8 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateNodeAssignment(const ParserElement& element,
-									const std::string& xPathExpression,
-									const std::uint8_t nodeId);
+					                               const std::string& xPathExpression,
+					                               const std::uint8_t nodeId);
 
 					/** \brief Sets node assignment values of node into library
 					  * \param nodeassign 		Node assignment attribute
@@ -214,8 +214,8 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult SetNodeAssignment(const NodeAssignment nodeassign,
-									const std::uint8_t nodeId,
-									const std::string& value);
+					                            const std::uint8_t nodeId,
+					                            const std::string& value);
 
 					/** \brief Creates Struct and Array data type parse results
 					  * \param element 		Element that contains handle of XDC
@@ -226,10 +226,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateDataType(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                         const std::uint8_t nodeId,
+					                         const std::string& interfaceId,
+					                         const std::string& modId,
+					                         const std::uint32_t modPosition);
 
 					/** \brief Creates Struct data type parse results
 					  * \param element 		Element that contains handle of XDC
@@ -240,10 +240,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateStructDataType(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                               const std::uint8_t nodeId,
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition);
 
 					/** \brief Creates Array data type parse results
 					  * \param element 		Element that contains handle of XDC
@@ -254,10 +254,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateArrayDataType(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                              const std::uint8_t nodeId,
+					                              const std::string& interfaceId,
+					                              const std::string& modId,
+					                              const std::uint32_t modPosition);
 
 					/** \brief Creates parameter template related parse results
 					  * \param element 		Element that contains handle of XDC
@@ -268,10 +268,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateParameterTemplate(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                                  const std::uint8_t nodeId,
+					                                  const std::string& interfaceId,
+					                                  const std::string& modId,
+					                                  const std::uint32_t modPosition);
 
 					/** \brief Creates parameter group related parse results
 					  * \param element 		Element that contains handle of XDC
@@ -282,10 +282,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateParameterGroup(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                               const std::uint8_t nodeId,
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition);
 
 					/** \brief Creates parameter list related parse results
 					  * \param element 		Element that contains handle of XDC
@@ -296,10 +296,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateParameterList(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                              const std::uint8_t nodeId,
+					                              const std::string& interfaceId,
+					                              const std::string& modId,
+					                              const std::uint32_t modPosition);
 
 					/** \brief Creates child parameter group related parse results
 					  * \param element 				Element that contains handle of XDC
@@ -312,12 +312,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateChildParameterGroup(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const xercesc::DOMNode* parameterGroupNode,
-									const std::string& paramGroupUId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                                    const std::uint8_t nodeId,
+					                                    const xercesc::DOMNode* parameterGroupNode,
+					                                    const std::string& paramGroupUId,
+					                                    const std::string& interfaceId,
+					                                    const std::string& modId,
+					                                    const std::uint32_t modPosition);
 
 					/** \brief Creates object related parse results and set parameters
 					  * \param element 			Element that contains handle of XDC
@@ -327,9 +327,9 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateObject(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject);
+					                       const std::uint8_t nodeId,
+					                       const std::vector<std::string>& forcedObject,
+					                       const std::vector<std::string>& forcedSubObject);
 
 					/** \brief Sets allowed values
 					  * \param element 		Element that contains handle of XDC
@@ -340,12 +340,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult SetParamAllowedValue(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const xercesc::DOMNode* node,
-									const std::string& uniqueId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                               const std::uint8_t nodeId,
+					                               const xercesc::DOMNode* node,
+					                               const std::string& uniqueId,
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition);
 
 					/** \brief Sets allowed range values
 					  * \param element 		Element that contains handle of XDC
@@ -356,12 +356,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult SetParamAllowedRange(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const xercesc::DOMNode* node,
-									const std::string& uniqueId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                               const std::uint8_t nodeId,
+					                               const xercesc::DOMNode* node,
+					                               const std::string& uniqueId,
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition);
 
 					/** \brief Sets actual values
 					  * \param element 		Element that contains handle of XDC
@@ -372,12 +372,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult SetParamActualValue(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const xercesc::DOMNode* node,
-									const std::string& uniqueId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                              const std::uint8_t nodeId,
+					                              const xercesc::DOMNode* node,
+					                              const std::string& uniqueId,
+					                              const std::string& interfaceId,
+					                              const std::string& modId,
+					                              const std::uint32_t modPosition);
 
 					/** \brief Sets dafault values
 					  * \param element 		Element that contains handle of XDC
@@ -388,12 +388,12 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult SetParamDefaultValue(const ParserElement& element,
-									const std::uint8_t nodeId,
-									const xercesc::DOMNode* node,
-									const std::string& uniqueId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                               const std::uint8_t nodeId,
+					                               const xercesc::DOMNode* node,
+					                               const std::string& uniqueId,
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition);
 
 					/** \brief Gets the addressing value of modular device from the XDC
 					  * \param modAddressing 	Module addressing value in XDC
@@ -426,14 +426,14 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateModule(const std::uint8_t nodeId,
-									const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject,
-									const std::string& interfaceId,
-									const std::string& moduleName,
-									const std::string& modulePosition,
-									const std::string& moduleAddress,
-									const std::string& modulePathToXDC,
-									const std::uint8_t maxModulePosition);
+					                       const std::vector<std::string>& forcedObject,
+					                       const std::vector<std::string>& forcedSubObject,
+					                       const std::string& interfaceId,
+					                       const std::string& moduleName,
+					                       const std::string& modulePosition,
+					                       const std::string& moduleAddress,
+					                       const std::string& modulePathToXDC,
+					                       const std::uint8_t maxModulePosition);
 
 					/** \brief Creates the object list of modules from XDC into core library
 					  * \param element 			Element that contains handle of XDC
@@ -445,13 +445,13 @@ namespace IndustrialNetwork
 					  * \param modPosition 		Position value of module
 					  * \return CliResult
 					  */
-					CliResult CreateModuleObject(const ParserElement & element,
-									const std::uint8_t nodeId,
-									const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					CliResult CreateModuleObject(const ParserElement& element,
+					                             const std::uint8_t nodeId,
+					                             const std::vector<std::string>& forcedObject,
+					                             const std::vector<std::string>& forcedSubObject,
+					                             const std::string& interfaceId,
+					                             const std::string& modId,
+					                             const std::uint32_t modPosition);
 
 					/** \brief Gets the index of module object from library
 					  * \param nodeId 			ID value of node
@@ -463,11 +463,11 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult GetNewObjectIndex(const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition,
-									const std::uint32_t objId,
-									std::uint32_t& index);
+					                            const std::string& interfaceId,
+					                            const std::string& modId,
+					                            const std::uint32_t modPosition,
+					                            const std::uint32_t objId,
+					                            std::uint32_t& index);
 
 					/** \brief Gets sub-index of module sub-object from the library
 					  * \param nodeId 			ID value of node
@@ -479,11 +479,11 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult GetNewSubObjectIndex(const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition,
-									const std::uint8_t subObjId,
-									std::uint32_t& subIndex);
+					                               const std::string& interfaceId,
+					                               const std::string& modId,
+					                               const std::uint32_t modPosition,
+					                               const std::uint8_t subObjId,
+					                               std::uint32_t& subIndex);
 
 					/** \brief Gets unique ID of parameter from the library
 					  * \param nodeId 			ID value of node
@@ -494,12 +494,12 @@ namespace IndustrialNetwork
 					  * \param paramId			New parameter ID output
 					  * \return CliResult
 					  */
-					 CliResult GetNewParameterId(const std::uint8_t nodeId,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition,
-									const std::string& uniqueID,
-									std::string& paramId);
+					CliResult GetNewParameterId(const std::uint8_t nodeId,
+					                            const std::string& interfaceId,
+					                            const std::string& modId,
+					                            const std::uint32_t modPosition,
+					                            const std::string& uniqueID,
+					                            std::string& paramId);
 
 					/** \brief Updates the forced object list of node
 					  * \param element 			Element that contains handle of XDC
@@ -510,10 +510,10 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult CreateForcedObjects(const ParserElement& pElement,
-									const std::string& xPathExpression,
-									std::vector<std::string>& forcedObject,
-									std::vector<std::string>& forcedSubObject,
-									const xercesc::DOMNode* parentNode);
+					                              const std::string& xPathExpression,
+					                              std::vector<std::string>& forcedObject,
+					                              std::vector<std::string>& forcedSubObject,
+					                              const xercesc::DOMNode* parentNode);
 
 					/** \brief Updates the forced object list of node into core library
 					  * \param forcedObject 		Forced objects vector of node
@@ -532,18 +532,18 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult UpdateForcedObjects(const std::vector<std::string>& forcedObject,
-									const std::vector<std::string>& forcedSubObject,
-									const std::uint8_t nodeId,
-									const std::string& objectIndex,
-									const std::string& SubobjectIndex,
-									const std::uint32_t objectId,
-									const std::uint8_t subObjectId,
-									const std::string& objectActualValue,
-									const std::string& subobjectActualValue,
-									const bool moduleCheck,
-									const std::string& interfaceId,
-									const std::string& modId,
-									const std::uint32_t modPosition);
+					                              const std::vector<std::string>& forcedSubObject,
+					                              const std::uint8_t nodeId,
+					                              const std::string& objectIndex,
+					                              const std::string& SubobjectIndex,
+					                              const std::uint32_t objectId,
+					                              const std::uint8_t subObjectId,
+					                              const std::string& objectActualValue,
+					                              const std::string& subobjectActualValue,
+					                              const bool moduleCheck,
+					                              const std::string& interfaceId,
+					                              const std::string& modId,
+					                              const std::uint32_t modPosition);
 
 
 					std::map<std::string, IEC_Datatype> iecdataTypeMap;

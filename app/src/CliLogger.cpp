@@ -58,7 +58,7 @@ std::string CliLogger::GetErrorString(const CliResult& result)
 	std::ostringstream outString;
 
 	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli",
-						(std::uint32_t)result.GetErrorType(), toolCode);
+	                (std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
 		LOG_INFO() << res.GetErrorMessage();
@@ -77,7 +77,7 @@ std::string CliLogger::GetErrorString(const Result& result)
 	std::ostringstream outString;
 
 	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library",
-							(std::uint32_t)result.GetErrorType(), toolCode);
+	                (std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
 		LOG_INFO() << res.GetErrorMessage();
@@ -96,7 +96,7 @@ CliResult CliLogger::GetFailureErrorString(const std::exception& e)
 	std::ostringstream outString;
 
 	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("cli",
-						(std::uint32_t)CliErrorCode::EXCEPTION_CAUGHT, toolCode);
+	                (std::uint32_t)CliErrorCode::EXCEPTION_CAUGHT, toolCode);
 	if (!res.IsSuccessful())
 	{
 		LOG_INFO() << res.GetErrorMessage();
@@ -116,7 +116,7 @@ CliResult CliLogger::GetFailureErrorString(const Result& result)
 	std::ostringstream outString;
 
 	CliResult res = ErrorCodeParser::GetInstance().GetToolCode("library",
-						(std::uint32_t)result.GetErrorType(), toolCode);
+	                (std::uint32_t)result.GetErrorType(), toolCode);
 	if (!res.IsSuccessful())
 	{
 		LOG_INFO() << res.GetErrorMessage();

@@ -90,7 +90,7 @@ namespace IndustrialNetwork
 					  * \return CliResult
 					  */
 					CliResult IsFileValid(const std::string& fileName,
-									const std::string& fileExtn);
+					                      const std::string& fileExtn);
 
 			}; // end of class ParameterValidator
 		} // end of namespace Application

@@ -53,7 +53,7 @@ ConfigurationGenerator& ConfigurationGenerator::GetInstance()
 }
 
 CliResult ConfigurationGenerator::GenerateOutputFiles(const std::string& xmlPath,
-														const std::string& outputPath)
+        const std::string& outputPath)
 {
 	CliResult cliRes;
 
@@ -79,7 +79,7 @@ CliResult ConfigurationGenerator::GenerateOutputFiles(const std::string& xmlPath
 				return cliRes;
 			}
 		}
-		catch(const std::exception& e)
+		catch (const std::exception& e)
 		{
 			return CliLogger::GetInstance().GetFailureErrorString(e);
 		}
@@ -116,9 +116,9 @@ CliResult ConfigurationGenerator::BuildConciseDeviceConfiguration(const std::str
 	CliResult cliRes;
 
 	res = OpenConfiguratorCore::GetInstance().BuildConfiguration(
-					OpenConfiguratorCli::GetInstance().networkName,
-					configurationOutput,
-					binOutput);
+	          OpenConfiguratorCli::GetInstance().networkName,
+	          configurationOutput,
+	          binOutput);
 	if (!res.IsSuccessful())
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(res);
@@ -161,15 +161,15 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 	std::vector<std::uint8_t> nodeIdCollection;
 
 	Result res = OpenConfiguratorCore::GetInstance().GetAvailableNodeIds(
-					OpenConfiguratorCli::GetInstance().networkName,
-					nodeIdCollection);
+	                 OpenConfiguratorCli::GetInstance().networkName,
+	                 nodeIdCollection);
 	if (!res.IsSuccessful())
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(res);
 	}
 
 	/** Create process image for CN nodes */
-    for (std::uint32_t index = 0; index < nodeIdCollection.size(); index++)
+	for (std::uint32_t index = 0; index < nodeIdCollection.size(); index++)
 	{
 		std::uint8_t value = nodeIdCollection.at(index);
 		std::string outputPathExtended = outputPath;
@@ -200,11 +200,11 @@ CliResult ConfigurationGenerator::BuildProcessImageDescriptions(const std::strin
 		}
 	}
 
-    return CliResult();
+	return CliResult();
 }
 
 CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
-												 const std::string& configuration)
+        const std::string& configuration)
 {
 	try
 	{
@@ -217,7 +217,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
@@ -226,7 +226,7 @@ CliResult ConfigurationGenerator::CreateMnobdTxt(const std::string& outputPath,
 }
 
 CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
-												 const std::ostringstream& buffer)
+        const std::ostringstream& buffer)
 {
 	try
 	{
@@ -239,7 +239,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
@@ -248,7 +248,7 @@ CliResult ConfigurationGenerator::CreateMnobdCdc(const std::string& outputPath,
 }
 
 CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPath,
-													const std::ostringstream& buffer)
+        const std::ostringstream& buffer)
 {
 	try
 	{
@@ -302,7 +302,7 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
@@ -312,13 +312,13 @@ CliResult ConfigurationGenerator::CreateMnobdHexTxt(const std::string& outputPat
 
 
 CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
-													  const std::string& outputPath)
+        const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildCProcessImage(
-					OpenConfiguratorCli::GetInstance().networkName,
-					nodeId, piDataOutput);
+	                 OpenConfiguratorCli::GetInstance().networkName,
+	                 nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(res);
@@ -335,7 +335,7 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
@@ -344,13 +344,13 @@ CliResult ConfigurationGenerator::CreateCProcessImage(const std::uint8_t nodeId,
 }
 
 CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeId,
-														const std::string& outputPath)
+        const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildXMLProcessImage(
-					OpenConfiguratorCli::GetInstance().networkName,
-					nodeId, piDataOutput);
+	                 OpenConfiguratorCli::GetInstance().networkName,
+	                 nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(res);
@@ -367,7 +367,7 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}
@@ -376,13 +376,13 @@ CliResult ConfigurationGenerator::CreateXmlProcessImage(const std::uint8_t nodeI
 }
 
 CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t nodeId,
-														   const std::string& outputPath)
+        const std::string& outputPath)
 {
 	std::string piDataOutput = "";
 
 	Result res = OpenConfiguratorCore::GetInstance().BuildNETProcessImage(
-					OpenConfiguratorCli::GetInstance().networkName,
-					nodeId, piDataOutput);
+	                 OpenConfiguratorCli::GetInstance().networkName,
+	                 nodeId, piDataOutput);
 	if (!res.IsSuccessful())
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(res);
@@ -399,7 +399,7 @@ CliResult ConfigurationGenerator::CreateCSharpProcessImage(const std::uint8_t no
 			ofile.close();
 		}
 	}
-	catch(const std::exception& e)
+	catch (const std::exception& e)
 	{
 		return CliLogger::GetInstance().GetFailureErrorString(e);
 	}

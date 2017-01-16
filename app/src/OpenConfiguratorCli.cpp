@@ -72,7 +72,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		ShowUsage();
 
 		return CliResult(CliErrorCode::USAGE,
-				kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
+		                 kMsgAppDescription[CliLogger::GetInstance().languageIndex]);
 	}
 
 	/** Load the error code table */
@@ -157,7 +157,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			ShowUsage();
 
 			return CliResult(CliErrorCode::OUTPUT_PATH_NOT_FOUND,
-								kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
+			                 kMsgOutputPathNotFound[CliLogger::GetInstance().languageIndex]);
 		}
 	}
 	else
@@ -165,7 +165,7 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 		ShowUsage();
 
 		return CliResult(CliErrorCode::XML_FILE_NOT_FOUND,
-							kMsgXmlFileNotFound[CliLogger::GetInstance().languageIndex]);
+		                 kMsgXmlFileNotFound[CliLogger::GetInstance().languageIndex]);
 	}
 }
 
