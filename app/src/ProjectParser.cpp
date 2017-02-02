@@ -1121,55 +1121,40 @@ CliResult ProjectParser::CreateParameterTemplate(const ParserElement& element,
 				}
 			}
 
-			if (!pResult.parameters[row].at(2).empty())							/** Parameter template uniqueID is not empty */
+			/** Updates the allowed values of parameter template.*/
+			subcrres = SetParamAllowedValue(element, nodeId, pResult.node.at(row),
+			                                pResult.parameters[row].at(0), interfaceId,
+			                                modId, modPosition);
+			if (!subcrres.IsSuccessful())
 			{
-				/** Core Library API call to create Parameter */
-				Result res = OpenConfiguratorCore::GetInstance().CreateParameter(
-				                 OpenConfiguratorCli::GetInstance().networkName,
-				                 nodeId, pResult.parameters[row].at(0),
-				                 accessOfParameter,
-				                 pResult.parameters[row].at(2),					/** Parameter template uniqueID */
-				                 interfaceId, modId, modPosition);
-				if (!res.IsSuccessful())
-				{
-					return CliLogger::GetInstance().GetFailureErrorString(res);
-				}
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
+			}
 
-				/** Updates the allowed values of parameter template.*/
-				subcrres = SetParamAllowedValue(element, nodeId, pResult.node.at(row),
-				                                pResult.parameters[row].at(0), interfaceId,
-				                                modId, modPosition);
-				if (!subcrres.IsSuccessful())
-				{
-					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
-				}
+			/** Updates the allowed range of parameter template.*/
+			subcrres = SetParamAllowedRange(element, nodeId, pResult.node.at(row),
+			                                pResult.parameters[row].at(0), interfaceId,
+			                                modId, modPosition);
+			if (!subcrres.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
+			}
 
-				/** Updates the allowed range of parameter template.*/
-				subcrres = SetParamAllowedRange(element, nodeId, pResult.node.at(row),
-				                                pResult.parameters[row].at(0), interfaceId,
-				                                modId, modPosition);
-				if (!subcrres.IsSuccessful())
-				{
-					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
-				}
+			/** Updates the default value of parameter template.*/
+			subcrres = SetParamDefaultValue(element, nodeId, pResult.node.at(row),
+			                                pResult.parameters[row].at(0), interfaceId,
+			                                modId, modPosition);
+			if (!subcrres.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
+			}
 
-				/** Updates the default value of parameter template.*/
-				subcrres = SetParamDefaultValue(element, nodeId, pResult.node.at(row),
-				                                pResult.parameters[row].at(0), interfaceId,
-				                                modId, modPosition);
-				if (!subcrres.IsSuccessful())
-				{
-					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
-				}
-
-				/** Updates the actual value of parameter template.*/
-				subcrres = SetParamActualValue(element,  nodeId, pResult.node.at(row),
-				                               pResult.parameters[row].at(0), interfaceId,
-				                               modId, modPosition);
-				if (!subcrres.IsSuccessful())
-				{
-					LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
-				}
+			/** Updates the actual value of parameter template.*/
+			subcrres = SetParamActualValue(element,  nodeId, pResult.node.at(row),
+			                               pResult.parameters[row].at(0), interfaceId,
+			                               modId, modPosition);
+			if (!subcrres.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(subcrres);
 			}
 		}
 	}
