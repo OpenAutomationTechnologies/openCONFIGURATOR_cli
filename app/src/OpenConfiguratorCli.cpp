@@ -177,8 +177,8 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 
 void OpenConfiguratorCli::ShowUsage()
 {
-	const std::string kMsgToolGenerator     = "Copyright (C) 2016 Kalycito Infotech Private Limited &\nBernecker + Rainer Industrie Elektronik GmbH";
-	const std::string kMsgVersion			= "2.0.0";
+	const std::string kMsgToolGenerator     = "Copyright (C) 2017 Kalycito Infotech Private Limited &\nBernecker + Rainer Industrie Elektronik GmbH";
+	const std::string kMsgVersion			= "2.0.1";
 #ifdef _WIN32
 	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR.exe [options]";
 #else
