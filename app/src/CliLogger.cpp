@@ -36,6 +36,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "OpenConfiguratorCli.h"
 #include "ErrorCodeParser.h"
 
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application;
+using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
+
 CliLogger::CliLogger() :
 	languageIndex((std::uint32_t)Language::EN)
 {

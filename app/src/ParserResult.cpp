@@ -39,6 +39,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <map>
 #include <boost/algorithm/string.hpp>
 
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application;
+
 ParserResult::ParserResult() :
 	parameters(),
 	resultNodeValue(NULL),
@@ -117,7 +121,7 @@ void ParserResult::ParseAttributeValues(const xercesc::DOMNode* domNode,
 	try
 	{
 		std::map<std::string, std::string> attributeValues;
-		std::vector<std::string> node;
+		std::vector<std::string> nodeVec;
 		if (domNode != NULL)
 		{
 			if (domNode->hasAttributes())
@@ -145,11 +149,11 @@ void ParserResult::ParseAttributeValues(const xercesc::DOMNode* domNode,
 				for (auto& attrName : attributeName)
 				{
 					if (attributeValues.find(attrName) != attributeValues.end())
-						node.push_back(attributeValues.at(attrName));
+						nodeVec.push_back(attributeValues.at(attrName));
 					else
-						node.push_back("");
+						nodeVec.push_back("");
 				}
-				this->parameters.push_back(node);
+				this->parameters.push_back(nodeVec);
 			}
 		}
 	}

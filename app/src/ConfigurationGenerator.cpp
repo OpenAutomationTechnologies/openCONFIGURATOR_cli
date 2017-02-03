@@ -37,6 +37,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ParameterValidator.h"
 #include "ProjectParser.h"
 
+using namespace IndustrialNetwork::POWERLINK::Core::API;
+using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;
+
 ConfigurationGenerator::ConfigurationGenerator()
 {
 }

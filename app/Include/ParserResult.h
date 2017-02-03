@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _PARSER_RESULT_H_
-#define _PARSER_RESULT_H_
+#ifndef PARSER_RESULT_H_
+#define PARSER_RESULT_H_
 
 #include "OpenConfiguratorCli.h"
 #include "ParserElement.h"
@@ -62,9 +62,9 @@ namespace IndustrialNetwork
 					  * \param formatString 	Attribute names as string separated by comma
 					  * \return CliResult
 					  */
-					CliResult CreateResult(const ParserElement& pElement,
-					                       const std::string& transcodeString,
-					                       const std::string& formatString);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateResult(const ParserElement& pElement,
+					        const std::string& transcodeString,
+					        const std::string& formatString);
 
 					/** \brief Parses and produces attributes by considering
 					  *        an sub node element as parent
@@ -74,10 +74,10 @@ namespace IndustrialNetwork
 					  * \param parentNode 		Sub node to be considered as parent
 					  * \return CliResult
 					  */
-					CliResult CreateResult(const ParserElement& pElement,
-					                       const std::string& transcodeString,
-					                       const std::string& formatString,
-					                       const xercesc::DOMNode* parentNode);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateResult(const ParserElement& pElement,
+					        const std::string& transcodeString,
+					        const std::string& formatString,
+					        const xercesc::DOMNode* parentNode);
 
 					/** Parsed parameters */
 					std::vector<std::vector<std::string> > parameters;

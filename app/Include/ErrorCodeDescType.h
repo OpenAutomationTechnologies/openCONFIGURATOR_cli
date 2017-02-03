@@ -33,14 +33,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _ERROR_CODE_DESC_TYPE_H_
-#define _ERROR_CODE_DESC_TYPE_H_
+#ifndef ERROR_CODE_DESC_TYPE_H_
+#define ERROR_CODE_DESC_TYPE_H_
 
 #include <cstdint>
 #include "Language.h"
-
-using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
-using namespace IndustrialNetwork::POWERLINK::Application;
 
 namespace IndustrialNetwork
 {
@@ -54,7 +51,7 @@ namespace IndustrialNetwork
 					/** \brief Default constructor of the class
 					  */
 					ErrorCodeDescType() :
-						lang(Language::EN),
+						lang(IndustrialNetwork::POWERLINK::Core::CoreConfiguration::Language::EN),
 						value("")
 					{
 					}
@@ -66,7 +63,7 @@ namespace IndustrialNetwork
 					}
 
 					/** Language of the error message */
-					Language lang;
+					IndustrialNetwork::POWERLINK::Core::CoreConfiguration::Language lang;
 
 					/** Error message */
 					std::string value;

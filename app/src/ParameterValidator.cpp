@@ -35,6 +35,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ParameterValidator.h"
 
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application;
+
 ParameterValidator::ParameterValidator()
 {
 }

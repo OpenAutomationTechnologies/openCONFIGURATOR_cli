@@ -33,17 +33,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CLI_LOGGER_H_
-#define _CLI_LOGGER_H_
+#ifndef CLI_LOGGER_H_
+#define CLI_LOGGER_H_
 
 #include "Language.h"
 #include "Result.h"
 #include "CliErrorCode.h"
 #include "CliResult.h"
-
-using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
-using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
-using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
 
 namespace IndustrialNetwork
 {
@@ -71,25 +67,25 @@ namespace IndustrialNetwork
 					  * \param result	CliResult for which error string to be created
 					  * \return Error string with tool code
 					  */
-					std::string GetErrorString(const CliResult& result);
+					std::string GetErrorString(const IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult& result);
 
 					/** \brief Generates the error string with tool code for Result
 					  * \param result	Result for which error string to be created
 					  * \return Error string with tool code
 					  */
-					std::string GetErrorString(const Result& result);
+					std::string GetErrorString(const IndustrialNetwork::POWERLINK::Core::ErrorHandling::Result& result);
 
 					/** \brief Generates the failure error string for exception
 					  * \param e		Exception ojbect
 					  * \return CliResult
 					  */
-					CliResult GetFailureErrorString(const std::exception& e);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult GetFailureErrorString(const std::exception& e);
 
 					/** \brief Generates the failure error string for Result with tool code
 					  * \param result	Result for which error string to be created
 					  * \return CliResult
 					  */
-					CliResult GetFailureErrorString(const Result& result);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult GetFailureErrorString(const IndustrialNetwork::POWERLINK::Core::ErrorHandling::Result& result);
 
 					/** Index of the current language */
 					std::uint32_t languageIndex;

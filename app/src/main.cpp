@@ -38,6 +38,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "OpenConfiguratorCli.h"
 
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application;
+using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+
 int main(int parameterCount, char* parameter[])
 {
 	std::vector<std::string> paramList;
@@ -52,22 +57,15 @@ int main(int parameterCount, char* parameter[])
 	CliResult result = OpenConfiguratorCli::GetInstance().GenerateConfigurationFiles(paramList);
 	if (!result.IsSuccessful())
 	{
-		switch (result.GetErrorType())
+		if (result.GetErrorType() == CliErrorCode::FAILURE)
 		{
-			case CliErrorCode::USAGE:
-				break;
-			case CliErrorCode::FAILURE:
-				{
-					LOG_ERROR() << result.GetErrorMessage();
-					std::cout << kApplicationName << ": ERROR " << result.GetErrorMessage();
-				}
-				break;
-			default:
-				{
-					LOG_ERROR() << CliLogger::GetInstance().GetErrorString(result);
-					std::cout << kApplicationName << ": ERROR " << CliLogger::GetInstance().GetErrorString(result);
-				}
-				break;
+			LOG_ERROR() << result.GetErrorMessage();
+			std::cout << kApplicationName << ": ERROR " << result.GetErrorMessage();
+		}
+		else if (result.GetErrorType() != CliErrorCode::USAGE && result.GetErrorType() != CliErrorCode::FAILURE)
+		{
+			LOG_ERROR() << CliLogger::GetInstance().GetErrorString(result);
+			std::cout << kApplicationName << ": ERROR " << CliLogger::GetInstance().GetErrorString(result);
 		}
 	}
 	else

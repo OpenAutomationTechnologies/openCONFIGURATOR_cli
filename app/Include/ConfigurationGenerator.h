@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CONFIGURATION_GENERATOR_CLI_H_
-#define _CONFIGURATION_GENERATOR_CLI_H_
+#ifndef CONFIGURATION_GENERATOR_CLI_H_
+#define CONFIGURATION_GENERATOR_CLI_H_
 
 #include "OpenConfiguratorCli.h"
 
@@ -65,68 +65,68 @@ namespace IndustrialNetwork
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult GenerateOutputFiles(const std::string& xmlPath,
-					                              const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult GenerateOutputFiles(const std::string& xmlPath,
+					        const std::string& outputPath);
 				private:
 					/** \brief Creates Mnobd configuration files
 					  * \param outputPath		Output path of the configuraiton files
 					  * \return CliResult
 					  */
-					CliResult BuildConciseDeviceConfiguration(const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult BuildConciseDeviceConfiguration(const std::string& outputPath);
 
 					/** \brief Creates process images
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult BuildProcessImageDescriptions(const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult BuildProcessImageDescriptions(const std::string& outputPath);
 
 					/** \brief Creates mnobd.txt
 					  * \param outputPath		Output path of the image files
 					  * \param configuration	Configuration output to be copied
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdTxt(const std::string& outputPath,
-					                         const std::string& configuration);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateMnobdTxt(const std::string& outputPath,
+					        const std::string& configuration);
 
 					/** \brief Creates mnobd.cdc
 					  * \param outputPath		Output path of the image files
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdCdc(const std::string& outputPath,
-					                         const std::ostringstream& buffer);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateMnobdCdc(const std::string& outputPath,
+					        const std::ostringstream& buffer);
 
 					/** \brief Creates mnobdhex.txt
 					  * \param outputPath		Output path of the image files
 					  * \param buffer			Buffer output to be coiped
 					  * \return CliResult
 					  */
-					CliResult CreateMnobdHexTxt(const std::string& outputPath,
-					                            const std::ostringstream& buffer);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateMnobdHexTxt(const std::string& outputPath,
+					        const std::ostringstream& buffer);
 
 					/** \brief Creates CProcess image file
 					  * \param nodeId			Node for which the process to be created
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateCProcessImage(const std::uint8_t nodeId,
-					                              const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateCProcessImage(const std::uint8_t nodeId,
+					        const std::string& outputPath);
 
 					/** \brief Creates XML process image file
 					  * \param nodeId			Node for which the process to be created
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateXmlProcessImage(const std::uint8_t nodeId,
-					                                const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateXmlProcessImage(const std::uint8_t nodeId,
+					        const std::string& outputPath);
 
 					/** \brief Creates CSharp process image file
 					  * \param nodeId			Node for which the process to be created
 					  * \param outputPath		Output path of the image files
 					  * \return CliResult
 					  */
-					CliResult CreateCSharpProcessImage(const std::uint8_t nodeId,
-					                                   const std::string& outputPath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateCSharpProcessImage(const std::uint8_t nodeId,
+					        const std::string& outputPath);
 
 			}; // end of class ConfigurationGenerator
 		} // end of namespace Application

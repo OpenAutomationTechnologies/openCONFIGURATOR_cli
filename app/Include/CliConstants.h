@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CLI_CONSTANTS_H_
-#define _CLI_CONSTANTS_H_
+#ifndef CLI_CONSTANTS_H_
+#define CLI_CONSTANTS_H_
 
 #include <string>
 

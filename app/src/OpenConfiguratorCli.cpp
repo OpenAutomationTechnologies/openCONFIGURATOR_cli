@@ -40,6 +40,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ConfigurationGenerator.h"
 #include "ErrorCodeParser.h"
 
+using namespace IndustrialNetwork::POWERLINK::Core::API;
+using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Application;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+
 OpenConfiguratorCli::OpenConfiguratorCli() :
 	xmlFilePath(""),
 	outputPath(""),
@@ -135,8 +141,8 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 			if (IsLanguageGerman(paramsList))
 			{
 				/** Initiate CliLogger for German language */
-				Result res = OpenConfiguratorCore::GetInstance().SetLoggingLanguage(Language::DE);
-				if (res.IsSuccessful())
+				Result result = OpenConfiguratorCore::GetInstance().SetLoggingLanguage(Language::DE);
+				if (result.IsSuccessful())
 				{
 					CliLogger::GetInstance().languageIndex = (std::uint32_t)Language::DE;
 				}
@@ -199,13 +205,13 @@ void OpenConfiguratorCli::ShowUsage()
 
 bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsList)
 {
-	for (std::uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::size_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for project file option */
 		if ((paramsList.at(index).compare("-p") == 0)  || (paramsList.at(index).compare("--project") == 0))
 		{
 			/* Check whether next element exists against number of parameters */
-			std::uint8_t increment = 1;
+			std::size_t increment = 1;
 			if ((index + increment) < paramsList.size())
 			{
 				xmlFilePath = paramsList.at(index + 1);
@@ -239,13 +245,13 @@ bool OpenConfiguratorCli::GetXmlFileName(const std::vector<std::string>& paramsL
 
 bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsList)
 {
-	for (std::uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::size_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for output path option */
 		if ((paramsList.at(index).compare("-o") == 0)  || (paramsList.at(index).compare("--output") == 0))
 		{
 			/* Check whether next element exists against number of parameters */
-			std::uint8_t increment = 1;
+			std::size_t increment = 1;
 			if ((index + increment) < paramsList.size())
 			{
 				outputPath = paramsList.at(index + 1);
@@ -264,7 +270,7 @@ bool OpenConfiguratorCli::GetOutputPath(const std::vector<std::string>& paramsLi
 
 bool OpenConfiguratorCli::IsLanguageGerman(const std::vector<std::string>& paramsList)
 {
-	for (std::uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::size_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for German language option */
 		if ((paramsList.at(index).compare("-de") == 0)  || (paramsList.at(index).compare("--german") == 0))
@@ -278,7 +284,7 @@ bool OpenConfiguratorCli::IsLanguageGerman(const std::vector<std::string>& param
 
 bool OpenConfiguratorCli::IsLogDebug(const std::vector<std::string>& paramsList)
 {
-	for (std::uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::size_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for verbose option */
 		if ((paramsList.at(index).compare("-d") == 0)  || (paramsList.at(index).compare("--debug") == 0))
@@ -292,7 +298,7 @@ bool OpenConfiguratorCli::IsLogDebug(const std::vector<std::string>& paramsList)
 
 bool OpenConfiguratorCli::GetHelpOption(const std::vector<std::string>& paramsList)
 {
-	for (std::uint8_t index = 0; index < paramsList.size(); index++)
+	for (std::size_t index = 0; index < paramsList.size(); index++)
 	{
 		/** Search for verbose option */
 		if ((paramsList.at(index).compare("-h") == 0)  || (paramsList.at(index).compare("--help") == 0))

@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _PARAMETER_VALIDATOR_H_
-#define _PARAMETER_VALIDATOR_H_
+#ifndef PARAMETER_VALIDATOR_H_
+#define PARAMETER_VALIDATOR_H_
 
 #include "OpenConfiguratorCli.h"
 
@@ -64,33 +64,33 @@ namespace IndustrialNetwork
 					  * \param xmlFileName		XML file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXmlFileValid(const std::string& xmlFileName);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult IsXmlFileValid(const std::string& xmlFileName);
 
 					/** \brief Validates the XDC file existence and extension
 					  * \param xdcFileName		XDC file name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsXdcFileValid(const std::string& xdcFileName);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult IsXdcFileValid(const std::string& xdcFileName);
 
 					/** \brief Validates the output path existence
 					  * \param path				Output path to be validated
 					  * \return CliResult
 					  */
-					CliResult IsPathValid(const std::string& path);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult IsPathValid(const std::string& path);
 
 					/** \brief Validates file existence
 					  * \param fileName			File name to be validated
 					  * \return CliResult
 					  */
-					CliResult IsFileExists(const std::string& fileName);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult IsFileExists(const std::string& fileName);
 				private:
 					/** \brief Validates file existence and extension
 					  * \param fileName			File name to be validated
 					  * \param fileExtn			File extention expected
 					  * \return CliResult
 					  */
-					CliResult IsFileValid(const std::string& fileName,
-					                      const std::string& fileExtn);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult IsFileValid(const std::string& fileName,
+					        const std::string& fileExtn);
 
 			}; // end of class ParameterValidator
 		} // end of namespace Application

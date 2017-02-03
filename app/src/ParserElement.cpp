@@ -36,6 +36,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ParserElement.h"
 #include "ParameterValidator.h"
 
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application;
+
 ParserElement::ParserElement(const std::string& file, const std::string& schemaFile, const std::string& xmlNamespace) :
 	domDocument(NULL),
 	domElement(NULL),

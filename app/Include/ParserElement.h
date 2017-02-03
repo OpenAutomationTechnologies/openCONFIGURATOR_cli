@@ -33,11 +33,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _PARSER_ELEMENT_H_
-#define _PARSER_ELEMENT_H_
+#ifndef PARSER_ELEMENT_H_
+#define PARSER_ELEMENT_H_
 
 #include "OpenConfiguratorCli.h"
-#include <xercesc/sax/ErrorHandler.hpp>
+#include "ParserErrorHandler.h"
 #include <xercesc/sax/SAXParseException.hpp>
 
 namespace IndustrialNetwork
@@ -63,7 +63,7 @@ namespace IndustrialNetwork
 					/** \brief Creates element for parsing
 					  * \return CliResult
 					  */
-					CliResult CreateElement();
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateElement();
 
 					/** Document handle */
 					xercesc::DOMDocument* domDocument;
@@ -84,7 +84,7 @@ namespace IndustrialNetwork
 					/** \brief Validates against schema file and parses
 					  * \return CliResult
 					  */
-					CliResult parseFile();
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult parseFile();
 
 					/** file that has to be parsed */
 					std::string filePath;
@@ -95,40 +95,6 @@ namespace IndustrialNetwork
 					/** namespace for validation */
 					std::string xmlNamespace;
 
-					class ParserErrorHandler : public xercesc::ErrorHandler
-					{
-						private:
-							std::string reportParseException(const xercesc::SAXParseException& ex)
-							{
-								char* msg = xercesc::XMLString::transcode(ex.getMessage());
-								boost::format formatter(kMsgXmlValidationError[CliLogger::GetInstance().languageIndex]);
-								formatter % ex.getColumnNumber()
-								% ex.getLineNumber()
-								% msg;
-								xercesc::XMLString::release(&msg);
-								return formatter.str();
-							}
-
-						public:
-							void warning(const xercesc::SAXParseException& ex)
-							{
-								LOG_WARN() << reportParseException(ex);
-							}
-
-							void error(const xercesc::SAXParseException& ex)
-							{
-								LOG_ERROR() << reportParseException(ex);
-							}
-
-							void fatalError(const xercesc::SAXParseException& ex)
-							{
-								LOG_FATAL() << reportParseException(ex);
-							}
-
-							void resetErrors()
-							{
-							}
-					};
 			}; // end of class ParserElement
 		} // end of namespace Application
 	} // end of namespace POWERLINK

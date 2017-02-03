@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _ERROR_CODE_COMP_TYPE_H_
-#define _ERROR_CODE_COMP_TYPE_H_
+#ifndef ERROR_CODE_COMP_TYPE_H_
+#define ERROR_CODE_COMP_TYPE_H_
 
 #include "ErrorCodeDescType.h"
 #include "ErrorCodeType.h"

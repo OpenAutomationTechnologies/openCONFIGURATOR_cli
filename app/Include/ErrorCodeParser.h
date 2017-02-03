@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _ERROR_CODE_PARSER_H_
-#define _ERROR_CODE_PARSER_H_
+#ifndef ERROR_CODE_PARSER_H_
+#define ERROR_CODE_PARSER_H_
 
 #include "OpenConfiguratorCli.h"
 #include "ParserElement.h"
@@ -42,8 +42,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ParameterValidator.h"
 #include "Language.h"
 #include "ErrorCodeCompType.h"
-
-using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
 
 namespace IndustrialNetwork
 {
@@ -79,7 +77,7 @@ namespace IndustrialNetwork
 					  * \param xmlFilePath		Error code XML file path
 					  * \return CliResult
 					  */
-					CliResult ParseErrorCodeTable(const std::string& xmlFilePath);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult ParseErrorCodeTable(const std::string& xmlFilePath);
 
 					/** \brief Gets the tool code for the original error code
 					  * \param compType			Components type
@@ -87,15 +85,15 @@ namespace IndustrialNetwork
 					  * \param toolCode			Tool codeoutput
 					  * \return CliResult
 					  */
-					CliResult GetToolCode(const std::string& compType,
-					                      const std::uint32_t& originalCode,
-					                      std::uint32_t& toolCode);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult GetToolCode(const std::string& compType,
+					        const std::uint32_t& originalCode,
+					        std::uint32_t& toolCode);
 				private:
 					/** \brief Gets the tool code for the original error code
 					  * \param element 		Element that contains handle of XML
 					  * \return CliResult
 					  */
-					CliResult CreateErrorTable(const ParserElement& element);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult CreateErrorTable(const ParserElement& element);
 
 					/** \brief Unloads the error code XML file
 					  * \return Nothing

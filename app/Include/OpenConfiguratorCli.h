@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _OPEN_CONFIGURATOR_CLI_H_
-#define _OPEN_CONFIGURATOR_CLI_H_
+#ifndef OPEN_CONFIGURATOR_CLI_H_
+#define OPEN_CONFIGURATOR_CLI_H_
 
 #include <fstream>
 #include <string>
@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "CliLogger.h"
 #include "CliConstants.h"
 
+/*
 using namespace IndustrialNetwork::POWERLINK::Core::API;
 using namespace IndustrialNetwork::POWERLINK::Core::Node;
 using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
@@ -67,7 +68,7 @@ using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
 using namespace IndustrialNetwork::POWERLINK::Core::ModularNode;
 using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 using namespace IndustrialNetwork::POWERLINK::Application;
-using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;
+using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;*/
 
 namespace IndustrialNetwork
 {
@@ -121,7 +122,7 @@ namespace IndustrialNetwork
 					  * \param paramsList		List of command line parameters
 					  * \return CliResult
 					  */
-					CliResult GenerateConfigurationFiles(const std::vector<std::string>& paramsList);
+					IndustrialNetwork::POWERLINK::Application::ErrorHandling::CliResult GenerateConfigurationFiles(const std::vector<std::string>& paramsList);
 
 					/** The input XML file with path */
 					std::string xmlFilePath;

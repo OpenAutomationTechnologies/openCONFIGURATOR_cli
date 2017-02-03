@@ -33,8 +33,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CLI_ERROR_CODE_H_
-#define _CLI_ERROR_CODE_H_
+#ifndef CLI_ERROR_CODE_H_
+#define CLI_ERROR_CODE_H_
 
 #include <cstdint>
 

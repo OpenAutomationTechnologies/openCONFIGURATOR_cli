@@ -35,6 +35,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ErrorCodeParser.h"
 
+using namespace IndustrialNetwork::POWERLINK::Core::CoreConfiguration;
+using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+using namespace IndustrialNetwork::POWERLINK::Application;
+using namespace IndustrialNetwork::POWERLINK::Application::CliConstants;
+
 ErrorCodeParser::ErrorCodeParser() :
 	errorCodeObject()
 {
@@ -143,12 +149,12 @@ CliResult ErrorCodeParser::CreateErrorTable(const ParserElement& element)
 				errCode.originalCode = 0xFFFF;
 				if (!pSubResult.parameters[subrow].at(1).empty())
 				{
-					errCode.originalCode = stoi(pSubResult.parameters[subrow].at(1), NULL, 10);
+					errCode.originalCode = (std::uint32_t) std::stoi(pSubResult.parameters[subrow].at(1), NULL, 10);
 				}
 				errCode.toolCode = 0xFFFF;
 				if (!pSubResult.parameters[subrow].at(2).empty())
 				{
-					errCode.toolCode = stoi(pSubResult.parameters[subrow].at(2), NULL, 10);
+					errCode.toolCode = (std::uint32_t) std::stoi(pSubResult.parameters[subrow].at(2), NULL, 10);
 				}
 
 				descres = pDescResult.CreateResult(element, kErrorDescription,

@@ -35,6 +35,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "CliResult.h"
 
+using namespace IndustrialNetwork::Fieldbus;
+using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
+
 CliResult::CliResult(const CliErrorCode& errorCode, const std::string& errorMessage = "") :
 	IResult<CliErrorCode>(errorCode, errorMessage)
 {

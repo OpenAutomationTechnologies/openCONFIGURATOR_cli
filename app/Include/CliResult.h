@@ -33,14 +33,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#ifndef _CLI_RESULT_H_
-#define _CLI_RESULT_H_
+#ifndef CLI_RESULT_H_
+#define CLI_RESULT_H_
 
 #include "IResult.h"
 #include "CliErrorCode.h"
-
-using namespace IndustrialNetwork::Fieldbus;
-using namespace IndustrialNetwork::POWERLINK::Application::ErrorHandling;
 
 namespace IndustrialNetwork
 {
