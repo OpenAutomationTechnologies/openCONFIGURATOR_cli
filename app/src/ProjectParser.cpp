@@ -2399,6 +2399,13 @@ CliResult ProjectParser::CreateNodeAssignment(const ParserElement& pElement,
 			{
 				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
 			}
+            
+            res = SetNodeAssignment(NodeAssignment::NMT_NODEASSIGN_MULTIPLEXED_CN,
+			                        nodeId, pResult.parameters[row].at(11));			/** isMultiplexed value */
+			if (!res.IsSuccessful())
+			{
+				LOG_WARN() << CliLogger::GetInstance().GetErrorString(res);
+			}
 
 			if (pResult.parameters[row].at(6).compare("true") == 0)					/** isChained value */
 			{
