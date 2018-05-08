@@ -35,10 +35,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 
-#include "OpenConfiguratorCli.h"
-#include "ParameterValidator.h"
 #include "ConfigurationGenerator.h"
 #include "ErrorCodeParser.h"
+#include "OpenConfiguratorCli.h"
+#include "ParameterValidator.h"
 
 using namespace IndustrialNetwork::POWERLINK::Core::API;
 using namespace IndustrialNetwork::POWERLINK::Core::ErrorHandling;
@@ -177,8 +177,8 @@ CliResult OpenConfiguratorCli::GenerateConfigurationFiles(const std::vector<std:
 
 void OpenConfiguratorCli::ShowUsage()
 {
-	const std::string kMsgToolGenerator     = "Copyright (C) 2017 Kalycito Infotech Private Limited &\nBernecker + Rainer Industrie Elektronik GmbH";
-	const std::string kMsgVersion			= "2.0.1";
+	const std::string kMsgToolGenerator     = "Copyright (C) 2018 Kalycito Infotech Private Limited &\nB&R Industrial Automation GmbH";
+	const std::string kMsgVersion			= "2.0.2";
 #ifdef _WIN32
 	const std::string kMsgToolUsage         = "Usage: openCONFIGURATOR.exe [options]";
 #else
